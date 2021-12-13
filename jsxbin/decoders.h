@@ -23,6 +23,7 @@ namespace jsxbin::decoders {
 
     AbstractNode* d_node(ScanState &scanState);
     string d_variant(ScanState &scanState);
+    string d_string(ScanState &scanState);
     vector<AbstractNode*> d_children(ScanState &scanState);
     string d_number(ScanState &scanState, int length, int sign);
     bool d_bool(ScanState &scanState);
