@@ -59,11 +59,11 @@ namespace jsxbin::nodes {
         XMLNamespaceExpr = 'p'
     };
 
-    AbstractNode* get_inst(NodeType nodeType){
+    AbstractNode* get_inst(NodeType nodeType, ScanState &scanState){
         switch(nodeType){
-            case ArgumentList: return new nodes::ArgumentList();
-            case ArrayExpr: return new nodes::ArrayExpr();
-            case ArrayIndexingExpr: return new nodes::ArrayIndexingExpr();
+            case ArgumentList: return new ArgumentList(scanState);
+            case ArrayExpr: return new ArrayExpr(scanState);
+            case ArrayIndexingExpr: return new ArrayIndexingExpr(scanState);
         }
     }
 

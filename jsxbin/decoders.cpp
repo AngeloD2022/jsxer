@@ -3,6 +3,7 @@
 //
 
 #include "decoders.h"
+#include "nodes/nodes.h"
 #include <string>
 #include <vector>
 
@@ -10,7 +11,7 @@
 
 using namespace jsxbin::decoders;
 
-// Markers...
+// Markers / constants...
 const char NO_VARIANT = 0x6E;
 const char ID_REFERENCE = 0x7A;
 const char NEGATIVE_NUMBER = 0x79;
@@ -19,24 +20,23 @@ const char NUMBER_4_BYTES = 0x34;
 const char NUMBER_2_BYTES = 0x32;
 const char BOOL_TRUE = 0x74;
 const char BOOL_FALSE = 0x66;
+const string NODE_MARKERS = "RAQSCdGHiIJLaKEMNjVOTPDUBXWYZkbcefghsFlmroqp";
 
-
-enum LiteralType {
-    NUMBER,
-    UTF8_STRING
-};
-
-AbstractNode *d_node(ScanState &scanState) {
-    return nullptr;
-}
-
+// begin utility functions...
 string unicode(const string &x) {
     // TODO: Implement this...
     return x;
 }
 
-string fromISO8859(const unsigned char &value){
+bool replace_str(string &str, const string &from, const string &to){
+    size_t pos = str.find(from);
+    if (pos == string::npos)
+        return false;
+    str.replace(pos, from.length(), to);
+    return true;
+}
 
+string fromISO8859(const unsigned char &value){
     if (value < 0x80){
         return to_string(value);
     } else {
@@ -46,6 +46,29 @@ string fromISO8859(const unsigned char &value){
         return out;
     }
 }
+// end utility functions.
+
+enum LiteralType {
+    NUMBER,
+    UTF8_STRING
+};
+
+AbstractNode *d_node(ScanState &scanState) {
+    char marker = scanState.pop();
+
+    if (marker == NO_VARIANT){
+        return nullptr;
+    }
+
+    // if the marker represents a valid node type, initialize and return said type...
+    if(NODE_MARKERS.find(marker) != string::npos){
+        nodes::get_inst(NodeType, scanState);
+    }
+
+    return nullptr;
+}
+
+
 
 string dnumber_primitive(ScanState &scanState, int length, bool negative) {
     byte bytes[length];
@@ -168,6 +191,15 @@ string d_variant(ScanState &scanState) {
         case 4: // 'e'
             // string type
             result = d_string(scanState);
+            replace_str(result, "\\", "\\\\");
+            replace_str(result, "\"", "\\\"");
+            replace_str(result, "\"", "\\\"");
+            replace_str(result, "\n", "\\n");
+            replace_str(result, "\t", "\\t");
+            replace_str(result, "\t", "\\t");
+            replace_str(result, "\r", "\\r");
+
+            result = '\"' + result + "\"";
             break;
     }
 
@@ -176,6 +208,7 @@ string d_variant(ScanState &scanState) {
 
 bool d_bool(ScanState &scanState) {
     char marker = scanState.pop();
+
     if (marker == BOOL_TRUE)
         return true;
     else if (marker == BOOL_FALSE)
@@ -186,5 +219,16 @@ bool d_bool(ScanState &scanState) {
 }
 
 string d_string(ScanState &scanState) {
-    return std::string();
+
+    // Parse length of string...
+    int length  = stoi(dliteral_primitive(scanState, LiteralType::NUMBER));
+    if (length == 0)
+        return "";
+
+    string buf;
+    for (int i = 0; i < length; ++i) {
+        buf += dliteral_primitive(scanState, LiteralType::UTF8_STRING);
+    }
+
+    return buf;
 }
