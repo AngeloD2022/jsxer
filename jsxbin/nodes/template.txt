@@ -5,7 +5,7 @@ using namespace jsxbin;
 
 namespace jsxbin::nodes {
 
-    class SubNode : AbstractNode {
+    class SubNode : public AbstractNode {
     public:
         explicit SubNode(ScanState &scanState) : AbstractNode(scanState) {}
 

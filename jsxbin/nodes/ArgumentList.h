@@ -15,7 +15,7 @@ using namespace jsxbin;
 
 namespace jsxbin::nodes {
 
-    class ArgumentList : AbstractNode {
+    class ArgumentList : public AbstractNode {
     public:
         explicit ArgumentList(ScanState &scanState) : AbstractNode(scanState) {}
 

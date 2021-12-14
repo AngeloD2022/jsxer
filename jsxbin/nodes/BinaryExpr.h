@@ -14,7 +14,7 @@ using namespace jsxbin;
 
 namespace jsxbin::nodes {
 
-    class BinaryExpr : AbstractNode {
+    class BinaryExpr : public AbstractNode {
     public:
         explicit BinaryExpr(ScanState &scanState) : AbstractNode(scanState) {}
 

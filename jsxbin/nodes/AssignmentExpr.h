@@ -6,14 +6,16 @@
 #define JSXBIN_DECOMPILER_ASSIGNMENTEXPR_H
 
 #include "AbstractNode.h"
+#include "BinaryExpr.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
 
-    class AssignmentExpr : AbstractNode {
+    class AssignmentExpr : public AbstractNode {
     public:
+
         explicit AssignmentExpr(ScanState &scanState) : AbstractNode(scanState) {}
 
         void parse() override {

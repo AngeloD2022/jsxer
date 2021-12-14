@@ -12,7 +12,7 @@ using namespace jsxbin;
 
 namespace jsxbin::nodes {
 
-    class ArrayIndexingExpr : AbstractNode {
+    class ArrayIndexingExpr : public AbstractNode {
     public:
         explicit ArrayIndexingExpr(ScanState &scanState) : AbstractNode(scanState) {}
 

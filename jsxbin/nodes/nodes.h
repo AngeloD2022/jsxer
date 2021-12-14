@@ -61,9 +61,10 @@ namespace jsxbin::nodes {
 
     AbstractNode* get_inst(NodeType nodeType, ScanState &scanState){
         switch(nodeType){
-            case ArgumentList: return new ArgumentList(scanState);
-            case ArrayExpr: return new ArrayExpr(scanState);
-            case ArrayIndexingExpr: return new ArrayIndexingExpr(scanState);
+            case ArgumentList: return new class ArgumentList(scanState);
+            case ArrayExpr: return new class ArrayExpr(scanState);
+            case ArrayIndexingExpr: return new class ArrayIndexingExpr(scanState);
+            case AssignmentExpr: return new class AssignmentExpr(scanState);
         }
     }
 

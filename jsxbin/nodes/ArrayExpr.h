@@ -14,7 +14,7 @@ using namespace jsxbin;
 
 namespace jsxbin::nodes {
 
-    class ArrayExpr : AbstractNode {
+    class ArrayExpr : public AbstractNode {
     public:
         explicit ArrayExpr(ScanState &scanState) : AbstractNode(scanState) {}
 
