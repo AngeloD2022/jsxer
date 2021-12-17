@@ -22,4 +22,4 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/AssignmentExpr.h
         jsxbin/nodes/BinaryExpr.cpp
         jsxbin/nodes/BinaryExpr.h
-        jsxbin/nodes/ConditionalExpr.cpp jsxbin/nodes/ConditionalExpr.h jsxbin/nodes/ConstDeclaration.cpp jsxbin/nodes/ConstDeclaration.h jsxbin/nodes/DebuggerStatement.cpp jsxbin/nodes/DebuggerStatement.h jsxbin/nodes/DeleteExpr.cpp jsxbin/nodes/DeleteExpr.h)
+        jsxbin/nodes/ConditionalExpr.cpp jsxbin/nodes/ConditionalExpr.h jsxbin/nodes/ConstDeclaration.cpp jsxbin/nodes/ConstDeclaration.h jsxbin/nodes/DebuggerStatement.cpp jsxbin/nodes/DebuggerStatement.h jsxbin/nodes/DeleteExpr.cpp jsxbin/nodes/DeleteExpr.h jsxbin/nodes/DoWhileExpr.cpp jsxbin/nodes/DoWhileExpr.h)

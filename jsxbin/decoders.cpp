@@ -106,7 +106,7 @@ string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
         return literalType == LiteralType::UTF8_STRING ? unicode(number) : number;
 
     } else {
-        byte num = decoders::d_byte(scanState);
+        byte num = d_byte(scanState);
 
         if (negative) {
             return to_string(-1 * (int) num);
@@ -195,7 +195,7 @@ string decoders::d_variant(ScanState &scanState) {
             break;
         case 3: // 'd'
             // number type
-            result = decoders::d_number(scanState);
+            result = d_number(scanState);
             break;
         case 4: // 'e'
             // string type
@@ -289,7 +289,7 @@ vector<AbstractNode *> decoders::d_children(ScanState &scanState) {
     return result;
 }
 
-line_info d_linfo(ScanState &scanState) {
+line_info decoders::d_linfo(ScanState &scanState) {
     line_info result;
 
     result.line_number = d_length(scanState);
