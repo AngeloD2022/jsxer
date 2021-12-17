@@ -14,6 +14,7 @@
 #include "ConstDeclaration.h"
 #include "DebuggerStatement.h"
 #include "DeleteExpr.h"
+#include "DoWhileExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -74,6 +75,7 @@ namespace jsxbin::nodes {
             case ConstDeclaration: return new class ConstDeclaration(scanState);
             case DebuggerStatement: return new class DebuggerStatement(scanState);
             case DeleteExpr: return new class DeleteExpr(scanState);
+            case DoWhileExpr: return new class DoWhileExpr(scanState);
         }
         return nullptr;
     }
