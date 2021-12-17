@@ -12,6 +12,7 @@
 #include "AssignmentExpr.h"
 #include "ConditionalExpr.h"
 #include "ConstDeclaration.h"
+#include "DebuggerStatement.h"
 
 namespace jsxbin::nodes {
 
@@ -70,6 +71,7 @@ namespace jsxbin::nodes {
             case AssignmentExpr: return new class AssignmentExpr(scanState);
             case ConditionalExpr: return new class ConditionalExpr(scanState);
             case ConstDeclaration: return new class ConstDeclaration(scanState);
+            case DebuggerStatement: return new class DebuggerStatement(scanState);
         }
         return nullptr;
     }
