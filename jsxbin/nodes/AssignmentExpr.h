@@ -30,13 +30,18 @@ namespace jsxbin::nodes {
         string jsx() override {
             string result = declaration ? "var " : "";
 
-//            if(shorthand){
-//                BinaryExpr binExpr = (BinaryExpr) expr;
-//
-//
-//            }else{
-//
-//            }
+            if (shorthand) {
+                BinaryExpr *b = (BinaryExpr *)expression;
+
+                // FIXME: i have a bad feeling about this one...
+                string value_assigned = literal.empty() ? b->get_op() : literal;
+
+                result += var_name + ' ' + b->get_op_name() + "= " + value_assigned;
+            } else {
+                string value_assigned = literal.empty() ? expression->jsx() : literal;
+                result += var_name + " = " + value_assigned;
+            }
+
             return result;
         }
 

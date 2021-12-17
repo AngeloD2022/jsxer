@@ -10,6 +10,8 @@
 #include "ArrayExpr.h"
 #include "ArrayIndexingExpr.h"
 #include "AssignmentExpr.h"
+#include "ConditionalExpr.h"
+#include "ConstDeclaration.h"
 
 namespace jsxbin::nodes {
 
@@ -66,6 +68,8 @@ namespace jsxbin::nodes {
             case ArrayExpr: return new class ArrayExpr(scanState);
             case ArrayIndexingExpr: return new class ArrayIndexingExpr(scanState);
             case AssignmentExpr: return new class AssignmentExpr(scanState);
+            case ConditionalExpr: return new class ConditionalExpr(scanState);
+            case ConstDeclaration: return new class ConstDeclaration(scanState);
         }
         return nullptr;
     }

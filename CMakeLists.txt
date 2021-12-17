@@ -22,4 +22,4 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/AssignmentExpr.h
         jsxbin/nodes/BinaryExpr.cpp
         jsxbin/nodes/BinaryExpr.h
-        )
+        jsxbin/nodes/ConditionalExpr.cpp jsxbin/nodes/ConditionalExpr.h jsxbin/nodes/ConstDeclaration.cpp jsxbin/nodes/ConstDeclaration.h)
