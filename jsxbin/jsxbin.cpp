@@ -24,17 +24,17 @@ void decompile(const string &input, string &output) {
     remove_copy(normalized.begin(), normalized.end(), back_inserter(normalized), '\\');
 
     // Identify the JSXBIN Version.
-    int version;
+    int version = 0;
     smatch matches;
     if(regex_search(normalized, matches, h_identify)){
         string match = matches[1].str();
         version = stoi(&match[0]);
     }
-    // TODO: add error handling.
+    // TODO: This is unsafe. Add error handling.
 
     // Remove the header from the normalized input.
     string body = regex_replace(normalized, h_replace, "");
-    ScanState *scanState = new ScanState(body);
+    ScanState *scanState = new ScanState(body, version == 1? jsxbin_version::VERSION_1 : jsxbin_version::VERSION_2);
 
     // Start decompilation.
     RootNode *root = new RootNode(*scanState);

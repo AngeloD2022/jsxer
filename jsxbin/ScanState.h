@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include "jsxbin.h"
 
 
 using namespace std;
@@ -17,7 +18,10 @@ namespace jsxbin{
 
     public:
 
-        explicit ScanState(const string &body);
+        explicit ScanState(const string &body, jsxbin_version version);
+
+        // meta...
+        jsxbin_version get_version();
 
         // tokens...
         void step();
@@ -34,6 +38,7 @@ namespace jsxbin{
         void add_symbol(string key, string value);
 
     private:
+        jsxbin_version input_version;
         map<string, string> symbols;
         unsigned long index = 0;
         uint16_t node_depth_lvl= 0;

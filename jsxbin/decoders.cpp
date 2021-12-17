@@ -129,7 +129,8 @@ AbstractNode* decoders::d_node(ScanState &scanState) {
 
     // if the marker represents a valid node type, initialize and return said type...
     if(NODE_MARKERS.find(marker) != string::npos){
-        nodes::get_inst(NodeType, scanState);
+        AbstractNode *node = nodes::get_inst(NodeType::ArgumentList, scanState);
+        return node;
     }
 
     return nullptr;
@@ -241,11 +242,11 @@ string decoders::d_string(ScanState &scanState) {
     return buf;
 }
 
-reference decoders::d_ref(ScanState &scanState, jsxbin_version jsxbinVersion) {
+reference decoders::d_ref(ScanState &scanState) {
     string id = d_ident(scanState);
     bool flag = false;
 
-    if (jsxbinVersion == jsxbin_version::VERSION_2) {
+    if (scanState.get_version() == jsxbin_version::VERSION_2) {
         flag = d_bool(scanState);
     }
 

@@ -6,8 +6,13 @@
 
 using namespace jsxbin;
 
-ScanState::ScanState(const string &body) {
+ScanState::ScanState(const string &body, jsxbin_version version) {
     this->body = body;
+    this->input_version = version;
+}
+
+jsxbin_version ScanState::get_version() {
+    return input_version;
 }
 
 void ScanState::step() {
@@ -76,6 +81,8 @@ string ScanState::get_symbol(string key) {
 void ScanState::add_symbol(string key, string value) {
     symbols.insert_or_assign(key, value);
 }
+
+
 
 
 

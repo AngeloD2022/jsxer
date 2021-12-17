@@ -17,7 +17,7 @@ namespace jsxbin::nodes {
         explicit ArrayIndexingExpr(ScanState &scanState) : AbstractNode(scanState) {}
 
         void parse() override {
-            decoders::d_ref(scanState, dref_ver::JSXBIN2); // <str, bool>
+            decoders::d_ref(scanState); // <str, bool>
             AbstractNode *name = decoders::d_node(scanState);
             AbstractNode *expr = decoders::d_node(scanState);
 

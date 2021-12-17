@@ -37,6 +37,7 @@ namespace jsxbin::nodes {
         AbstractNode* right;
         string literalLeft;
         string literalRight;
+        string create_expr(const string &literal, AbstractNode *exprNode);
     };
 }
 

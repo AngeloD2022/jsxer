@@ -29,7 +29,7 @@ namespace jsxbin::decoders {
     bool d_bool(ScanState &scanState);
     string d_ident(ScanState &scanState);
     int d_length(ScanState &scanState);
-    reference d_ref(ScanState &scanState, jsxbin_version jsxbinVersion);
+    reference d_ref(ScanState &scanState);
     byte d_byte(ScanState &scanState);
     vector<AbstractNode *> d_children(ScanState &scanState);
 }
