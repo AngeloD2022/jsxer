@@ -6,6 +6,7 @@
 #define JSXBIN_DECOMPILER_SCANSTATE_H
 
 #include <string>
+#include <map>
 
 
 using namespace std;
@@ -18,11 +19,9 @@ namespace jsxbin{
 
         explicit ScanState(const string &body);
 
-        // change...
+        // tokens...
         void step();
         char pop();
-
-        // no change...
         char peek(int ahead);
         string peek(int position, size_t length);
 
@@ -30,7 +29,12 @@ namespace jsxbin{
         int get_node_depth();
         bool decrement_node_depth();
 
+        // symbol...
+        string get_symbol(string key);
+        void add_symbol(string key, string value);
+
     private:
+        map<string, string> symbols;
         unsigned long index = 0;
         uint16_t node_depth_lvl= 0;
         string body;

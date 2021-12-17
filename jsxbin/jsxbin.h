@@ -4,12 +4,13 @@
 
 #ifndef JSXBIN_DECOMPILER_JSXBIN_H
 #define JSXBIN_DECOMPILER_JSXBIN_H
+#include <string>
 
 enum jsxbin_version {
     VERSION_1,
     VERSION_2
 };
 
-
+void decompile(const std::string &input, std::string &output);
 
 #endif //JSXBIN_DECOMPILER_JSXBIN_H

@@ -14,7 +14,8 @@ using namespace std;
 const regex h_identify("^@JSXBIN@ES@([\\d.]+)@");
 const regex h_replace("^@JSXBIN@ES@[\\d.]+@");
 
-string decompile(const string &input) {
+
+void decompile(const string &input, string &output) {
 
     // Normalize the input by removing line-breaks, carriage returns, and backslashes.
     string normalized;
@@ -29,7 +30,7 @@ string decompile(const string &input) {
         string match = matches[1].str();
         version = stoi(&match[0]);
     }
-    // TODO: Throw exception if not found.
+    // TODO: add error handling.
 
     // Remove the header from the normalized input.
     string body = regex_replace(normalized, h_replace, "");
@@ -38,5 +39,5 @@ string decompile(const string &input) {
     // Start decompilation.
     RootNode *root = new RootNode(*scanState);
 
-    return root->jsx();
+    output = root->jsx();
 }

@@ -53,23 +53,6 @@ enum LiteralType {
     UTF8_STRING
 };
 
-AbstractNode *d_node(ScanState &scanState) {
-    char marker = scanState.pop();
-
-    if (marker == NO_VARIANT){
-        return nullptr;
-    }
-
-    // if the marker represents a valid node type, initialize and return said type...
-    if(NODE_MARKERS.find(marker) != string::npos){
-        nodes::get_inst(NodeType, scanState);
-    }
-
-    return nullptr;
-}
-
-
-
 string dnumber_primitive(ScanState &scanState, int length, bool negative) {
     byte bytes[length];
     for (int i = 0; i < length; ++i) {
@@ -101,7 +84,7 @@ string dnumber_primitive(ScanState &scanState, int length, bool negative) {
 string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
 
     if (scanState.decrement_node_depth()) {
-        return nullptr;
+        return "";
     }
 
     bool negative = false;
@@ -123,7 +106,7 @@ string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
         return literalType == LiteralType::UTF8_STRING ? unicode(number) : number;
 
     } else {
-        byte num = d_byte(scanState);
+        byte num = decoders::d_byte(scanState);
 
         if (negative) {
             return to_string(-1 * (int) num);
@@ -135,28 +118,53 @@ string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
             }
         }
     }
-
 }
 
-string d_number(ScanState &scanState, int length, bool negative) {
-    return dnumber_primitive(scanState, length, negative);
+AbstractNode* decoders::d_node(ScanState &scanState) {
+    char marker = scanState.pop();
+
+    if (marker == NO_VARIANT){
+        return nullptr;
+    }
+
+    // if the marker represents a valid node type, initialize and return said type...
+    if(NODE_MARKERS.find(marker) != string::npos){
+        nodes::get_inst(NodeType, scanState);
+    }
+
+    return nullptr;
 }
 
-unsigned char d_byte(ScanState &scanState) {
+string decoders::d_number(ScanState &scanState) {
+    char marker = scanState.pop();
+    string num;
+
+    // if the marker suggests
+    if(marker == NUMBER_8_BYTES){
+        scanState.step();
+        num = dnumber_primitive(scanState, 8, false);
+    } else {
+        num = dliteral_primitive(scanState, LiteralType::NUMBER);
+    }
+
+    return num;
+}
+
+byte decoders::d_byte(ScanState &scanState) {
 
     static const string alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef";
 
     // if it is nested, decrement depth level and return 0
     // (sorta feels like it should never happen)
     if (scanState.decrement_node_depth()) {
-        return 0;
+        return static_cast<byte>(0);
     }
 
     char cur = scanState.pop();
 
     // if result is capital letter...
     if (iscapital(cur)) {
-        return cur - 'A';
+        return static_cast<byte>(cur - 'A');
     } else {
         // cur must be within [103, 111]
         int n = (cur - 0x67) * 32; // ranges from 0 to 256
@@ -164,11 +172,11 @@ unsigned char d_byte(ScanState &scanState) {
         size_t up_index = alphabet_upper.find(second);
 
         // takes advantage of 8-bit overflow for encoding...
-        return (unsigned char) (n + up_index);
+        return (byte)(n + up_index);
     }
 }
 
-string d_variant(ScanState &scanState) {
+string decoders::d_variant(ScanState &scanState) {
     string result;
 
     // types are 'a' or 'b':null 'c':boolean 'd':number 'e':string
@@ -186,7 +194,7 @@ string d_variant(ScanState &scanState) {
             break;
         case 3: // 'd'
             // number type
-            result = d_number(scanState, 0, 0);
+            result = decoders::d_number(scanState);
             break;
         case 4: // 'e'
             // string type
@@ -206,7 +214,7 @@ string d_variant(ScanState &scanState) {
     return result;
 }
 
-bool d_bool(ScanState &scanState) {
+bool decoders::d_bool(ScanState &scanState) {
     char marker = scanState.pop();
 
     if (marker == BOOL_TRUE)
@@ -218,7 +226,7 @@ bool d_bool(ScanState &scanState) {
     return false;
 }
 
-string d_string(ScanState &scanState) {
+string decoders::d_string(ScanState &scanState) {
 
     // Parse length of string...
     int length  = stoi(dliteral_primitive(scanState, LiteralType::NUMBER));
@@ -231,4 +239,51 @@ string d_string(ScanState &scanState) {
     }
 
     return buf;
+}
+
+reference decoders::d_ref(ScanState &scanState, jsxbin_version jsxbinVersion) {
+    string id = d_ident(scanState);
+    bool flag = false;
+
+    if (jsxbinVersion == jsxbin_version::VERSION_2) {
+        flag = d_bool(scanState);
+    }
+
+    return (reference) { id, flag };
+}
+
+int decoders::d_length(ScanState &scanState) {
+    string value = dliteral_primitive(scanState, LiteralType::NUMBER);
+    return value.empty() ? 0 : abs(stoi(value));
+}
+
+string decoders::d_ident(ScanState &scanState) {
+    char marker = scanState.pop();
+
+    if (marker == ID_REFERENCE) {
+        string id = to_string(d_length(scanState));
+        return scanState.get_symbol(id);
+    } else {
+        scanState.step(); // steps over type marker
+        string name = d_string(scanState);
+        string id = to_string(d_length(scanState));
+        scanState.add_symbol(id, name);
+        return name;
+    }
+}
+
+vector<AbstractNode *> decoders::d_children(ScanState &scanState) {
+    int length = d_length(scanState);
+    if (length == 0){
+        return {};
+    }
+
+    vector<AbstractNode *> result;
+    for (int i = 0; i < length; ++i) {
+        AbstractNode *child = d_node(scanState);
+        if (child != nullptr)
+            result.push_back(child);
+    }
+
+    return result;
 }

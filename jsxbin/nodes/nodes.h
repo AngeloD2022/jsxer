@@ -9,6 +9,7 @@
 #include "ArgumentList.h"
 #include "ArrayExpr.h"
 #include "ArrayIndexingExpr.h"
+#include "AssignmentExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -66,6 +67,7 @@ namespace jsxbin::nodes {
             case ArrayIndexingExpr: return new class ArrayIndexingExpr(scanState);
             case AssignmentExpr: return new class AssignmentExpr(scanState);
         }
+        return nullptr;
     }
 
 }

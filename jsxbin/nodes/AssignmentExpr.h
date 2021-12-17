@@ -30,13 +30,14 @@ namespace jsxbin::nodes {
         string jsx() override {
             string result = declaration ? "var " : "";
 
-            if(shorthand){
-                BinaryExpr binExpr = (BinaryExpr) expr;
-
-
-            }else{
-
-            }
+//            if(shorthand){
+//                BinaryExpr binExpr = (BinaryExpr) expr;
+//
+//
+//            }else{
+//
+//            }
+            return result;
         }
 
     private:

@@ -8,6 +8,7 @@
 #include <string>
 #include "ScanState.h"
 #include "nodes/AbstractNode.h"
+#include "jsxbin.h"
 #include <vector>
 
 using namespace std;
@@ -24,13 +25,13 @@ namespace jsxbin::decoders {
     AbstractNode* d_node(ScanState &scanState);
     string d_variant(ScanState &scanState);
     string d_string(ScanState &scanState);
-    vector<AbstractNode*> d_children(ScanState &scanState);
-    string d_number(ScanState &scanState, int length, int sign);
+    string d_number(ScanState &scanState);
     bool d_bool(ScanState &scanState);
     string d_ident(ScanState &scanState);
     int d_length(ScanState &scanState);
-    reference d_ref(ScanState &scanState);
+    reference d_ref(ScanState &scanState, jsxbin_version jsxbinVersion);
     byte d_byte(ScanState &scanState);
+    vector<AbstractNode *> d_children(ScanState &scanState);
 }
 
 

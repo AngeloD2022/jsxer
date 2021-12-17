@@ -69,6 +69,14 @@ bool ScanState::decrement_node_depth() {
     return true;
 }
 
+string ScanState::get_symbol(string key) {
+    return symbols.at(key);
+}
+
+void ScanState::add_symbol(string key, string value) {
+    symbols.insert_or_assign(key, value);
+}
+
 
 
 
