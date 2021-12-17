@@ -14,7 +14,7 @@ using namespace std;
 namespace jsxbin::nodes{
 
     class AbstractNode {
-        // The universal features of each node type...
+        // The universal features of each argument type...
     public:
         explicit AbstractNode(ScanState &scanState) : scanState(scanState) {};
         virtual string jsx() = 0;

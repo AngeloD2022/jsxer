@@ -29,7 +29,7 @@ namespace jsxbin{
         char peek(int ahead);
         string peek(int position, size_t length);
 
-        // node depth...
+        // argument depth...
         int get_node_depth();
         bool decrement_node_depth();
 
