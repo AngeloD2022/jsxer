@@ -288,3 +288,18 @@ vector<AbstractNode *> decoders::d_children(ScanState &scanState) {
 
     return result;
 }
+
+line_info d_linfo(ScanState &scanState) {
+    line_info result;
+
+    result.line_number = d_length(scanState);
+    result.child = d_node(scanState);
+
+    int length = d_length(scanState);
+
+    for (int i = 0; i < length; ++i) {
+        result.labels.push_back(d_ident(scanState));
+    }
+
+    return result;
+}

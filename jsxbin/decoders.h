@@ -22,7 +22,24 @@ namespace jsxbin::decoders {
         bool flag;
     };
 
+    struct line_info {
+        int line_number;
+        AbstractNode *child;
+        vector<string> labels;
+
+        string lbl_statement() {
+            string result;
+            std::for_each(labels.begin(), labels.end(), [&result](const string& x){result += x +": \n";});
+            return result;
+        }
+
+        string create_body() const {
+            return child == nullptr ? "" : child->jsx();
+        }
+    };
+
     AbstractNode* d_node(ScanState &scanState);
+    line_info d_linfo(ScanState &scanState);
     string d_variant(ScanState &scanState);
     string d_string(ScanState &scanState);
     string d_number(ScanState &scanState);
