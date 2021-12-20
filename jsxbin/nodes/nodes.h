@@ -15,6 +15,8 @@
 #include "DebuggerStatement.h"
 #include "DeleteExpr.h"
 #include "DoWhileExpr.h"
+#include "ExprNode.h"
+#include "ForInStatement.h"
 
 namespace jsxbin::nodes {
 
@@ -76,6 +78,8 @@ namespace jsxbin::nodes {
             case DebuggerStatement: return new class DebuggerStatement(scanState);
             case DeleteExpr: return new class DeleteExpr(scanState);
             case DoWhileExpr: return new class DoWhileExpr(scanState);
+            case ExprNode: return new class ExprNode(scanState);
+            case ForInStatement: return new class ForInStatement(scanState);
         }
         return nullptr;
     }
