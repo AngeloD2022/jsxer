@@ -19,6 +19,7 @@
 #include "ForInStatement.h"
 #include "ForStatement.h"
 #include "FunctionCallExpr.h"
+#include "FunctionDeclaration.h"
 
 namespace jsxbin::nodes {
 
@@ -85,6 +86,7 @@ namespace jsxbin::nodes {
             case ForStatement: return new class ForStatement(scanState);
             case ForStatement2: return new class ForStatement2(scanState);
             case FunctionCallExpr: return new class FunctionCallExpr(scanState);
+            case FunctionDeclaration: return new class FunctionDeclaration(scanState);
         }
         return nullptr;
     }
