@@ -10,6 +10,7 @@
 #include "nodes/AbstractNode.h"
 #include "jsxbin.h"
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 using namespace jsxbin::nodes;

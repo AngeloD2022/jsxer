@@ -3,7 +3,7 @@
 //
 
 #include "ConditionalExpr.h"
-
+#include <typeinfo>
 // AKA ternary expression
 
 bool parenthesis(AbstractNode *node){

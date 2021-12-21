@@ -54,7 +54,7 @@ enum LiteralType {
 };
 
 string dnumber_primitive(ScanState &scanState, int length, bool negative) {
-    byte bytes[length];
+    byte *bytes = (byte*) malloc(length);
     for (int i = 0; i < length; ++i) {
         bytes[i] = d_byte(scanState);
     }
@@ -250,7 +250,11 @@ reference decoders::d_ref(ScanState &scanState) {
         flag = d_bool(scanState);
     }
 
+#ifdef WIN32
+    return {id, flag};
+#elif
     return (reference) {id, flag};
+#endif
 }
 
 int decoders::d_length(ScanState &scanState) {

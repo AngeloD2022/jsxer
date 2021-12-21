@@ -3,7 +3,7 @@
 //
 
 #include "IfStatement.h"
-
+#include <typeinfo>
 
 
 void IfStatement::parse() {
