@@ -17,6 +17,8 @@
 #include "DoWhileExpr.h"
 #include "ExprNode.h"
 #include "ForInStatement.h"
+#include "ForStatement.h"
+#include "FunctionCallExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -80,6 +82,9 @@ namespace jsxbin::nodes {
             case DoWhileExpr: return new class DoWhileExpr(scanState);
             case ExprNode: return new class ExprNode(scanState);
             case ForInStatement: return new class ForInStatement(scanState);
+            case ForStatement: return new class ForStatement(scanState);
+            case ForStatement2: return new class ForStatement2(scanState);
+            case FunctionCallExpr: return new class FunctionCallExpr(scanState);
         }
         return nullptr;
     }

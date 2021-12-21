@@ -23,7 +23,7 @@ string ForInStatement::jsx() {
     result += loopVariable->jsx();
     result += " in ";
     result += objExpression->jsx();
-    result += ") {{ \n" + bodyInfo.create_body() + '}';
+    result += ") { \n" + bodyInfo.create_body() + '}';
 
     return result;
 }
