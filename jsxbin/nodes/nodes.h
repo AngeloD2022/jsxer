@@ -22,6 +22,8 @@
 #include "FunctionDeclaration.h"
 #include "FunctionExpr.h"
 #include "IdNode.h"
+#include "IdRefExpr.h"
+#include "IfStatement.h"
 
 namespace jsxbin::nodes {
 
@@ -91,6 +93,8 @@ namespace jsxbin::nodes {
             case FunctionDeclaration: return new class FunctionDeclaration(scanState);
             case FunctionExpr: return new class FunctionExpr(scanState);
             case IdNode: return new class IdNode(scanState);
+            case IdRefExpr: return new class IdRefExpr(scanState);
+            case IfStatement: return new class IfStatement(scanState);
         }
         return nullptr;
     }

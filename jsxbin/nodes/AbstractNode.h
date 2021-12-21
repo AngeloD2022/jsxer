@@ -5,6 +5,7 @@
 #ifndef JSXBIN_DECOMPILER_ABSTRACTNODE_H
 #define JSXBIN_DECOMPILER_ABSTRACTNODE_H
 
+#define istype(x, tname) strcmp(typeid(x).name(), tname) == 0
 
 #include "../ScanState.h"
 
