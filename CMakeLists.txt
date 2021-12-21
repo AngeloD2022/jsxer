@@ -40,4 +40,4 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/ForStatement.h
         jsxbin/nodes/FunctionCallExpr.cpp
         jsxbin/nodes/FunctionCallExpr.h
-        jsxbin/nodes/FunctionDeclaration.cpp jsxbin/nodes/FunctionDeclaration.h)
+        jsxbin/nodes/FunctionDeclaration.cpp jsxbin/nodes/FunctionDeclaration.h jsxbin/nodes/FunctionExpr.cpp jsxbin/nodes/FunctionExpr.h jsxbin/nodes/IdNode.cpp jsxbin/nodes/IdNode.h)

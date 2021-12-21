@@ -20,6 +20,8 @@
 #include "ForStatement.h"
 #include "FunctionCallExpr.h"
 #include "FunctionDeclaration.h"
+#include "FunctionExpr.h"
+#include "IdNode.h"
 
 namespace jsxbin::nodes {
 
@@ -71,7 +73,7 @@ namespace jsxbin::nodes {
     };
 
     AbstractNode* get_inst(NodeType nodeType, ScanState &scanState){
-        switch(nodeType){
+        switch (nodeType) {
             case ArgumentList: return new class ArgumentList(scanState);
             case ArrayExpr: return new class ArrayExpr(scanState);
             case ArrayIndexingExpr: return new class ArrayIndexingExpr(scanState);
@@ -87,6 +89,8 @@ namespace jsxbin::nodes {
             case ForStatement2: return new class ForStatement2(scanState);
             case FunctionCallExpr: return new class FunctionCallExpr(scanState);
             case FunctionDeclaration: return new class FunctionDeclaration(scanState);
+            case FunctionExpr: return new class FunctionExpr(scanState);
+            case IdNode: return new class IdNode(scanState);
         }
         return nullptr;
     }
