@@ -38,6 +38,16 @@ namespace jsxbin::decoders {
         }
     };
 
+    struct function_signature {
+        int type;
+        string name;
+        int header_1;
+        int header_3;
+        int header_5;
+        map<string, int> parameters;
+        map<string, int> local_vars;
+    };
+
     AbstractNode* d_node(ScanState &scanState);
     line_info d_linfo(ScanState &scanState);
     string d_variant(ScanState &scanState);
@@ -49,6 +59,7 @@ namespace jsxbin::decoders {
     reference d_ref(ScanState &scanState);
     byte d_byte(ScanState &scanState);
     vector<AbstractNode *> d_children(ScanState &scanState);
+    function_signature d_fsig(ScanState &scanState);
 }
 
 

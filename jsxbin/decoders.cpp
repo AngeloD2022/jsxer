@@ -28,7 +28,7 @@ string unicode(const string &x) {
     return x;
 }
 
-bool replace_str(string &str, const string &from, const string &to){
+bool replace_str(string &str, const string &from, const string &to) {
     size_t pos = str.find(from);
     if (pos == string::npos)
         return false;
@@ -36,13 +36,13 @@ bool replace_str(string &str, const string &from, const string &to){
     return true;
 }
 
-string fromISO8859(const unsigned char &value){
-    if (value < 0x80){
+string fromISO8859(const unsigned char &value) {
+    if (value < 0x80) {
         return to_string(value);
     } else {
         string out;
-        out.push_back((char)(0xC0 | value >> 6));
-        out.push_back((char)(0x80 | (value & 0x3f)));
+        out.push_back((char) (0xC0 | value >> 6));
+        out.push_back((char) (0x80 | (value & 0x3f)));
         return out;
     }
 }
@@ -114,21 +114,21 @@ string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
             if (literalType == LiteralType::NUMBER) {
                 return to_string((unsigned char) num);
             } else {
-                return fromISO8859((unsigned char)num);
+                return fromISO8859((unsigned char) num);
             }
         }
     }
 }
 
-AbstractNode* decoders::d_node(ScanState &scanState) {
+AbstractNode *decoders::d_node(ScanState &scanState) {
     char marker = scanState.pop();
 
-    if (marker == NO_VARIANT){
+    if (marker == NO_VARIANT) {
         return nullptr;
     }
 
     // if the marker represents a valid argument type, initialize and return said type...
-    if(NODE_MARKERS.find(marker) != string::npos){
+    if (NODE_MARKERS.find(marker) != string::npos) {
         AbstractNode *node = nodes::get_inst(NodeType::ArgumentList, scanState);
         return node;
     }
@@ -141,7 +141,7 @@ string decoders::d_number(ScanState &scanState) {
     string num;
 
     // if the marker suggests
-    if(marker == NUMBER_8_BYTES){
+    if (marker == NUMBER_8_BYTES) {
         scanState.step();
         num = dnumber_primitive(scanState, 8, false);
     } else {
@@ -173,7 +173,7 @@ byte decoders::d_byte(ScanState &scanState) {
         size_t up_index = alphabet_upper.find(second);
 
         // takes advantage of 8-bit overflow for encoding...
-        return (byte)(n + up_index);
+        return (byte) (n + up_index);
     }
 }
 
@@ -230,7 +230,7 @@ bool decoders::d_bool(ScanState &scanState) {
 string decoders::d_string(ScanState &scanState) {
 
     // Parse length of string...
-    int length  = stoi(dliteral_primitive(scanState, LiteralType::NUMBER));
+    int length = stoi(dliteral_primitive(scanState, LiteralType::NUMBER));
     if (length == 0)
         return "";
 
@@ -250,7 +250,7 @@ reference decoders::d_ref(ScanState &scanState) {
         flag = d_bool(scanState);
     }
 
-    return (reference) { id, flag };
+    return (reference) {id, flag};
 }
 
 int decoders::d_length(ScanState &scanState) {
@@ -275,7 +275,7 @@ string decoders::d_ident(ScanState &scanState) {
 
 vector<AbstractNode *> decoders::d_children(ScanState &scanState) {
     int length = d_length(scanState);
-    if (length == 0){
+    if (length == 0) {
         return {};
     }
 
@@ -301,5 +301,30 @@ line_info decoders::d_linfo(ScanState &scanState) {
         result.labels.push_back(d_ident(scanState));
     }
 
+    return result;
+}
+
+function_signature decoders::d_fsig(ScanState &scanState) {
+    function_signature result;
+
+    int length = d_length(scanState);
+    if (length > 0) {
+        for (int i = 0; i < length; ++i) {
+            string parameterName = d_ident(scanState);
+            int paramLength = d_length(scanState);
+
+            // separate local variables from parameter list...
+            if (paramLength > 0x1ffffc70 && paramLength < 0x202fbf00)
+                result.parameters.insert_or_assign(parameterName, paramLength);
+            else
+                result.local_vars.insert_or_assign(parameterName, paramLength);
+        }
+    }
+
+    result.header_1 = d_length(scanState);
+    result.type = d_length(scanState);
+    result.header_3 = d_length(scanState);
+    result.name = d_ident(scanState);
+    result.header_5 = stoi(dliteral_primitive(scanState, LiteralType::NUMBER));
     return result;
 }
