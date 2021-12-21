@@ -120,6 +120,12 @@ string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
     }
 }
 
+int decoders::d_literal_num(ScanState &scanState) {
+    string value = dliteral_primitive(scanState, LiteralType::NUMBER);
+    return value.empty() ? 0 : stoi(value);
+}
+
+
 AbstractNode *decoders::d_node(ScanState &scanState) {
     char marker = scanState.pop();
 
@@ -329,6 +335,7 @@ function_signature decoders::d_fsig(ScanState &scanState) {
     result.type = d_length(scanState);
     result.header_3 = d_length(scanState);
     result.name = d_ident(scanState);
-    result.header_5 = stoi(dliteral_primitive(scanState, LiteralType::NUMBER));
+    result.header_5 = d_literal_num(scanState);
     return result;
 }
+

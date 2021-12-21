@@ -24,6 +24,11 @@
 #include "IdNode.h"
 #include "IdRefExpr.h"
 #include "IfStatement.h"
+#include "IncrementExpr.h"
+#include "IndexingIncrementExpr.h"
+#include "JumpStatement.h"
+#include "LogicalExpr.h"
+#include "MemberAssignmentExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -51,7 +56,7 @@ namespace jsxbin::nodes {
         IncrementExpr = 'T',
         IndexingIncrementExpr = 'P',
         JumpStatement = 'D',
-        LogicalExp = 'U',
+        LogicalExpr = 'U',
         MemberAssignmentExpr = 'B',
         MemberExpr = 'X',
         ObjectExpr = 'W',
@@ -75,6 +80,8 @@ namespace jsxbin::nodes {
     };
 
     AbstractNode* get_inst(NodeType nodeType, ScanState &scanState){
+        // should be able to cast char to node type, making this easier to use!
+
         switch (nodeType) {
             case ArgumentList: return new class ArgumentList(scanState);
             case ArrayExpr: return new class ArrayExpr(scanState);
@@ -95,6 +102,11 @@ namespace jsxbin::nodes {
             case IdNode: return new class IdNode(scanState);
             case IdRefExpr: return new class IdRefExpr(scanState);
             case IfStatement: return new class IfStatement(scanState);
+            case IncrementExpr: return new class IncrementExpr(scanState);
+            case IndexingIncrementExpr: return new class IndexingIncrementExpr(scanState);
+            case JumpStatement: return new class JumpStatement(scanState);
+            case LogicalExpr: return new class LogicalExpr(scanState);
+            case MemberAssignmentExpr: return new class MemberAssignmentExpr(scanState);
         }
         return nullptr;
     }
