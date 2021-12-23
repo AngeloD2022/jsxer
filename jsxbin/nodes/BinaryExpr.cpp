@@ -3,6 +3,7 @@
 //
 
 #include "BinaryExpr.h"
+#include <typeinfo>
 
 using namespace jsxbin::nodes;
 
@@ -10,7 +11,7 @@ string BinaryExpr::create_expr(const string &literal, AbstractNode *exprNode) {
     bool parenthesis = false;
     string expression;
 
-    if (exprNode != nullptr && strcmp(typeid(exprNode).name(), "BinaryExpr") == 0) {
+    if (exprNode != nullptr && strcmp(typeid(&exprNode).name(), "BinaryExpr") == 0) {
         BinaryExpr *binExpr = (BinaryExpr *) exprNode;
         expression = binExpr->get_op();
 

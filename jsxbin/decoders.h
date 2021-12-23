@@ -10,6 +10,7 @@
 #include "nodes/AbstractNode.h"
 #include "jsxbin.h"
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 using namespace jsxbin::nodes;
@@ -50,6 +51,7 @@ namespace jsxbin::decoders {
 
     AbstractNode* d_node(ScanState &scanState);
     line_info d_linfo(ScanState &scanState);
+    int d_literal_num(ScanState &scanState);
     string d_variant(ScanState &scanState);
     string d_string(ScanState &scanState);
     string d_number(ScanState &scanState);

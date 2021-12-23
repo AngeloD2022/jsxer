@@ -12,5 +12,6 @@ void IncrementExpr::parse() {
 }
 
 string IncrementExpr::jsx() {
-    return std::string();
+    string op = operation == "1" ? "++" : "--";
+    return postfix ? id + op : op + id;
 }
