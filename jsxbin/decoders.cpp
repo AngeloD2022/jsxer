@@ -135,7 +135,7 @@ AbstractNode *decoders::d_node(ScanState &scanState) {
 
     // if the marker represents a valid argument type, initialize and return said type...
     if (NODE_MARKERS.find(marker) != string::npos) {
-        AbstractNode *node = nodes::get_inst(NodeType::ArgumentList, scanState);
+        AbstractNode *node = nodes::get_inst((NodeType)marker, scanState);
         return node;
     }
 
@@ -256,6 +256,7 @@ reference decoders::d_ref(ScanState &scanState) {
         flag = d_bool(scanState);
     }
 
+    // Something special for MSVC regarding the syntax for returning a struct inline...
 #ifdef WIN32
     return {id, flag};
 #else
