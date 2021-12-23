@@ -258,7 +258,7 @@ reference decoders::d_ref(ScanState &scanState) {
 
 #ifdef WIN32
     return {id, flag};
-#elif
+#else
     return (reference) {id, flag};
 #endif
 }
