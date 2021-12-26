@@ -35,6 +35,7 @@
 #include "RegExpLiteral.h"
 #include "ReturnStatement.h"
 #include "SetDefaultXMLNamespaceExpr.h"
+#include "StatementList.h"
 
 namespace jsxbin::nodes {
 
@@ -119,6 +120,7 @@ namespace jsxbin::nodes {
             case RegExpLiteral: return new class RegExpLiteral(scanState);
             case ReturnStatement: return new class ReturnStatement(scanState);
             case SetDefaultXMLNamespaceExpr: return new class SetDefaultXMLNamespaceExpr(scanState);
+            case StatementList: return new class StatementList(scanState);
         }
         return nullptr;
     }

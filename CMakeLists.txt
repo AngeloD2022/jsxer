@@ -14,7 +14,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/RootNode.h
         jsxbin/jsxbin.cpp
         jsxbin/jsxbin.h
-
         jsxbin/nodes/nodes.h
         jsxbin/nodes/ArgumentList.h
         jsxbin/nodes/ArrayExpr.h
@@ -40,4 +39,36 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/ForStatement.h
         jsxbin/nodes/FunctionCallExpr.cpp
         jsxbin/nodes/FunctionCallExpr.h
-        jsxbin/nodes/FunctionDeclaration.cpp jsxbin/nodes/FunctionDeclaration.h jsxbin/nodes/FunctionExpr.cpp jsxbin/nodes/FunctionExpr.h jsxbin/nodes/IdNode.cpp jsxbin/nodes/IdNode.h jsxbin/nodes/IdRefExpr.cpp jsxbin/nodes/IdRefExpr.h jsxbin/nodes/IfStatement.cpp jsxbin/nodes/IfStatement.h jsxbin/nodes/IncrementExpr.cpp jsxbin/nodes/IncrementExpr.h jsxbin/nodes/IndexingIncrementExpr.cpp jsxbin/nodes/IndexingIncrementExpr.h jsxbin/nodes/JumpStatement.cpp jsxbin/nodes/JumpStatement.h jsxbin/nodes/LogicalExpr.cpp jsxbin/nodes/LogicalExpr.h jsxbin/nodes/MemberAssignmentExpr.cpp jsxbin/nodes/MemberAssignmentExpr.h jsxbin/nodes/MemberExpr.cpp jsxbin/nodes/MemberExpr.h jsxbin/nodes/ObjectExpr.cpp jsxbin/nodes/ObjectExpr.h jsxbin/nodes/RegExpLiteral.cpp jsxbin/nodes/RegExpLiteral.h jsxbin/nodes/ReturnStatement.cpp jsxbin/nodes/ReturnStatement.h jsxbin/nodes/SetDefaultXMLNamespaceExpr.cpp jsxbin/nodes/SetDefaultXMLNamespaceExpr.h)
+        jsxbin/nodes/FunctionDeclaration.cpp
+        jsxbin/nodes/FunctionDeclaration.h
+        jsxbin/nodes/FunctionExpr.cpp
+        jsxbin/nodes/FunctionExpr.h
+        jsxbin/nodes/IdNode.cpp
+        jsxbin/nodes/IdNode.h
+        jsxbin/nodes/IdRefExpr.cpp
+        jsxbin/nodes/IdRefExpr.h
+        jsxbin/nodes/IfStatement.cpp
+        jsxbin/nodes/IfStatement.h
+        jsxbin/nodes/IncrementExpr.cpp
+        jsxbin/nodes/IncrementExpr.h
+        jsxbin/nodes/IndexingIncrementExpr.cpp
+        jsxbin/nodes/IndexingIncrementExpr.h
+        jsxbin/nodes/JumpStatement.cpp
+        jsxbin/nodes/JumpStatement.h
+        jsxbin/nodes/LogicalExpr.cpp
+        jsxbin/nodes/LogicalExpr.h
+        jsxbin/nodes/MemberAssignmentExpr.cpp
+        jsxbin/nodes/MemberAssignmentExpr.h
+        jsxbin/nodes/MemberExpr.cpp
+        jsxbin/nodes/MemberExpr.h
+        jsxbin/nodes/ObjectExpr.cpp
+        jsxbin/nodes/ObjectExpr.h
+        jsxbin/nodes/RegExpLiteral.cpp
+        jsxbin/nodes/RegExpLiteral.h
+        jsxbin/nodes/ReturnStatement.cpp
+        jsxbin/nodes/ReturnStatement.h
+        jsxbin/nodes/SetDefaultXMLNamespaceExpr.cpp
+        jsxbin/nodes/SetDefaultXMLNamespaceExpr.h
+        jsxbin/nodes/StatementList.cpp
+        jsxbin/nodes/StatementList.h
+        )
