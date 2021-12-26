@@ -36,6 +36,7 @@
 #include "ReturnStatement.h"
 #include "SetDefaultXMLNamespaceExpr.h"
 #include "StatementList.h"
+#include "SwitchStatement.h"
 
 namespace jsxbin::nodes {
 
@@ -121,6 +122,7 @@ namespace jsxbin::nodes {
             case ReturnStatement: return new class ReturnStatement(scanState);
             case SetDefaultXMLNamespaceExpr: return new class SetDefaultXMLNamespaceExpr(scanState);
             case StatementList: return new class StatementList(scanState);
+            case SwitchStatement: return new class SwitchStatement(scanState);
         }
         return nullptr;
     }
