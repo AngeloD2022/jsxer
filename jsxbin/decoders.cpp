@@ -4,8 +4,6 @@
 
 #include "decoders.h"
 #include "nodes/nodes.h"
-#include <string>
-#include <vector>
 
 #define iscapital(x) x - 0x41 <= 0x19
 
@@ -53,15 +51,13 @@ enum LiteralType {
     UTF8_STRING
 };
 
-string dnumber_primitive(ScanState &scanState, int length, bool negative) {
-    byte *bytes = (byte*) malloc(length);
-    for (int i = 0; i < length; ++i) {
-        bytes[i] = d_byte(scanState);
-    }
+string d_number_primitive(ScanState &scanState, int length, bool negative) {
 
-    // copy ambiguous type into buffer.
-    void *buffer = malloc(length);
-    memcpy(&buffer, bytes, length);
+    void *buffer[length];
+    for (int i = 0; i < length; ++i) {
+        // first, cast void* to byte*, and then dereference it to give it a value
+        *((byte *) buffer[i]) = d_byte(scanState);
+    }
 
     short sign = negative ? -1 : 1;
 
@@ -76,12 +72,12 @@ string dnumber_primitive(ScanState &scanState, int length, bool negative) {
         case 2:
             // result is a short...
             return to_string(reinterpret_cast<uint16_t &>(buffer) * sign);
+        default:
+            return "";
     }
-
-    return "";
 }
 
-string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
+string d_literal_primitive(ScanState &scanState, LiteralType literalType) {
 
     if (scanState.decrement_node_depth()) {
         return "";
@@ -97,12 +93,12 @@ string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
 
     if (marker == NUMBER_4_BYTES) {
         scanState.step();
-        string number = dnumber_primitive(scanState, 4, negative);
+        string number = d_number_primitive(scanState, 4, negative);
         return literalType == LiteralType::UTF8_STRING ? unicode(number) : number;
 
     } else if (marker == NUMBER_2_BYTES) {
         scanState.step();
-        string number = dnumber_primitive(scanState, 2, negative);
+        string number = d_number_primitive(scanState, 2, negative);
         return literalType == LiteralType::UTF8_STRING ? unicode(number) : number;
 
     } else {
@@ -121,7 +117,7 @@ string dliteral_primitive(ScanState &scanState, LiteralType literalType) {
 }
 
 int decoders::d_literal_num(ScanState &scanState) {
-    string value = dliteral_primitive(scanState, LiteralType::NUMBER);
+    string value = d_literal_primitive(scanState, LiteralType::NUMBER);
     return value.empty() ? 0 : stoi(value);
 }
 
@@ -135,7 +131,7 @@ AbstractNode *decoders::d_node(ScanState &scanState) {
 
     // if the marker represents a valid argument type, initialize and return said type...
     if (NODE_MARKERS.find(marker) != string::npos) {
-        AbstractNode *node = nodes::get_inst((NodeType)marker, scanState);
+        AbstractNode *node = nodes::get_inst((NodeType) marker, scanState);
         return node;
     }
 
@@ -149,9 +145,9 @@ string decoders::d_number(ScanState &scanState) {
     // if the marker suggests
     if (marker == NUMBER_8_BYTES) {
         scanState.step();
-        num = dnumber_primitive(scanState, 8, false);
+        num = d_number_primitive(scanState, 8, false);
     } else {
-        num = dliteral_primitive(scanState, LiteralType::NUMBER);
+        num = d_literal_primitive(scanState, LiteralType::NUMBER);
     }
 
     return num;
@@ -236,13 +232,13 @@ bool decoders::d_bool(ScanState &scanState) {
 string decoders::d_string(ScanState &scanState) {
 
     // Parse length of string...
-    int length = stoi(dliteral_primitive(scanState, LiteralType::NUMBER));
+    int length = stoi(d_literal_primitive(scanState, LiteralType::NUMBER));
     if (length == 0)
         return "";
 
     string buf;
     for (int i = 0; i < length; ++i) {
-        buf += dliteral_primitive(scanState, LiteralType::UTF8_STRING);
+        buf += d_literal_primitive(scanState, LiteralType::UTF8_STRING);
     }
 
     return buf;
@@ -265,7 +261,7 @@ reference decoders::d_ref(ScanState &scanState) {
 }
 
 int decoders::d_length(ScanState &scanState) {
-    string value = dliteral_primitive(scanState, LiteralType::NUMBER);
+    string value = d_literal_primitive(scanState, LiteralType::NUMBER);
     return value.empty() ? 0 : abs(stoi(value));
 }
 
@@ -340,3 +336,14 @@ function_signature decoders::d_fsig(ScanState &scanState) {
     return result;
 }
 
+// decoding utilities...
+bool decoders::valid_id(const string &value) {
+    static const regex identifier("^[a-zA-Z_$][0-9a-zA-Z_$]*$");
+    return regex_match(value.c_str(), identifier);
+}
+
+bool decoders::is_integer(const string &value) {
+    // Help from: https://stackoverflow.com/a/4654718/7786807
+    return !value.empty() && std::find_if(value.begin(), value.end(),
+                                          [](unsigned char c) { return !isdigit(c); }) == value.end();
+}

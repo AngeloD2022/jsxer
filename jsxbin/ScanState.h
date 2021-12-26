@@ -12,7 +12,7 @@
 
 using namespace std;
 
-namespace jsxbin{
+namespace jsxbin {
 
     class ScanState {
 

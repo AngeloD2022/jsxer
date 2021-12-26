@@ -81,9 +81,3 @@ string ScanState::get_symbol(string key) {
 void ScanState::add_symbol(string key, string value) {
     symbols.insert_or_assign(key, value);
 }
-
-
-
-
-
-

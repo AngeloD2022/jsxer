@@ -11,6 +11,21 @@ void MemberExpr::parse() {
 
 string MemberExpr::jsx() {
     // todo: complete implementation
-    return std::string();
+    string result;
+
+    // Check member validity...
+    if (decoders::valid_id(memberInfo.id)){
+        result = "." + memberInfo.id;
+    } else {
+
+        // check if ID can be converted to an integer...
+        if(decoders::is_integer(memberInfo.id)){
+            result = '[' + memberInfo.id + ']';
+        } else {
+            result = "[\"" + memberInfo.id + "\"]";
+        }
+    }
+
+    return (objInfo == nullptr ? "" : objInfo->jsx()) + result;
 }
 

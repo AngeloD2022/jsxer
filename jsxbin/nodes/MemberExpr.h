@@ -7,6 +7,7 @@
 
 #include "AbstractNode.h"
 #include "../decoders.h"
+#include <cstdlib>
 
 using namespace jsxbin;
 

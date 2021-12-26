@@ -29,6 +29,7 @@
 #include "JumpStatement.h"
 #include "LogicalExpr.h"
 #include "MemberAssignmentExpr.h"
+#include "MemberExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -107,6 +108,7 @@ namespace jsxbin::nodes {
             case JumpStatement: return new class JumpStatement(scanState);
             case LogicalExpr: return new class LogicalExpr(scanState);
             case MemberAssignmentExpr: return new class MemberAssignmentExpr(scanState);
+            case MemberExpr: return new class MemberExpr(scanState);
         }
         return nullptr;
     }

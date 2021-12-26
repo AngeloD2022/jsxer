@@ -5,12 +5,13 @@
 #ifndef JSXBIN_DECOMPILER_DECODERS_H
 #define JSXBIN_DECOMPILER_DECODERS_H
 
-#include <string>
 #include "ScanState.h"
 #include "nodes/AbstractNode.h"
 #include "jsxbin.h"
+#include <string>
 #include <vector>
 #include <algorithm>
+#include <regex>
 
 using namespace std;
 using namespace jsxbin::nodes;
@@ -62,6 +63,10 @@ namespace jsxbin::decoders {
     byte d_byte(ScanState &scanState);
     vector<AbstractNode *> d_children(ScanState &scanState);
     function_signature d_fsig(ScanState &scanState);
+
+    // decoding utilities...
+    bool valid_id(const string &value);
+    bool is_integer(const string &value);
 }
 
 
