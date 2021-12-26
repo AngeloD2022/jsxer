@@ -23,13 +23,16 @@ string ObjectExpr::jsx() {
         result += "\n{";
 
         std::for_each(properties.begin(), properties.end(), [&](const std::pair<string, AbstractNode*>& entry){
-            // for dictionaries
+            // for js dictionaries
+
             if (decoders::valid_id(entry.first)) {
                 result += '\"' + entry.first + '\"';
             } else {
                 result += entry.first;
             }
-            result += " :" + entry.second->jsx() + '\n';
+
+            // fixme: extra comma added, fix later
+            result += " :" + entry.second->jsx() + ",\n";
 
             return true;
         });
