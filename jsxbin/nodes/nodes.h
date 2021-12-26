@@ -10,6 +10,7 @@
 #include "ArrayExpr.h"
 #include "ArrayIndexingExpr.h"
 #include "AssignmentExpr.h"
+#include "BinaryExpr.h"
 #include "ConditionalExpr.h"
 #include "ConstDeclaration.h"
 #include "DebuggerStatement.h"
@@ -30,6 +31,7 @@
 #include "LogicalExpr.h"
 #include "MemberAssignmentExpr.h"
 #include "MemberExpr.h"
+#include "ObjectExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -88,6 +90,7 @@ namespace jsxbin::nodes {
             case ArrayExpr: return new class ArrayExpr(scanState);
             case ArrayIndexingExpr: return new class ArrayIndexingExpr(scanState);
             case AssignmentExpr: return new class AssignmentExpr(scanState);
+            case BinaryExpr: return new class BinaryExpr(scanState);
             case ConditionalExpr: return new class ConditionalExpr(scanState);
             case ConstDeclaration: return new class ConstDeclaration(scanState);
             case DebuggerStatement: return new class DebuggerStatement(scanState);
@@ -109,6 +112,7 @@ namespace jsxbin::nodes {
             case LogicalExpr: return new class LogicalExpr(scanState);
             case MemberAssignmentExpr: return new class MemberAssignmentExpr(scanState);
             case MemberExpr: return new class MemberExpr(scanState);
+            case ObjectExpr: return new class ObjectExpr(scanState);
         }
         return nullptr;
     }
