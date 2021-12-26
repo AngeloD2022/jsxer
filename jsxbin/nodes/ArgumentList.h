@@ -33,8 +33,9 @@ namespace jsxbin::nodes {
             return result;
         }
 
-    private:
         vector<AbstractNode*> arguments;
+
+    private:
         bool unkValue;
 
     };

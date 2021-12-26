@@ -71,4 +71,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/SetDefaultXMLNamespaceExpr.h
         jsxbin/nodes/StatementList.cpp
         jsxbin/nodes/StatementList.h
+        jsxbin/nodes/SwitchStatement.cpp
+        jsxbin/nodes/SwitchStatement.h
         )
