@@ -132,6 +132,8 @@ AbstractNode *decoders::d_node(ScanState &scanState) {
     // if the marker represents a valid argument type, initialize and return said type...
     if (NODE_MARKERS.find(marker) != string::npos) {
         AbstractNode *node = nodes::get_inst((NodeType) marker, scanState);
+        node->parse();
+
         return node;
     }
 

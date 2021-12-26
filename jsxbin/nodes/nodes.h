@@ -32,6 +32,7 @@
 #include "MemberAssignmentExpr.h"
 #include "MemberExpr.h"
 #include "ObjectExpr.h"
+#include "RegExpLiteral.h"
 
 namespace jsxbin::nodes {
 
@@ -113,6 +114,7 @@ namespace jsxbin::nodes {
             case MemberAssignmentExpr: return new class MemberAssignmentExpr(scanState);
             case MemberExpr: return new class MemberExpr(scanState);
             case ObjectExpr: return new class ObjectExpr(scanState);
+            case RegExpLiteral: return new class RegExpLiteral(scanState);
         }
         return nullptr;
     }
