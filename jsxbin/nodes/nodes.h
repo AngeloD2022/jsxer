@@ -41,6 +41,7 @@
 #include "ThrowStatement.h"
 #include "TryStatement.h"
 #include "UnaryExpr.h"
+#include "UnknownNode.h"
 
 namespace jsxbin::nodes {
 
@@ -131,6 +132,7 @@ namespace jsxbin::nodes {
             case ThrowStatement: return new class ThrowStatement(scanState);
             case TryStatement: return new class TryStatement(scanState);
             case UnaryExpr: return new class UnaryExpr(scanState);
+            case UnknownNode: return new class UnknownNode(scanState);
         }
         return nullptr;
     }

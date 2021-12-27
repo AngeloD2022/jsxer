@@ -82,4 +82,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/TryStatement.h
         jsxbin/nodes/UnaryExpr.cpp
         jsxbin/nodes/UnaryExpr.h
+        jsxbin/nodes/UnknownNode.cpp
+        jsxbin/nodes/UnknownNode.h
         )
