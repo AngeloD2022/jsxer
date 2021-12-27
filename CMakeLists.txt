@@ -14,6 +14,7 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/RootNode.h
         jsxbin/jsxbin.cpp
         jsxbin/jsxbin.h
+
         jsxbin/nodes/nodes.h
         jsxbin/nodes/ArgumentList.h
         jsxbin/nodes/ArrayExpr.h
@@ -73,4 +74,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/StatementList.h
         jsxbin/nodes/SwitchStatement.cpp
         jsxbin/nodes/SwitchStatement.h
+        jsxbin/nodes/ThisExpr.cpp
+        jsxbin/nodes/ThisExpr.h
         )
