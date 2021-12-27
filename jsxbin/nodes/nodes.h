@@ -48,6 +48,7 @@
 #include "XMLAccessorExpr.h"
 #include "XMLAssignmentExpr.h"
 #include "XMLDoubleDotDescendantsExpr.h"
+#include "XMLNamespaceExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -144,9 +145,10 @@ namespace jsxbin::nodes {
             case XMLAccessorExpr: return new class XMLAccessorExpr(scanState);
             case XMLAssignmentExpr: return new class XMLAssignmentExpr(scanState);
             case XMLDoubleDotDescendantsExpr: return new class XMLDoubleDotDescendantsExpr(scanState);
-
+            case XMLNamespaceExpr: return new class XMLNamespaceExpr(scanState);
+            default:
+                return nullptr;
         }
-        return nullptr;
     }
 
 }
