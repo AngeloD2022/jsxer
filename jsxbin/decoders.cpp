@@ -234,7 +234,9 @@ bool decoders::d_bool(ScanState &scanState) {
 string decoders::d_string(ScanState &scanState) {
 
     // Parse length of string...
-    int length = stoi(d_literal_primitive(scanState, LiteralType::NUMBER));
+    string parsed_len = d_literal_primitive(scanState, LiteralType::NUMBER);
+    int length = parsed_len.empty() ? 0 : stoi(parsed_len);
+
     if (length == 0)
         return "";
 

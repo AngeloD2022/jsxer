@@ -21,7 +21,6 @@ namespace jsxbin::nodes {
         }
 
         string jsx() override {
-            parse();
             return child->jsx();
         }
 
