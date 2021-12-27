@@ -96,4 +96,4 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/XMLAssignmentExpr.h
         jsxbin/nodes/XMLDoubleDotDescendantsExpr.cpp
         jsxbin/nodes/XMLDoubleDotDescendantsExpr.h
-        )
+        jsxbin/nodes/XMLNamespaceExpr.cpp jsxbin/nodes/XMLNamespaceExpr.h)
