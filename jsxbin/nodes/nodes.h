@@ -39,6 +39,7 @@
 #include "SwitchStatement.h"
 #include "ThisExpr.h"
 #include "ThrowStatement.h"
+#include "TryStatement.h"
 
 namespace jsxbin::nodes {
 
@@ -127,6 +128,7 @@ namespace jsxbin::nodes {
             case SwitchStatement: return new class SwitchStatement(scanState);
             case ThisExpr: return new class ThisExpr(scanState);
             case ThrowStatement: return new class ThrowStatement(scanState);
+            case TryStatement: return new class TryStatement(scanState);
         }
         return nullptr;
     }

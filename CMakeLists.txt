@@ -78,4 +78,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/ThisExpr.h
         jsxbin/nodes/ThrowStatement.cpp
         jsxbin/nodes/ThrowStatement.h
+        jsxbin/nodes/TryStatement.cpp
+        jsxbin/nodes/TryStatement.h
         )
