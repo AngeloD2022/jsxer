@@ -47,6 +47,7 @@
 #include "WithStatement.h"
 #include "XMLAccessorExpr.h"
 #include "XMLAssignmentExpr.h"
+#include "XMLDoubleDotDescendantsExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -142,6 +143,8 @@ namespace jsxbin::nodes {
             case WhileStatement: return new class WhileStatement(scanState);
             case XMLAccessorExpr: return new class XMLAccessorExpr(scanState);
             case XMLAssignmentExpr: return new class XMLAssignmentExpr(scanState);
+            case XMLDoubleDotDescendantsExpr: return new class XMLDoubleDotDescendantsExpr(scanState);
+
         }
         return nullptr;
     }
