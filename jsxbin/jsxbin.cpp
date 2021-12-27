@@ -38,6 +38,7 @@ void jsxbin::decompile(const string &input, string &output) {
 
     // Start decompilation.
     RootNode *root = new RootNode(*scanState);
+    root->parse();
 
     output = root->jsx();
 }
