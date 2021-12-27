@@ -45,6 +45,7 @@
 #include "ValueNode.h"
 #include "WhileStatement.h"
 #include "WithStatement.h"
+#include "XMLAccessorExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -138,6 +139,7 @@ namespace jsxbin::nodes {
             case UnknownNode: return new class UnknownNode(scanState);
             case ValueNode: return new class ValueNode(scanState);
             case WhileStatement: return new class WhileStatement(scanState);
+            case XMLAccessorExpr: return new class XMLAccessorExpr(scanState);
         }
         return nullptr;
     }

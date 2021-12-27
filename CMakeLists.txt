@@ -90,4 +90,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/WhileStatement.h
         jsxbin/nodes/WithStatement.cpp
         jsxbin/nodes/WithStatement.h
+        jsxbin/nodes/XMLAccessorExpr.cpp
+        jsxbin/nodes/XMLAccessorExpr.h
         )
