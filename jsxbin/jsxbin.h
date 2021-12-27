@@ -11,6 +11,8 @@ enum jsxbin_version {
     VERSION_2
 };
 
-void decompile(const std::string &input, std::string &output);
+namespace jsxbin {
+    void decompile(const std::string &input, std::string &output);
+}
 
 #endif //JSXBIN_DECOMPILER_JSXBIN_H

@@ -15,7 +15,7 @@ const regex h_identify("^@JSXBIN@ES@([\\d.]+)@");
 const regex h_replace("^@JSXBIN@ES@[\\d.]+@");
 
 
-void decompile(const string &input, string &output) {
+void jsxbin::decompile(const string &input, string &output) {
 
     // Normalize the input by removing line-breaks, carriage returns, and backslashes.
     string normalized;
