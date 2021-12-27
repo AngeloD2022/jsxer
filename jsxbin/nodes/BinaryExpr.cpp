@@ -22,7 +22,7 @@ string BinaryExpr::create_expr(const string &literal, AbstractNode *exprNode) {
 
         parenthesis = !associative;
     } else {
-        expression = exprNode != nullptr ? literal : exprNode->jsx();
+        expression = exprNode == nullptr ? literal : exprNode->jsx();
     }
 
     return parenthesis ? "(" + expression + ")" : expression;
@@ -38,7 +38,7 @@ void BinaryExpr::parse() {
     string leftExp = create_expr(literalLeft, left);
     string rightExp = create_expr(literalRight, right);
 
-    if ((!leftExp.empty() && !rightExp.empty()) || (leftExp.empty() && !rightExp.empty())) {
+    if ((!leftExp.empty() && rightExp.empty()) || (leftExp.empty() && !rightExp.empty())) {
         op = leftExp + rightExp;
     } else {
         op = leftExp + ' ' + op_name + ' ' + rightExp;
