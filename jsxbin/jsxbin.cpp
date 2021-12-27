@@ -14,14 +14,24 @@ using namespace std;
 const regex h_identify("^@JSXBIN@ES@([\\d.]+)@");
 const regex h_replace("^@JSXBIN@ES@[\\d.]+@");
 
+// copied+pasted from decoders.cpp (temp solution)
+bool r_str(string &str, const string &from, const string &to) {
+    size_t pos = str.find(from);
+    while (pos != string::npos){
+        str.replace(pos, from.length(), to);
+        pos = str.find(from);
+    }
+    return true;
+}
 
 void jsxbin::decompile(const string &input, string &output) {
 
     // Normalize the input by removing line-breaks, carriage returns, and backslashes.
-    string normalized;
-    remove_copy(input.begin(), input.end(), back_inserter(normalized), '\n');
-    remove_copy(normalized.begin(), normalized.end(), back_inserter(normalized), '\r');
-    remove_copy(normalized.begin(), normalized.end(), back_inserter(normalized), '\\');
+    string normalized = input;
+
+    r_str(normalized, "\n", "");
+    r_str(normalized, "\r", "");
+    r_str(normalized, "\\", "");
 
     // Identify the JSXBIN Version.
     int version = 0;

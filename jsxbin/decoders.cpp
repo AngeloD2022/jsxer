@@ -35,14 +35,14 @@ bool replace_str(string &str, const string &from, const string &to) {
 }
 
 string fromISO8859(const unsigned char &value) {
+    string result;
     if (value < 0x80) {
-        return to_string(value);
+        result += value;
     } else {
-        string out;
-        out.push_back((char) (0xC0 | value >> 6));
-        out.push_back((char) (0x80 | (value & 0x3f)));
-        return out;
+        result.push_back((char) (0xC0 | value >> 6));
+        result.push_back((char) (0x80 | (value & 0x3f)));
     }
+    return result;
 }
 // end utility functions.
 
@@ -65,13 +65,13 @@ string d_number_primitive(ScanState &scanState, int length, bool negative) {
     switch (length) {
         case 8:
             // result is a double...
-            return to_string(reinterpret_cast<double &>(buffer) * sign);
+            return to_string(*((double *)buffer) * sign);
         case 4:
             // result is an integer...
-            return to_string(reinterpret_cast<uint32_t &>(buffer) * sign);
+            return to_string(*((uint32_t *)buffer) * sign);
         case 2:
             // result is a short...
-            return to_string(reinterpret_cast<uint16_t &>(buffer) * sign);
+            return to_string(*((uint16_t *)buffer) * sign);
         default:
             return "";
     }
@@ -141,7 +141,7 @@ AbstractNode *decoders::d_node(ScanState &scanState) {
 }
 
 string decoders::d_number(ScanState &scanState) {
-    char marker = scanState.pop();
+    char marker = scanState.peek(0);
     string num;
 
     // if the marker suggests
@@ -268,9 +268,9 @@ int decoders::d_length(ScanState &scanState) {
 }
 
 string decoders::d_ident(ScanState &scanState) {
-    char marker = scanState.pop();
+    char marker = scanState.peek(0);
 
-    if (marker == ID_REFERENCE) {
+    if (marker != ID_REFERENCE) {
         string id = to_string(d_length(scanState));
         return scanState.get_symbol(id);
     } else {

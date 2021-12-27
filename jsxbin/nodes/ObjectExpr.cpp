@@ -9,7 +9,9 @@ void ObjectExpr::parse() {
 
     size_t child_count = decoders::d_length(scanState);
     for (int i = 0; i < child_count; ++i) {
-        properties.insert_or_assign(decoders::d_ident(scanState), decoders::d_node(scanState));
+        string id = decoders::d_ident(scanState);
+        AbstractNode *node = decoders::d_node(scanState);
+        properties.insert_or_assign(id, node);
     }
 }
 
