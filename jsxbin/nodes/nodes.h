@@ -43,6 +43,7 @@
 #include "UnaryExpr.h"
 #include "UnknownNode.h"
 #include "ValueNode.h"
+#include "WhileStatement.h"
 
 namespace jsxbin::nodes {
 
@@ -135,6 +136,7 @@ namespace jsxbin::nodes {
             case UnaryExpr: return new class UnaryExpr(scanState);
             case UnknownNode: return new class UnknownNode(scanState);
             case ValueNode: return new class ValueNode(scanState);
+            case WhileStatement: return new class WhileStatement(scanState);
         }
         return nullptr;
     }

@@ -86,4 +86,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/UnknownNode.h
         jsxbin/nodes/ValueNode.cpp
         jsxbin/nodes/ValueNode.h
+        jsxbin/nodes/WhileStatement.cpp
+        jsxbin/nodes/WhileStatement.h
         )
