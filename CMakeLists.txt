@@ -84,4 +84,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/UnaryExpr.h
         jsxbin/nodes/UnknownNode.cpp
         jsxbin/nodes/UnknownNode.h
+        jsxbin/nodes/ValueNode.cpp
+        jsxbin/nodes/ValueNode.h
         )
