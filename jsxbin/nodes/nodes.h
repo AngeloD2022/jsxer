@@ -38,6 +38,7 @@
 #include "StatementList.h"
 #include "SwitchStatement.h"
 #include "ThisExpr.h"
+#include "ThrowStatement.h"
 
 namespace jsxbin::nodes {
 
@@ -125,6 +126,7 @@ namespace jsxbin::nodes {
             case StatementList: return new class StatementList(scanState);
             case SwitchStatement: return new class SwitchStatement(scanState);
             case ThisExpr: return new class ThisExpr(scanState);
+            case ThrowStatement: return new class ThrowStatement(scanState);
         }
         return nullptr;
     }
