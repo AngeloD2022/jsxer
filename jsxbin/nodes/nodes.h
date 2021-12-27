@@ -40,6 +40,7 @@
 #include "ThisExpr.h"
 #include "ThrowStatement.h"
 #include "TryStatement.h"
+#include "UnaryExpr.h"
 
 namespace jsxbin::nodes {
 
@@ -80,7 +81,7 @@ namespace jsxbin::nodes {
         ThrowStatement = 'f',
         TryStatement = 'g',
         UnaryExpr = 'h',
-        UnknownNode2 = 's',
+        UnknownNode = 's',
         ValueNode = 'F',
         WhileStatement = 'l',
         WithStatement = 'm',
@@ -129,6 +130,7 @@ namespace jsxbin::nodes {
             case ThisExpr: return new class ThisExpr(scanState);
             case ThrowStatement: return new class ThrowStatement(scanState);
             case TryStatement: return new class TryStatement(scanState);
+            case UnaryExpr: return new class UnaryExpr(scanState);
         }
         return nullptr;
     }
