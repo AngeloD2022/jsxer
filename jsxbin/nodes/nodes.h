@@ -44,6 +44,7 @@
 #include "UnknownNode.h"
 #include "ValueNode.h"
 #include "WhileStatement.h"
+#include "WithStatement.h"
 
 namespace jsxbin::nodes {
 
