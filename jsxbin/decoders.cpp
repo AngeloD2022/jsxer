@@ -53,10 +53,10 @@ enum LiteralType {
 
 string d_number_primitive(ScanState &scanState, int length, bool negative) {
 
-    void *buffer[length];
+    void *buffer = malloc(length);
     for (int i = 0; i < length; ++i) {
         // first, cast void* to byte*, and then dereference it to give it a value
-        *((byte *) buffer[i]) = d_byte(scanState);
+        ((byte*) buffer)[i] = d_byte(scanState);
     }
 
     short sign = negative ? -1 : 1;
