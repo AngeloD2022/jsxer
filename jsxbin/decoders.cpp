@@ -277,7 +277,6 @@ int decoders::d_length(ScanState &scanState) {
 string decoders::d_ident(ScanState &scanState) {
     char marker = scanState.peek(0);
 
-    //FIXME: Huge problem here, I don't know what.
     if (marker != ID_REFERENCE) {
         string id = to_string(d_length(scanState));
         return scanState.get_symbol(id);

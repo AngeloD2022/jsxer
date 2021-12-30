@@ -38,9 +38,9 @@ void ForStatement2::parse() {
 string ForStatement2::jsx() {
     string result;
     result += bodyInfo.lbl_statement();
-    result += "for (" + initial->jsx();
-    result += "; " + test->jsx();
-    result += "; " + update->jsx();
+    result += "for (" + (initial == nullptr ? "" : initial->jsx());
+    result += "; " + (test == nullptr ? "" : test->jsx());
+    result += "; " + (update == nullptr ? "" : update->jsx());
     result += ") { \n" + bodyInfo.create_body() + '}';
     return result;
 }
