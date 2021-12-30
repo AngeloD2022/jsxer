@@ -9,6 +9,8 @@ void IncrementExpr::parse() {
     length = decoders::d_length(scanState);
     operation = decoders::d_number(scanState);
 
+    // I CAN'T BELIEVE I FORGOT THIS...
+    postfix = decoders::d_bool(scanState);
 }
 
 string IncrementExpr::jsx() {

@@ -4,7 +4,7 @@
 #include "jsxbin/jsxbin.h"
 
 int main() {
-    std::string path = "/Users/angelodeluca/Downloads/Overlord.zxp/jsx/Overlord.jsx";
+    std::string path = "/Users/angelodeluca/Downloads/Buttcapper_1.5/Buttcapper.jsx";
 //    std::cout << "Enter the .jsxbin file path to decompile: " << std::endl;
 //    std::cin >> path;
 

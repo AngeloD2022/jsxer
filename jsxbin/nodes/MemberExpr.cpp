@@ -10,7 +10,6 @@ void MemberExpr::parse() {
 }
 
 string MemberExpr::jsx() {
-    // todo: complete implementation
     string result;
 
     // Check member validity...

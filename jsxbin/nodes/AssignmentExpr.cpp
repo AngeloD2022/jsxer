@@ -6,7 +6,7 @@
 
 void AssignmentExpr::parse() {
     var_name = decoders::d_ident(scanState);
-    decoders::d_length(scanState);
+    int type = decoders::d_length(scanState);
     expression = decoders::d_node(scanState);
     literal = decoders::d_variant(scanState);
     shorthand = decoders::d_bool(scanState);

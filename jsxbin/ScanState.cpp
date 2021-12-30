@@ -4,6 +4,8 @@
 
 #include "ScanState.h"
 
+#include <iostream>
+
 using namespace jsxbin;
 
 ScanState::ScanState(const string &body, jsxbin_version version) {
@@ -75,9 +77,11 @@ bool ScanState::decrement_node_depth() {
 }
 
 string ScanState::get_symbol(string key) {
+//    cout << "GETSYM(\""<<key<<"\") AT INDEX " << index << endl;
     return symbols.at(key);
 }
 
 void ScanState::add_symbol(string key, string value) {
+//    cout << "ADDSYM(\""<<key<<"\", \"" << value << "\") AT INDEX " << index << endl;
     symbols.insert_or_assign(key, value);
 }

@@ -27,10 +27,11 @@ string unicode(const string &x) {
 }
 
 bool replace_str(string &str, const string &from, const string &to) {
-    size_t pos = str.find(from);
-    if (pos == string::npos)
-        return false;
-    str.replace(pos, from.length(), to);
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+    }
     return true;
 }
 
@@ -152,7 +153,7 @@ string decoders::d_number(ScanState &scanState) {
         num = d_literal_primitive(scanState, LiteralType::NUMBER);
     }
 
-    return num;
+    return num.empty() ? "0" : num;
 }
 
 byte decoders::d_byte(ScanState &scanState) {
@@ -184,6 +185,11 @@ byte decoders::d_byte(ScanState &scanState) {
 string decoders::d_variant(ScanState &scanState) {
     string result;
 
+    if (scanState.peek(0) == NO_VARIANT) {
+        scanState.step();
+        return "";
+    }
+
     // types are 'a' or 'b':null 'c':boolean 'd':number 'e':string
     uint8_t type = scanState.pop() - 'a';
 
@@ -205,7 +211,6 @@ string decoders::d_variant(ScanState &scanState) {
             // string type
             result = d_string(scanState);
             replace_str(result, "\\", "\\\\");
-            replace_str(result, "\"", "\\\"");
             replace_str(result, "\"", "\\\"");
             replace_str(result, "\n", "\\n");
             replace_str(result, "\t", "\\t");
@@ -272,6 +277,7 @@ int decoders::d_length(ScanState &scanState) {
 string decoders::d_ident(ScanState &scanState) {
     char marker = scanState.peek(0);
 
+    //FIXME: Huge problem here, I don't know what.
     if (marker != ID_REFERENCE) {
         string id = to_string(d_length(scanState));
         return scanState.get_symbol(id);
