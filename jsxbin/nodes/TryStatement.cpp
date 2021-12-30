@@ -28,7 +28,7 @@ string TryStatement::jsx() {
         if (layer.exceptionFilter != nullptr)
             result += " if " + layer.exceptionFilter->jsx();
 
-        result += "\n) {" + (layer.catchBlock == nullptr ? "" : layer.catchBlock->jsx()) + '\n';
+        result += ") {" + (layer.catchBlock == nullptr ? "" : layer.catchBlock->jsx()) + '\n';
     }
 
     if (finallyBlock != nullptr) {
