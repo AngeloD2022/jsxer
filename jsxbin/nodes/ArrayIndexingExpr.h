@@ -16,18 +16,9 @@ namespace jsxbin::nodes {
     public:
         explicit ArrayIndexingExpr(ScanState &scanState) : AbstractNode(scanState) {}
 
-        void parse() override {
-            decoders::d_ref(scanState); // <str, bool>
-            AbstractNode *name = decoders::d_node(scanState);
-            AbstractNode *expr = decoders::d_node(scanState);
+        void parse() override;
 
-            arrayName = name->jsx();
-            expression = expr->jsx();
-        }
-
-        string jsx() override {
-            return arrayName + '[' + expression + ']';
-        }
+        string jsx() override;
 
     private:
         string arrayName;

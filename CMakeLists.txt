@@ -3,6 +3,16 @@ project(jsxbin_decompiler)
 
 set(CMAKE_CXX_STANDARD 20)
 
+#if(NOT CMAKE_BUILD_TYPE)
+#    set(CMAKE_BUILD_TYPE Release)
+#endif()
+#
+#set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
+add_compile_options(-O0)
+
 add_executable(jsxbin_decompiler
 
         main.cpp
@@ -11,14 +21,19 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/AbstractNode.h
         jsxbin/ScanState.cpp
         jsxbin/ScanState.h
+        jsxbin/nodes/RootNode.cpp
         jsxbin/nodes/RootNode.h
         jsxbin/jsxbin.cpp
         jsxbin/jsxbin.h
 
         jsxbin/nodes/nodes.h
+        jsxbin/nodes/ArgumentList.cpp
         jsxbin/nodes/ArgumentList.h
+        jsxbin/nodes/ArrayExpr.cpp
         jsxbin/nodes/ArrayExpr.h
+        jsxbin/nodes/ArrayIndexingExpr.cpp
         jsxbin/nodes/ArrayIndexingExpr.h
+        jsxbin/nodes/AssignmentExpr.cpp
         jsxbin/nodes/AssignmentExpr.h
         jsxbin/nodes/BinaryExpr.cpp
         jsxbin/nodes/BinaryExpr.h
@@ -96,4 +111,6 @@ add_executable(jsxbin_decompiler
         jsxbin/nodes/XMLAssignmentExpr.h
         jsxbin/nodes/XMLDoubleDotDescendantsExpr.cpp
         jsxbin/nodes/XMLDoubleDotDescendantsExpr.h
-        jsxbin/nodes/XMLNamespaceExpr.cpp jsxbin/nodes/XMLNamespaceExpr.h)
+        jsxbin/nodes/XMLNamespaceExpr.cpp
+        jsxbin/nodes/XMLNamespaceExpr.h
+        )

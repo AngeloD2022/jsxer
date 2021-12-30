@@ -18,17 +18,9 @@ namespace jsxbin::nodes {
     public:
         explicit ArrayExpr(ScanState &scanState) : AbstractNode(scanState) {}
 
-        void parse() override {
-            argumentList = (ArgumentList *) decoders::d_node(scanState);
-        }
+        void parse() override;
 
-        string jsx() override {
-            if(argumentList == nullptr){
-                return "[]";
-            }
-
-            return '[' + argumentList->jsx() + ']';
-        }
+        string jsx() override;
 
     private:
         ArgumentList* argumentList;

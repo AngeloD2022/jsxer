@@ -16,13 +16,9 @@ namespace jsxbin::nodes {
     public:
         explicit RootNode(ScanState &scanState) : AbstractNode(scanState) {}
 
-        void parse() override {
-            child = decoders::d_node(scanState);
-        }
+        void parse() override;
 
-        string jsx() override {
-            return child->jsx();
-        }
+        string jsx() override;
 
     private:
         AbstractNode *child = nullptr;

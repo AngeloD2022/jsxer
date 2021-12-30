@@ -19,19 +19,9 @@ namespace jsxbin::nodes {
     public:
         explicit ArgumentList(ScanState &scanState) : AbstractNode(scanState) {}
 
-        void parse() override {
-            arguments = decoders::d_children(scanState);
-            unkValue = decoders::d_bool(scanState);
-        }
+        void parse() override;
 
-        string jsx() override {
-            string result;
-            for (int i = 0; i < arguments.size(); ++i) {
-                result += arguments[i]->jsx() + (i + 1 == arguments.size() ? "": ", ");
-            }
-
-            return result;
-        }
+        string jsx() override;
 
         vector<AbstractNode*> arguments;
 
