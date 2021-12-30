@@ -20,7 +20,7 @@ string ForStatement::jsx() {
     result += bodyInfo.lbl_statement();
     result += "for (var ";
     result += varname + " = " + iteratorInitial + "; ";
-    result += varname + ' ' + comparisonOperator + ' ' + upperBound->jsx() = "; ";
+    result += varname + ' ' + comparisonOperator + ' ' + upperBound->jsx() + "; ";
     result += varname + " += " + stepSize;
     result += ") { \n" + bodyInfo.create_body() + '}';
     return result;
