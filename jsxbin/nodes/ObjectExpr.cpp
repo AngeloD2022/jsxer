@@ -22,22 +22,23 @@ string ObjectExpr::jsx() {
         result = "{}";
     } else {
 
-        result += "\n{";
+        result += "{";
 
-        std::for_each(properties.begin(), properties.end(), [&](const std::pair<string, AbstractNode*>& entry){
-            // for js dictionaries
-
+        int i = 0;
+        for(std::pair<string, AbstractNode*> entry : properties){
             if (decoders::valid_id(entry.first)) {
                 result += '\"' + entry.first + '\"';
             } else {
                 result += entry.first;
             }
 
-            // fixme: extra comma added, fix later
-            result += " :" + entry.second->jsx() + ",\n";
+            result += ": " + entry.second->jsx();
 
-            return true;
-        });
+            if (i+1 < properties.size())
+                result += ", ";
+
+            i++;
+        }
 
         result += '}';
     }
