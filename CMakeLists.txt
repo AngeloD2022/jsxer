@@ -13,111 +13,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_compile_options(-O3)
 
-add_executable(jsxbin_decompiler
-
-        main.cpp
-
-        jsxbin/decoders.cpp
-        jsxbin/decoders.h
-        jsxbin/nodes/AbstractNode.h
-        jsxbin/ScanState.cpp
-        jsxbin/ScanState.h
-        jsxbin/nodes/RootNode.cpp
-        jsxbin/nodes/RootNode.h
-        jsxbin/jsxbin.cpp
-        jsxbin/jsxbin.h
-
-        jsxbin/nodes/nodes.h
-        jsxbin/nodes/ArgumentList.cpp
-        jsxbin/nodes/ArgumentList.h
-        jsxbin/nodes/ArrayExpr.cpp
-        jsxbin/nodes/ArrayExpr.h
-        jsxbin/nodes/ArrayIndexingExpr.cpp
-        jsxbin/nodes/ArrayIndexingExpr.h
-        jsxbin/nodes/AssignmentExpr.cpp
-        jsxbin/nodes/AssignmentExpr.h
-        jsxbin/nodes/BinaryExpr.cpp
-        jsxbin/nodes/BinaryExpr.h
-        jsxbin/nodes/ConditionalExpr.cpp
-        jsxbin/nodes/ConditionalExpr.h
-        jsxbin/nodes/ConstDeclaration.cpp
-        jsxbin/nodes/ConstDeclaration.h
-        jsxbin/nodes/DebuggerStatement.cpp
-        jsxbin/nodes/DebuggerStatement.h
-        jsxbin/nodes/DeleteExpr.cpp
-        jsxbin/nodes/DeleteExpr.h
-        jsxbin/nodes/DoWhileExpr.cpp
-        jsxbin/nodes/DoWhileExpr.h
-        jsxbin/nodes/ExprNode.cpp
-        jsxbin/nodes/ExprNode.h
-        jsxbin/nodes/ForInStatement.cpp
-        jsxbin/nodes/ForInStatement.h
-        jsxbin/nodes/ForStatement.cpp
-        jsxbin/nodes/ForStatement.h
-        jsxbin/nodes/FunctionCallExpr.cpp
-        jsxbin/nodes/FunctionCallExpr.h
-        jsxbin/nodes/FunctionDeclaration.cpp
-        jsxbin/nodes/FunctionDeclaration.h
-        jsxbin/nodes/FunctionExpr.cpp
-        jsxbin/nodes/FunctionExpr.h
-        jsxbin/nodes/IdNode.cpp
-        jsxbin/nodes/IdNode.h
-        jsxbin/nodes/IdRefExpr.cpp
-        jsxbin/nodes/IdRefExpr.h
-        jsxbin/nodes/IfStatement.cpp
-        jsxbin/nodes/IfStatement.h
-        jsxbin/nodes/IncrementExpr.cpp
-        jsxbin/nodes/IncrementExpr.h
-        jsxbin/nodes/IndexingIncrementExpr.cpp
-        jsxbin/nodes/IndexingIncrementExpr.h
-        jsxbin/nodes/JumpStatement.cpp
-        jsxbin/nodes/JumpStatement.h
-        jsxbin/nodes/LogicalExpr.cpp
-        jsxbin/nodes/LogicalExpr.h
-        jsxbin/nodes/MemberAssignmentExpr.cpp
-        jsxbin/nodes/MemberAssignmentExpr.h
-        jsxbin/nodes/MemberExpr.cpp
-        jsxbin/nodes/MemberExpr.h
-        jsxbin/nodes/ObjectExpr.cpp
-        jsxbin/nodes/ObjectExpr.h
-        jsxbin/nodes/RegExpLiteral.cpp
-        jsxbin/nodes/RegExpLiteral.h
-        jsxbin/nodes/ReturnStatement.cpp
-        jsxbin/nodes/ReturnStatement.h
-        jsxbin/nodes/SetDefaultXMLNamespaceExpr.cpp
-        jsxbin/nodes/SetDefaultXMLNamespaceExpr.h
-        jsxbin/nodes/StatementList.cpp
-        jsxbin/nodes/StatementList.h
-        jsxbin/nodes/SwitchStatement.cpp
-        jsxbin/nodes/SwitchStatement.h
-        jsxbin/nodes/ThisExpr.cpp
-        jsxbin/nodes/ThisExpr.h
-        jsxbin/nodes/ThrowStatement.cpp
-        jsxbin/nodes/ThrowStatement.h
-        jsxbin/nodes/TryStatement.cpp
-        jsxbin/nodes/TryStatement.h
-        jsxbin/nodes/UnaryExpr.cpp
-        jsxbin/nodes/UnaryExpr.h
-        jsxbin/nodes/UnknownNode.cpp
-        jsxbin/nodes/UnknownNode.h
-        jsxbin/nodes/ValueNode.cpp
-        jsxbin/nodes/ValueNode.h
-        jsxbin/nodes/WhileStatement.cpp
-        jsxbin/nodes/WhileStatement.h
-        jsxbin/nodes/WithStatement.cpp
-        jsxbin/nodes/WithStatement.h
-        jsxbin/nodes/XMLAccessorExpr.cpp
-        jsxbin/nodes/XMLAccessorExpr.h
-        jsxbin/nodes/XMLAssignmentExpr.cpp
-        jsxbin/nodes/XMLAssignmentExpr.h
-        jsxbin/nodes/XMLDoubleDotDescendantsExpr.cpp
-        jsxbin/nodes/XMLDoubleDotDescendantsExpr.h
-        jsxbin/nodes/XMLNamespaceExpr.cpp
-        jsxbin/nodes/XMLNamespaceExpr.h
-        )
-
-
-add_library(jsxbin_decomp SHARED
+add_library(jsxbin_decomp STATIC
 
         jsxbin/decoders.cpp
         jsxbin/decoders.h
@@ -218,3 +114,12 @@ add_library(jsxbin_decomp SHARED
         jsxbin/nodes/XMLNamespaceExpr.h
 
         )
+
+add_executable(jsxbin_decompiler main.cpp)
+target_include_directories(jsxbin_decompiler PUBLIC jsxbin)
+target_link_libraries(jsxbin_decompiler jsxbin_decomp)
+
+# For python bindings...
+add_library(jd_pybind SHARED pybind/pybind.cpp pybind/pybind.h)
+target_include_directories(jd_pybind PUBLIC jsxbin)
+target_link_libraries(jd_pybind jsxbin_decomp)
