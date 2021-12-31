@@ -24,8 +24,8 @@ string StatementList::jsx() {
 
     for (int i = 0; i < statements.size(); ++i) {
         string expression = statements[i]->jsx();
-        if(istype(statements[i], "ExprNode"))
-            expression += ';';
+//        if(istype(statements[i], "ExprNode"))
+//            expression += ';';
 
         result += expression;
 

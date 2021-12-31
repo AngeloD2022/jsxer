@@ -10,5 +10,5 @@ void ExprNode::parse() {
 }
 
 string ExprNode::jsx() {
-    return lineInfo.lbl_statement() + expression->jsx();
+    return lineInfo.lbl_statement() + expression->jsx() + ';';
 }
