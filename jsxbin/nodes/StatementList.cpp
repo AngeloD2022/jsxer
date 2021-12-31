@@ -22,13 +22,15 @@ string StatementList::jsx() {
     // A seemingly useless sorting step (by line number of statements) happens here (where this comment is) in the original project,
     // but I removed it. We'll see what happens when I test it...
 
-    for (AbstractNode* statement : statements){
-        string expression = statement->jsx();
-        if(istype(statement, "ExprNode"))
+    for (int i = 0; i < statements.size(); ++i) {
+        string expression = statements[i]->jsx();
+        if(istype(statements[i], "ExprNode"))
             expression += ';';
 
-        // fixme: adds an extra line break, fix later
-        result += expression + '\n';
+        result += expression;
+
+        if (i+1 < statements.size())
+            result += '\n';
     }
 
     return body.lbl_statement() + result;
