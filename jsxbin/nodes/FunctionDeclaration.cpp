@@ -24,7 +24,7 @@ string FunctionDeclaration::jsx() {
         result += parameter.first + (j + 1 == signature.parameters.size() ? "" : ", ");
         j++;
     }
-    result += ") {\n" +body + '}';
+    result += ") {\n" +body + "\n}";
 
 
     return result;
