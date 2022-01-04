@@ -14,7 +14,7 @@ void IfStatement::parse() {
 
 string IfStatement::jsx() {
     string result = bodyInfo.lbl_statement() + "if ("+test->jsx()+") { \n"
-            + bodyInfo.create_body() + '}';
+            + bodyInfo.create_body() + "\n}";
 
     if (otherwise == nullptr) {
         return result;
@@ -24,7 +24,7 @@ string IfStatement::jsx() {
     while (istype(current, "IfStatement") && ((IfStatement *)current)->otherwise != nullptr) {
         IfStatement *elif = (IfStatement *)current;
         result += '\n' + elif->bodyInfo.lbl_statement() + "else if (" + elif->test->jsx() + ") {\n"
-                + elif->bodyInfo.create_body() + '}';
+                + elif->bodyInfo.create_body() + "\n}";
 
         current = elif->otherwise;
     }
