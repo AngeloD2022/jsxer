@@ -21,10 +21,6 @@ const char BOOL_FALSE = 0x66;
 const string NODE_MARKERS = "RAQSCdGHiIJLaKEMNjVOTPDUBXWYZkbcefghsFlmroqp";
 
 // begin utility functions...
-string unicode(const string &x) {
-    // TODO: Implement this...
-    return x;
-}
 
 bool replace_str(string &str, const string &from, const string &to) {
     size_t start_pos = 0;
@@ -95,12 +91,12 @@ string d_literal_primitive(ScanState &scanState, LiteralType literalType) {
     if (marker == NUMBER_4_BYTES) {
         scanState.step();
         string number = d_number_primitive(scanState, 4, negative);
-        return literalType == LiteralType::UTF8_STRING ? unicode(number) : number;
+        return number;
 
     } else if (marker == NUMBER_2_BYTES) {
         scanState.step();
         string number = d_number_primitive(scanState, 2, negative);
-        return literalType == LiteralType::UTF8_STRING ? unicode(number) : number;
+        return number;
 
     } else {
         byte num = d_byte(scanState);
@@ -232,7 +228,7 @@ bool decoders::d_bool(ScanState &scanState) {
     else if (marker == BOOL_FALSE)
         return false;
 
-    // todo: throw exception if CPU reaches here...
+    // todo: throw exception if CPU reaches here (which is entirely possible)...
     return false;
 }
 
