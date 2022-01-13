@@ -3,27 +3,31 @@
 #include <fstream>
 #include "jsxbin/jsxbin.h"
 
-int main() {
-    std::string path = "/Users/angelodeluca/Downloads/sliced_box_v3.25/Sliced Box.jsxbin";
-//    std::cout << "Enter the .jsxbin file path to decompile: " << std::endl;
-//    std::cin >> path;
+int main(int argc, char* argv[]) {
 
-    // read in the JSXBIN file contents...
-    std::ifstream jsxbinFile(path);
-    std::string content;
-    content.assign(std::istreambuf_iterator<char>(jsxbinFile), std::istreambuf_iterator<char>());
+    if (argc != 3){
+        std::cout << "Usage: jsxbin_decompiler <jsxbin path> <output path>" << std::endl;
+    } else {
 
-    std::cout << std::endl << "Decompiling..." << std::endl;
+        std::string input_path = argv[1];
+        std::string output_path = argv[2];
 
-    // begin decompilation...
-    std::string output;
-    jsxbin::decompile(content, output);
+        // read in the JSXBIN file contents...
+        std::ifstream jsxbinFile(input_path);
+        std::string content;
+        content.assign(std::istreambuf_iterator<char>(jsxbinFile), std::istreambuf_iterator<char>());
 
-    std::cout << "Finished." << std::endl;
+        std::cout << std::endl << "Decompiling..." << std::endl;
 
-    std::ofstream outfile("output.jsx");
-    outfile << output;
-    outfile.close();
+        // begin decompilation...
+        std::string output;
+        jsxbin::decompile(content, output);
+        std::cout << "Finished." << std::endl;
+
+        std::ofstream outfile(output_path);
+        outfile << output;
+        outfile.close();
+    }
 
     return 0;
 }
