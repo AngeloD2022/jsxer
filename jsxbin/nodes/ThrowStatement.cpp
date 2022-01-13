@@ -10,5 +10,5 @@ void ThrowStatement::parse() {
 }
 
 string ThrowStatement::jsx() {
-    return "throw " + expression->jsx();
+    return "throw " + expression->jsx() + ';';
 }
