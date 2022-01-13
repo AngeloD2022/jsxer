@@ -14,7 +14,16 @@ using namespace std;
 const regex h_identify("^@JSXBIN@ES@([\\d.]+)@");
 const regex h_replace("^@JSXBIN@ES@[\\d.]+@");
 
-// copied+pasted from decoders.cpp (temp solution)
+//void append_header(string &code){
+//    // Append a header to the decompiler output with branding and version...
+//    string header = "/**\n"
+//                    " * File Generated With Studio7 DeJSX (TM)\n"
+//                    " * Decompiler Version: 1.0.1\n"
+//                    " */\n\n";
+//    code = header + code;
+//}
+
+// copied+pasted from decoders.cpp
 bool r_str(string &str, const string &from, const string &to) {
     size_t pos = str.find(from);
     while (pos != string::npos){
@@ -40,7 +49,7 @@ void jsxbin::decompile(const string &input, string &output) {
         string match = matches[1].str();
         version = stoi(&match[0]);
     }
-    // TODO: This is unsafe. Add error handling.
+    // FIXME: This messes up a lot of things if not error-handled properly.
 
     // Remove the header from the normalized input.
     string body = regex_replace(normalized, h_replace, "");
@@ -51,4 +60,5 @@ void jsxbin::decompile(const string &input, string &output) {
     root->parse();
 
     output = root->jsx();
+//    append_header(output);
 }

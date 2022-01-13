@@ -142,6 +142,7 @@ namespace jsxbin::nodes {
             case UnknownNode: return new class UnknownNode(scanState);
             case ValueNode: return new class ValueNode(scanState);
             case WhileStatement: return new class WhileStatement(scanState);
+            case WithStatement: return new class WithStatement(scanState);
             case XMLAccessorExpr: return new class XMLAccessorExpr(scanState);
             case XMLAssignmentExpr: return new class XMLAssignmentExpr(scanState);
             case XMLDoubleDotDescendantsExpr: return new class XMLDoubleDotDescendantsExpr(scanState);

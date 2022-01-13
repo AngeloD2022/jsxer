@@ -12,6 +12,11 @@ enum jsxbin_version {
 };
 
 namespace jsxbin {
+
+    struct decompiler_options {
+        bool tabbed = false;
+    };
+
     void decompile(const std::string &input, std::string &output);
 }
 
