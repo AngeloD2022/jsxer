@@ -5,6 +5,6 @@ void IdRefExpr::parse() {
     type = decoders::d_length(reader);
 }
 
-string IdRefExpr::jsx() {
+string IdRefExpr::to_string() {
     return reference.id;
 }

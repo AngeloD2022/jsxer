@@ -5,17 +5,17 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class ReturnStatement : public AstNode {
     public:
         explicit ReturnStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::line_info lineInfo;
+        decoders::LineInfo lineInfo;
         AstNode *expression;
     };
-}
+} }

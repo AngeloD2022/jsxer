@@ -5,18 +5,18 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class FunctionDeclaration : public AstNode {
     public:
         explicit FunctionDeclaration(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::line_info bodyInfo;
-        decoders::function_signature signature;
+        decoders::LineInfo bodyInfo;
+        decoders::FunctionSignature signature;
         int type;
     };
-}
+} }

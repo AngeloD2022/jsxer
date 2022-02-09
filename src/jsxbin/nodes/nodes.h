@@ -47,7 +47,7 @@
 #include "XMLDoubleDotDescendantsExpr.h"
 #include "XMLNamespaceExpr.h"
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     enum NodeType {
         ArgumentList = 'R',
         ArrayExpr = 'A',
@@ -146,4 +146,4 @@ namespace jsxbin::nodes {
                 return nullptr;
         }
     }
-}
+} }

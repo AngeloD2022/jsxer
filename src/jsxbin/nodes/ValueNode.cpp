@@ -4,6 +4,6 @@ void ValueNode::parse() {
     value = decoders::d_variant(reader);
 }
 
-string ValueNode::jsx() {
+string ValueNode::to_string() {
     return value;
 }

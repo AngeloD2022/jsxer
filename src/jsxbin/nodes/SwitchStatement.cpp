@@ -22,15 +22,15 @@ void SwitchStatement::parse() {
 
 }
 
-string SwitchStatement::jsx() {
-    string result = "switch (" + switchValue->jsx() + ") { \n";
+string SwitchStatement::to_string() {
+    string result = "switch (" + switchValue->to_string() + ") { \n";
 
     for (int i = 0; i < cases.size(); ++i){
 
         vector<AstNode*> caseArgs = ((ArgumentList*)cases[i])->arguments;
         if (!caseArgs.empty()){
             for (AstNode* arg : caseArgs){
-                result += "case " + arg->jsx() + ":\n";
+                result += "case " + arg->to_string() + ":\n";
             }
         } else {
             result += "default:\n";
@@ -38,7 +38,7 @@ string SwitchStatement::jsx() {
 
         // now for each case implementation...
         if (i < implementations.size()) {
-            result += implementations[i]->jsx() + '\n';
+            result += implementations[i]->to_string() + '\n';
         }
     }
     result += '}';

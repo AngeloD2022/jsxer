@@ -5,10 +5,10 @@ void XMLNamespaceExpr::parse() {
     object = decoders::d_node(reader);
     decoders::d_node(reader);
     decoders::d_node(reader);
-    xmlId = decoders::d_ident(reader);
+    xmlId = decoders::d_sid(reader);
 }
 
-string XMLNamespaceExpr::jsx() {
+string XMLNamespaceExpr::to_string() {
     string ns = namespaceObject.flag ? '@' + namespaceObject.id : namespaceObject.id;
-    return object->jsx() + '.' + ns + "::" + xmlId;
+    return object->to_string() + '.' + ns + "::" + xmlId;
 }

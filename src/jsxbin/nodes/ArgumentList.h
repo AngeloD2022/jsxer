@@ -6,14 +6,14 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class ArgumentList : public AstNode {
     public:
         explicit ArgumentList(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
         vector<AstNode*> arguments;
 
@@ -21,4 +21,4 @@ namespace jsxbin::nodes {
         bool unkValue = false;
 
     };
-}
+} }

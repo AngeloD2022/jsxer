@@ -2,11 +2,11 @@
 
 void JumpStatement::parse() {
     labelInfo = decoders::d_line_info(reader);
-    jmpLocation = decoders::d_ident(reader);
+    jmpLocation = decoders::d_sid(reader);
     breakStatement = decoders::d_bool(reader);
 }
 
-string JumpStatement::jsx() {
+string JumpStatement::to_string() {
     string result = labelInfo.lbl_statement();
 
     if (breakStatement)

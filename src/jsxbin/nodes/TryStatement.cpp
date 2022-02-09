@@ -6,13 +6,13 @@ void TryStatement::parse() {
     finallyBlock = decoders::d_node(reader);
 
     for (int i = 0; i < length; ++i) {
-        layers.push_back({decoders::d_ident(reader),
+        layers.push_back({decoders::d_sid(reader),
                           decoders::d_node(reader),
                           decoders::d_node(reader)});
     }
 }
 
-string TryStatement::jsx() {
+string TryStatement::to_string() {
     string result = tryBlock.lbl_statement() + "try {\n";
     result += tryBlock.create_body() + '\n';
 
@@ -22,14 +22,14 @@ string TryStatement::jsx() {
         result += "} catch (" + layer.arg;
 
         if (layer.exceptionFilter != nullptr)
-            result += " if " + layer.exceptionFilter->jsx();
+            result += " if " + layer.exceptionFilter->to_string();
 
-        result += ") {" + (layer.catchBlock == nullptr ? "" : layer.catchBlock->jsx()) + '\n';
+        result += ") {" + (layer.catchBlock == nullptr ? "" : layer.catchBlock->to_string()) + '\n';
     }
 
     if (finallyBlock != nullptr) {
         result += "} finally {\n";
-        result += finallyBlock->jsx();
+        result += finallyBlock->to_string();
         result += '\n';
     }
     result += '}';

@@ -5,17 +5,17 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class IdNode : public AstNode {
     public:
         explicit IdNode(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
         string id;
         bool unknown = false;
     };
-}
+} }

@@ -5,10 +5,11 @@ void ArgumentList::parse() {
     unkValue = decoders::d_bool(reader);
 }
 
-string ArgumentList::jsx() {
+string ArgumentList::to_string() {
     string result;
+
     for (int i = 0; i < arguments.size(); ++i) {
-        result += arguments[i]->jsx() + (i + 1 == arguments.size() ? "" : ", ");
+        result += arguments[i]->to_string() + (i + 1 == arguments.size() ? "" : ", ");
     }
 
     return result;

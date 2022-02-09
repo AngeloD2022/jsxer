@@ -5,9 +5,9 @@ void WhileStatement::parse() {
     condition = decoders::d_node(reader);
 }
 
-string WhileStatement::jsx() {
+string WhileStatement::to_string() {
     string result = bodyInfo.lbl_statement() + "while (" +
-            (condition == nullptr ? "true" : condition->jsx()) + ") {\n";
+                    (condition == nullptr ? "true" : condition->to_string()) + ") {\n";
 
     result += bodyInfo.create_body() + "\n}";
 

@@ -5,21 +5,21 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class ForInStatement : public AstNode {
     public:
         explicit ForInStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::line_info bodyInfo;
+        decoders::LineInfo bodyInfo;
         AstNode *loopVariable = nullptr;
         AstNode *objExpression = nullptr;
         int length;
         string id;
         bool forEach = false;
     };
-}
+} }

@@ -4,6 +4,6 @@ void ThisExpr::parse() {
     reference = decoders::d_ref(reader);
 }
 
-string ThisExpr::jsx() {
+string ThisExpr::to_string() {
     return reference.id;
 }

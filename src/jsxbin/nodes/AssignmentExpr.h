@@ -6,21 +6,20 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class AssignmentExpr : public AstNode {
     public:
-
         explicit AssignmentExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
         string var_name;
         string literal;
-        AstNode *expression = nullptr;
+        AstNode* expression = nullptr;
         bool shorthand = false;
         bool declaration = false;
     };
-}
+} }

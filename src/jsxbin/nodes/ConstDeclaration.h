@@ -5,14 +5,14 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class ConstDeclaration : public AstNode {
     public:
         explicit ConstDeclaration(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
         string name;
@@ -22,4 +22,4 @@ namespace jsxbin::nodes {
         bool boolean_1;
         bool boolean_2;
     };
-}
+} }

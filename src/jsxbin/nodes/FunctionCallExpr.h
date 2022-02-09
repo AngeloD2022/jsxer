@@ -6,18 +6,18 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class FunctionCallExpr : public AstNode {
     public:
         explicit FunctionCallExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
         AstNode *function = nullptr;
         AstNode *args = nullptr;
         bool constructorCall;
     };
-}
+} }

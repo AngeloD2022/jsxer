@@ -6,7 +6,7 @@ void FunctionDeclaration::parse() {
     type = decoders::d_length(reader);
 }
 
-string FunctionDeclaration::jsx() {
+string FunctionDeclaration::to_string() {
     string result = "function ";
     string body = bodyInfo.create_body();
     if (signature.header_5 == 1) {

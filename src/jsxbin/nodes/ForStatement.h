@@ -5,17 +5,17 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class ForStatement : public AstNode {
     public:
         explicit ForStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::line_info bodyInfo;
+        decoders::LineInfo bodyInfo;
         AstNode *loopVar = nullptr;
         string iteratorInitial;
         AstNode *upperBound = nullptr;
@@ -23,4 +23,4 @@ namespace jsxbin::nodes {
         int length;
         string comparisonOperator;
     };
-}
+} }

@@ -7,13 +7,13 @@ void MemberAssignmentExpr::parse() {
     shorthand = decoders::d_bool(reader);
 }
 
-string MemberAssignmentExpr::jsx() {
+string MemberAssignmentExpr::to_string() {
     if (shorthand) {
-        BinaryExpr *expr = (BinaryExpr *)expression;
+        auto* expr = (BinaryExpr*) expression;
         string value_assigned = literal.empty() ? expr->get_op() : literal;
-        return variable->jsx() + ' ' + expr->get_op_name() + "= " + value_assigned;
+        return variable->to_string() + ' ' + expr->get_op_name() + "= " + value_assigned;
     } else {
-        string value_assigned = literal.empty() ? expression->jsx() : literal;
-        return variable->jsx() + " = " + value_assigned;
+        string value_assigned = literal.empty() ? expression->to_string() : literal;
+        return variable->to_string() + " = " + value_assigned;
     }
 }

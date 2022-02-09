@@ -61,7 +61,7 @@ void Reader::update_node_depth() {
 }
 
 bool Reader::decrement_node_depth() {
-    if(get_node_depth() == 0)
+    if (get_node_depth() == 0)
         return false;
 
     node_depth--;
@@ -73,5 +73,5 @@ string Reader::get_symbol(const string& key) {
 }
 
 void Reader::add_symbol(const string& key, string value) {
-    symbols.insert_or_assign(key, value);
+    symbols[key] = std::move(value);
 }

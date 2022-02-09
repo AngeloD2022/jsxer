@@ -5,14 +5,14 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class BinaryExpr : public AstNode {
     public:
         explicit BinaryExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
         string get_op(){
             return this->op;
@@ -31,4 +31,4 @@ namespace jsxbin::nodes {
         string literalRight;
         string create_expr(const string &literal, AstNode *exprNode);
     };
-}
+} }
