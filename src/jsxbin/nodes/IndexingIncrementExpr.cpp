@@ -6,7 +6,7 @@ void IndexingIncrementExpr::parse() {
     postfix = decoders::d_bool(reader);
 }
 
-string IndexingIncrementExpr::jsx() {
+string IndexingIncrementExpr::to_string() {
     string op = operation == 1 ? "++" : "--";
-    return postfix ?  variable->jsx() + op : op + variable->jsx() ;
+    return postfix ? variable->to_string() + op : op + variable->to_string() ;
 }

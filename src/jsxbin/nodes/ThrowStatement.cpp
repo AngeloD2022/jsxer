@@ -5,6 +5,6 @@ void ThrowStatement::parse() {
     expression = decoders::d_node(reader);
 }
 
-string ThrowStatement::jsx() {
-    return "throw " + expression->jsx() + ';';
+string ThrowStatement::to_string() {
+    return "throw " + expression->to_string() + ';';
 }

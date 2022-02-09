@@ -5,6 +5,6 @@ void RegExpLiteral::parse() {
     flags = decoders::d_string(reader);
 }
 
-string RegExpLiteral::jsx() {
+string RegExpLiteral::to_string() {
     return '/' + regex + '/' + flags;
 }

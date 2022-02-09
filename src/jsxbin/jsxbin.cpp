@@ -1,6 +1,6 @@
 #include "jsxbin.h"
 #include "util.h"
-#include "nodes/RootNode.h"
+#include "nodes/Program.h"
 
 #include <string>
 
@@ -44,7 +44,7 @@ bool verifySignature(const char* code, JsxbinVersion* version = nullptr, int* st
     return true;
 }
 
-void append_header(string& code) {
+void prepend_header(string& code) {
     string header = "/*\n"
                     "* Decompiled with Jsxbin Decompiler\n"
                     "* Version: 1.0.1\n"
@@ -53,13 +53,11 @@ void append_header(string& code) {
 }
 
 int jsxbin::decompile(const string& input, string& output) {
-    using jsxbin::utils::string_strip_char;
-
     string compiled = input;
 
-    string_strip_char(compiled, '\n');
-    string_strip_char(compiled, '\r');
-    string_strip_char(compiled, '\\');
+    utils::string_strip_char(compiled, '\n');
+    utils::string_strip_char(compiled, '\r');
+    utils::string_strip_char(compiled, '\\');
 
     int start = -1;
     JsxbinVersion version;
@@ -75,12 +73,12 @@ int jsxbin::decompile(const string& input, string& output) {
     reader->seek(start);
 
     // Parse into an Ast
-    auto *root = new RootNode(*reader);
-    root->parse();
+    auto* ast = new Program(*reader);
+    ast->parse();
 
     // Generate code from the ast
-    output = root->jsx();
-    append_header(output);
+    output = ast->to_string();
+    prepend_header(output);
 
     return 0;
 }

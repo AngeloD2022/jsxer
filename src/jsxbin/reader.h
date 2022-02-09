@@ -1,10 +1,12 @@
 #pragma once
 
-#include <string>
-#include <map>
 #include "jsxbin.h"
 
-using namespace std;
+#include <string>
+#include <map>
+
+using std::string;
+using std::map;
 
 namespace jsxbin {
     class Reader {

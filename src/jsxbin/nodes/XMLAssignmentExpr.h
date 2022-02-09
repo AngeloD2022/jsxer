@@ -5,18 +5,16 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class XMLAssignmentExpr : public AstNode {
     public:
         explicit XMLAssignmentExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
         map<AstNode*, int> children;
-
-
     };
-}
+} }

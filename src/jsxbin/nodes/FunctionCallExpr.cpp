@@ -6,11 +6,11 @@ void FunctionCallExpr::parse() {
     constructorCall = decoders::d_bool(reader);
 }
 
-string FunctionCallExpr::jsx() {
+string FunctionCallExpr::to_string() {
     string result = constructorCall ? "new " : "";
-    ArgumentList *argList = (ArgumentList *) args;
+    auto* argList = (ArgumentList*) args;
 
     // {new }{funcName}({args})
-    result += function->jsx() + '(' + (argList == nullptr ? "" : argList->jsx()) + ")";
+    result += function->to_string() + '(' + (argList == nullptr ? "" : argList->to_string()) + ")";
     return result;
 }

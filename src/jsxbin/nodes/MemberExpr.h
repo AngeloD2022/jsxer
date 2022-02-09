@@ -7,17 +7,17 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class MemberExpr : public AstNode {
     public:
         explicit MemberExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::reference memberInfo;
-        AstNode *objInfo;
+        decoders::Reference memberInfo;
+        AstNode* objInfo;
     };
-}
+} }

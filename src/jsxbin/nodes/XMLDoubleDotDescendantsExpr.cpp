@@ -8,6 +8,6 @@ void XMLDoubleDotDescendantsExpr::parse() {
     decoders::d_node(reader);
 }
 
-string XMLDoubleDotDescendantsExpr::jsx() {
-    return object->jsx() + ".." + descendants.id;
+string XMLDoubleDotDescendantsExpr::to_string() {
+    return object->to_string() + ".." + descendants.id;
 }

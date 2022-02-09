@@ -5,19 +5,19 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class ConditionalExpr : public AstNode {
     public:
         explicit ConditionalExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        AstNode *condition;
-        AstNode *node_true;
-        AstNode *node_false;
+        AstNode* condition;
+        AstNode* node_true;
+        AstNode* node_false;
 
     };
-}
+} }

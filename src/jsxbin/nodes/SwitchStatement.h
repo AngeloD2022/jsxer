@@ -6,19 +6,19 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class SwitchStatement : public AstNode {
     public:
         explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::line_info lineInfo;
-        AstNode *switchValue;
+        decoders::LineInfo lineInfo;
+        AstNode* switchValue;
         vector<AstNode*> cases;
         vector<AstNode*> implementations;
     };
-}
+} }

@@ -5,16 +5,16 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class ThisExpr : public AstNode {
     public:
         explicit ThisExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::reference reference;
+        decoders::Reference reference;
     };
-}
+} }

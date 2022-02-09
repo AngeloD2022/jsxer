@@ -5,18 +5,18 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class IfStatement : public AstNode {
     public:
         explicit IfStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::line_info bodyInfo;
+        decoders::LineInfo bodyInfo;
         AstNode *test = nullptr;
         AstNode *otherwise = nullptr;
     };
-}
+} }

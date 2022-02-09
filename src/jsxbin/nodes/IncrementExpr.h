@@ -5,14 +5,14 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class IncrementExpr : public AstNode {
     public:
         explicit IncrementExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
         string id;
@@ -20,4 +20,4 @@ namespace jsxbin::nodes {
         string operation;
         bool postfix = false;
     };
-}
+} }

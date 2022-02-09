@@ -5,17 +5,17 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class WhileStatement : public AstNode {
     public:
         explicit WhileStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::line_info bodyInfo;
+        decoders::LineInfo bodyInfo;
         AstNode *condition;
     };
-}
+} }

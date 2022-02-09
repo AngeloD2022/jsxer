@@ -12,14 +12,14 @@ void StatementList::parse() {
     statements.insert(statements.end(), children.begin(), children.end());
 }
 
-string StatementList::jsx() {
+string StatementList::to_string() {
     string result;
 
     // A seemingly useless sorting step (by line number of statements) happens here (where this comment is) in the original project,
     // but I removed it. We'll see what happens when I test it...
 
     for (int i = 0; i < statements.size(); ++i) {
-        string expression = statements[i]->jsx();
+        string expression = statements[i]->to_string();
 //        if(istype(statements[i], "ExprNode"))
 //            expression += ';';
 

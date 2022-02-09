@@ -5,14 +5,14 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class TryStatement : public AstNode {
     public:
         explicit TryStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
 
@@ -22,9 +22,9 @@ namespace jsxbin::nodes {
             AstNode *catchBlock;
         };
 
-        decoders::line_info tryBlock;
+        decoders::LineInfo tryBlock;
         AstNode *finallyBlock;
         vector<tc_layer> layers;
         int length;
     };
-}
+} }

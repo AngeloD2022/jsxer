@@ -1,22 +1,25 @@
 cmake_minimum_required(VERSION 3.20)
 project(jsxbin_decompiler)
 
-set(CMAKE_CXX_STANDARD 20)
+# C++ supported standards: 11-23
+set(CMAKE_CXX_STANDARD 11)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_library(jsxbin_decomp STATIC
     src/jsxbin/jsxbin.cpp
+    src/jsxbin/common.h
     src/jsxbin/util.h
     src/jsxbin/util.cpp
     src/jsxbin/decoders.cpp
     src/jsxbin/decoders.h
     src/jsxbin/reader.cpp
     src/jsxbin/reader.h
-    src/jsxbin/nodes/AstNode.h
-    src/jsxbin/nodes/RootNode.cpp
-    src/jsxbin/nodes/RootNode.h
     src/jsxbin/nodes/nodes.h
+    src/jsxbin/nodes/node-types.h
+    src/jsxbin/nodes/AstNode.h
+    src/jsxbin/nodes/Program.cpp
+    src/jsxbin/nodes/Program.h
     src/jsxbin/nodes/ArgumentList.cpp
     src/jsxbin/nodes/ArgumentList.h
     src/jsxbin/nodes/ArrayExpr.cpp

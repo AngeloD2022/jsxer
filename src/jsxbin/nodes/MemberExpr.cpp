@@ -5,14 +5,13 @@ void MemberExpr::parse() {
     objInfo = decoders::d_node(reader);
 }
 
-string MemberExpr::jsx() {
+string MemberExpr::to_string() {
     string result;
 
     // Check member validity...
     if (decoders::valid_id(memberInfo.id)){
         result = "." + memberInfo.id;
     } else {
-
         // check if ID can be converted to an integer...
         if(decoders::is_integer(memberInfo.id)){
             result = '[' + memberInfo.id + ']';
@@ -21,6 +20,6 @@ string MemberExpr::jsx() {
         }
     }
 
-    return (objInfo == nullptr ? "" : objInfo->jsx()) + result;
+    return (objInfo == nullptr ? "" : objInfo->to_string()) + result;
 }
 

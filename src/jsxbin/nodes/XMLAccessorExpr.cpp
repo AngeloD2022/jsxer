@@ -6,6 +6,6 @@ void XMLAccessorExpr::parse() {
     member = decoders::d_node(reader);
 }
 
-string XMLAccessorExpr::jsx() {
-    return object->jsx() + '.' + member->jsx();
+string XMLAccessorExpr::to_string() {
+    return object->to_string() + '.' + member->to_string();
 }

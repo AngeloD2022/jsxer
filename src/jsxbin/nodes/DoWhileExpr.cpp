@@ -5,12 +5,14 @@ void DoWhileExpr::parse() {
     condition = decoders::d_node(reader);
 }
 
-string DoWhileExpr::jsx() {
+string DoWhileExpr::to_string() {
     string label = body.lbl_statement();
     string inner = body.create_body();
     string result;
+
     result += label + "do {\n";
     result += "  " + inner + '\n';
-    result += "} while (" + condition->jsx() + ')';
+    result += "} while (" + condition->to_string() + ')';
+
     return result;
 }

@@ -1,19 +1,18 @@
 #pragma once
 
-#define istype(x, tname) strcmp(typeid(x).name(), tname) == 0
-
 #include "../reader.h"
 
-using namespace jsxbin;
-using namespace std;
+using std::string;
 
-namespace jsxbin::nodes {
+using namespace jsxbin;
+
+namespace jsxbin { namespace nodes {
     class AstNode {
     public:
         explicit AstNode(Reader& reader) : reader(reader) {};
-        virtual string jsx() = 0;
+        virtual string to_string() = 0;
         virtual void parse() = 0;
     protected:
         Reader& reader;
     };
-}
+} }

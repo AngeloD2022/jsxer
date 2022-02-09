@@ -5,18 +5,18 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class XMLNamespaceExpr : public AstNode {
     public:
         explicit XMLNamespaceExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::reference namespaceObject;
-        AstNode *object = nullptr;
+        decoders::Reference namespaceObject;
+        AstNode* object = nullptr;
         string xmlId;
     };
-}
+} }

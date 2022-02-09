@@ -5,17 +5,17 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class XMLDoubleDotDescendantsExpr : public AstNode {
     public:
         explicit XMLDoubleDotDescendantsExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
-        decoders::reference descendants;
-        AstNode *object;
+        decoders::Reference descendants;
+        AstNode* object;
     };
-}
+} }

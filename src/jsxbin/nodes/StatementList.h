@@ -6,18 +6,18 @@
 
 using namespace jsxbin;
 
-namespace jsxbin::nodes {
+namespace jsxbin { namespace nodes {
     class StatementList : public AstNode {
     public:
         explicit StatementList(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
         size_t length;
-        decoders::line_info body;
+        decoders::LineInfo body;
         vector<AstNode*> statements;
     };
-}
+} }

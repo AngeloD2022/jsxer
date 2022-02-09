@@ -4,10 +4,10 @@ void ArrayExpr::parse() {
     argumentList = (ArgumentList *) decoders::d_node(reader);
 }
 
-string ArrayExpr::jsx() {
+string ArrayExpr::to_string() {
     if (!argumentList) {
         return "[]";
     }
 
-    return '[' + argumentList->jsx() + ']';
+    return '[' + argumentList->to_string() + ']';
 }
