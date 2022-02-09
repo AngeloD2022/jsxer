@@ -1,6 +1,7 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
+
 #include "ArgumentList.h"
 #include "ArrayExpr.h"
 #include "ArrayIndexingExpr.h"
@@ -94,54 +95,52 @@ namespace jsxbin::nodes {
         XMLNamespaceExpr = 'p'
     };
 
-    AbstractNode* get(NodeType type, ScanState& scanState){
-        // should be able to cast char to node type, making this easier to use!
-
+    AstNode* get(NodeType type, Reader& reader) {
         switch (type) {
-            case ArgumentList: return new class ArgumentList(scanState);
-            case ArrayExpr: return new class ArrayExpr(scanState);
-            case ArrayIndexingExpr: return new class ArrayIndexingExpr(scanState);
-            case AssignmentExpr: return new class AssignmentExpr(scanState);
-            case BinaryExpr: return new class BinaryExpr(scanState);
-            case ConditionalExpr: return new class ConditionalExpr(scanState);
-            case ConstDeclaration: return new class ConstDeclaration(scanState);
-            case DebuggerStatement: return new class DebuggerStatement(scanState);
-            case DeleteExpr: return new class DeleteExpr(scanState);
-            case DoWhileExpr: return new class DoWhileExpr(scanState);
-            case ExprNode: return new class ExprNode(scanState);
-            case ForInStatement: return new class ForInStatement(scanState);
-            case ForStatement: return new class ForStatement(scanState);
-            case ForStatement2: return new class ForStatement2(scanState);
-            case FunctionCallExpr: return new class FunctionCallExpr(scanState);
-            case FunctionDeclaration: return new class FunctionDeclaration(scanState);
-            case FunctionExpr: return new class FunctionExpr(scanState);
-            case IdNode: return new class IdNode(scanState);
-            case IdRefExpr: return new class IdRefExpr(scanState);
-            case IfStatement: return new class IfStatement(scanState);
-            case IncrementExpr: return new class IncrementExpr(scanState);
-            case IndexingIncrementExpr: return new class IndexingIncrementExpr(scanState);
-            case JumpStatement: return new class JumpStatement(scanState);
-            case LogicalExpr: return new class LogicalExpr(scanState);
-            case MemberAssignmentExpr: return new class MemberAssignmentExpr(scanState);
-            case MemberExpr: return new class MemberExpr(scanState);
-            case ObjectExpr: return new class ObjectExpr(scanState);
-            case RegExpLiteral: return new class RegExpLiteral(scanState);
-            case ReturnStatement: return new class ReturnStatement(scanState);
-            case SetDefaultXMLNamespaceExpr: return new class SetDefaultXMLNamespaceExpr(scanState);
-            case StatementList: return new class StatementList(scanState);
-            case SwitchStatement: return new class SwitchStatement(scanState);
-            case ThisExpr: return new class ThisExpr(scanState);
-            case ThrowStatement: return new class ThrowStatement(scanState);
-            case TryStatement: return new class TryStatement(scanState);
-            case UnaryExpr: return new class UnaryExpr(scanState);
-            case UnknownNode: return new class UnknownNode(scanState);
-            case ValueNode: return new class ValueNode(scanState);
-            case WhileStatement: return new class WhileStatement(scanState);
-            case WithStatement: return new class WithStatement(scanState);
-            case XMLAccessorExpr: return new class XMLAccessorExpr(scanState);
-            case XMLAssignmentExpr: return new class XMLAssignmentExpr(scanState);
-            case XMLDoubleDotDescendantsExpr: return new class XMLDoubleDotDescendantsExpr(scanState);
-            case XMLNamespaceExpr: return new class XMLNamespaceExpr(scanState);
+            case ArgumentList: return new class ArgumentList(reader);
+            case ArrayExpr: return new class ArrayExpr(reader);
+            case ArrayIndexingExpr: return new class ArrayIndexingExpr(reader);
+            case AssignmentExpr: return new class AssignmentExpr(reader);
+            case BinaryExpr: return new class BinaryExpr(reader);
+            case ConditionalExpr: return new class ConditionalExpr(reader);
+            case ConstDeclaration: return new class ConstDeclaration(reader);
+            case DebuggerStatement: return new class DebuggerStatement(reader);
+            case DeleteExpr: return new class DeleteExpr(reader);
+            case DoWhileExpr: return new class DoWhileExpr(reader);
+            case ExprNode: return new class ExprNode(reader);
+            case ForInStatement: return new class ForInStatement(reader);
+            case ForStatement: return new class ForStatement(reader);
+            case ForStatement2: return new class ForStatement2(reader);
+            case FunctionCallExpr: return new class FunctionCallExpr(reader);
+            case FunctionDeclaration: return new class FunctionDeclaration(reader);
+            case FunctionExpr: return new class FunctionExpr(reader);
+            case IdNode: return new class IdNode(reader);
+            case IdRefExpr: return new class IdRefExpr(reader);
+            case IfStatement: return new class IfStatement(reader);
+            case IncrementExpr: return new class IncrementExpr(reader);
+            case IndexingIncrementExpr: return new class IndexingIncrementExpr(reader);
+            case JumpStatement: return new class JumpStatement(reader);
+            case LogicalExpr: return new class LogicalExpr(reader);
+            case MemberAssignmentExpr: return new class MemberAssignmentExpr(reader);
+            case MemberExpr: return new class MemberExpr(reader);
+            case ObjectExpr: return new class ObjectExpr(reader);
+            case RegExpLiteral: return new class RegExpLiteral(reader);
+            case ReturnStatement: return new class ReturnStatement(reader);
+            case SetDefaultXMLNamespaceExpr: return new class SetDefaultXMLNamespaceExpr(reader);
+            case StatementList: return new class StatementList(reader);
+            case SwitchStatement: return new class SwitchStatement(reader);
+            case ThisExpr: return new class ThisExpr(reader);
+            case ThrowStatement: return new class ThrowStatement(reader);
+            case TryStatement: return new class TryStatement(reader);
+            case UnaryExpr: return new class UnaryExpr(reader);
+            case UnknownNode: return new class UnknownNode(reader);
+            case ValueNode: return new class ValueNode(reader);
+            case WhileStatement: return new class WhileStatement(reader);
+            case WithStatement: return new class WithStatement(reader);
+            case XMLAccessorExpr: return new class XMLAccessorExpr(reader);
+            case XMLAssignmentExpr: return new class XMLAssignmentExpr(reader);
+            case XMLDoubleDotDescendantsExpr: return new class XMLDoubleDotDescendantsExpr(reader);
+            case XMLNamespaceExpr: return new class XMLNamespaceExpr(reader);
 
             default:
                 return nullptr;

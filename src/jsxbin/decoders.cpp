@@ -7,14 +7,15 @@
 using namespace jsxbin::decoders;
 
 // Markers / constants...
-const char NO_VARIANT = 0x6E;
-const char ID_REFERENCE = 0x7A;
-const char NEGATIVE_NUMBER = 0x79;
-const char NUMBER_8_BYTES = 0x38;
-const char NUMBER_4_BYTES = 0x34;
-const char NUMBER_2_BYTES = 0x32;
-const char BOOL_TRUE = 0x74;
-const char BOOL_FALSE = 0x66;
+enum Markers : char {
+    ID_REFERENCE = 0x7A,
+    NEGATIVE_NUMBER = 0x79,
+    NUMBER_8_BYTES = 0x38,
+    NUMBER_4_BYTES = 0x34,
+    NUMBER_2_BYTES = 0x32,
+    BOOL_TRUE = 0x74,
+    BOOL_FALSE = 0x66,
+};
 
 // begin utility functions...
 string fromISO8859(const unsigned char &value) {
@@ -34,11 +35,11 @@ enum LiteralType {
     UTF8_STRING
 };
 
-string d_number_primitive(ScanState &scanState, int length, bool negative) {
+string d_number_primitive(Reader &reader, int length, bool negative) {
      vector<byte> buffer(length);
 
     for (int i = 0; i < length; ++i) {
-        buffer[i] = d_byte(scanState);
+        buffer[i] = d_byte(reader);
     }
 
     short sign = negative ? -1 : 1;
@@ -59,31 +60,31 @@ string d_number_primitive(ScanState &scanState, int length, bool negative) {
     }
 }
 
-string d_literal_primitive(ScanState &scanState, LiteralType literalType) {
-    if (scanState.decrement_node_depth()) {
+string d_literal_primitive(Reader &reader, LiteralType literalType) {
+    if (reader.decrement_node_depth()) {
         return "";
     }
 
     bool negative = false;
-    if (scanState.peek(0) == NEGATIVE_NUMBER) {
+    if (reader.peek(0) == NEGATIVE_NUMBER) {
         negative = true;
-        scanState.step();
+        reader.step();
     }
 
-    char marker = scanState.peek(0);
+    char marker = reader.peek(0);
 
     if (marker == NUMBER_4_BYTES) {
-        scanState.step();
-        string number = d_number_primitive(scanState, 4, negative);
+        reader.step();
+        string number = d_number_primitive(reader, 4, negative);
         return number;
 
     } else if (marker == NUMBER_2_BYTES) {
-        scanState.step();
-        string number = d_number_primitive(scanState, 2, negative);
+        reader.step();
+        string number = d_number_primitive(reader, 2, negative);
         return number;
 
     } else {
-        byte num = d_byte(scanState);
+        byte num = d_byte(reader);
 
         if (negative) {
             return to_string(-1 * (int) num);
@@ -97,20 +98,16 @@ string d_literal_primitive(ScanState &scanState, LiteralType literalType) {
     }
 }
 
-int decoders::d_literal_num(ScanState &scanState) {
-    string value = d_literal_primitive(scanState, LiteralType::NUMBER);
+int decoders::d_literal_num(Reader &reader) {
+    string value = d_literal_primitive(reader, LiteralType::NUMBER);
     return value.empty() ? 0 : stoi(value);
 }
 
 
-AbstractNode *decoders::d_node(ScanState &scanState) {
-    char marker = scanState.pop();
+AstNode *decoders::d_node(Reader &reader) {
+    char marker = reader.pop();
 
-    if (marker == NO_VARIANT) {
-        return nullptr;
-    }
-
-    AbstractNode *node = nodes::get((NodeType) marker, scanState);
+    AstNode *node = nodes::get((NodeType) marker, reader);
 
     if (node != nullptr) {
         node->parse();
@@ -122,31 +119,31 @@ AbstractNode *decoders::d_node(ScanState &scanState) {
     return nullptr;
 }
 
-string decoders::d_number(ScanState &scanState) {
-    char marker = scanState.peek(0);
+string decoders::d_number(Reader &reader) {
+    char marker = reader.peek(0);
     string num;
 
     // if the marker suggests
     if (marker == NUMBER_8_BYTES) {
-        scanState.step();
-        num = d_number_primitive(scanState, 8, false);
+        reader.step();
+        num = d_number_primitive(reader, 8, false);
     } else {
-        num = d_literal_primitive(scanState, LiteralType::NUMBER);
+        num = d_literal_primitive(reader, LiteralType::NUMBER);
     }
 
     return num.empty() ? "0" : num;
 }
 
-byte decoders::d_byte(ScanState &scanState) {
-    static const string alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef";
+byte decoders::d_byte(Reader& reader) {
+    static const string alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "abcdef";
 
     // if it is nested, decrement depth level and return 0
     // (sorta feels like it should never happen)
-    if (scanState.decrement_node_depth()) {
+    if (reader.decrement_node_depth()) {
         return static_cast<byte>(0);
     }
 
-    char cur = scanState.pop();
+    char cur = reader.pop();
 
     // if result is capital letter...
     if (is_capital_alpha(cur)) {
@@ -154,7 +151,7 @@ byte decoders::d_byte(ScanState &scanState) {
     } else {
         // cur must be within [103, 111]
         int n = (cur - 0x67) * 32; // ranges from 0 to 256
-        char second = scanState.pop();
+        char second = reader.pop();
         size_t up_index = alphabet_upper.find(second);
 
         // takes advantage of 8-bit overflow for encoding...
@@ -162,56 +159,57 @@ byte decoders::d_byte(ScanState &scanState) {
     }
 }
 
-string decoders::d_variant(ScanState &scanState) {
-    using jsxbin::utils::string_replace;
+string decoders::d_variant(Reader &reader) {
+    using jsxbin::utils::replace_str_inplace;
 
     string result;
 
-    if (scanState.peek(0) == NO_VARIANT) {
-        scanState.step();
-        return "";
-    }
-
     // types are 'a' or 'b':null 'c':boolean 'd':number 'e':string
-    uint8_t type = scanState.pop() - 'a';
+    uint8_t type = reader.pop() - 'a';
 
     switch (type) {
-        case 0: // 'a'
-        case 1: // 'b'
+        case 0: // 'a' - also recognized as a null at runtime.
+        case 1: // 'b' - null always encoded to 'b'
             // null type
             result = "null";
             break;
         case 2: // 'c'
             // boolean type
-            result = d_bool(scanState) ? "true" : "false";
+            result = d_bool(reader) ? "true" : "false";
             break;
         case 3: // 'd'
             // number type
-            result = d_number(scanState);
+            result = d_number(reader);
             break;
         case 4: // 'e'
             // string type
-            result = d_string(scanState);
-            string_replace(result, "\\", "\\\\");
-            string_replace(result, "\"", "\\\"");
-            string_replace(result, "\n", "\\n");
-            string_replace(result, "\t", "\\t");
-            string_replace(result, "\t", "\\t");
-            string_replace(result, "\r", "\\r");
+            result = d_string(reader);
 
-            result = '\"' + result + "\"";
+            replace_str_inplace(result, "\\", "\\\\");
+            replace_str_inplace(result, "\"", "\\\"");
+            replace_str_inplace(result, "\n", "\\n");
+            replace_str_inplace(result, "\t", "\\t");
+            replace_str_inplace(result, "\t", "\\t");
+            replace_str_inplace(result, "\r", "\\r");
+
+            result = '\"' + result + '\"';
+            break;
+
+        case 13: // 'n' | NO_VARIANT
+            result = "";
             break;
 
         default:
             // TODO: Handle this
+            printf("Unexpected: %c\n", type);
             break;
     }
 
     return result;
 }
 
-bool decoders::d_bool(ScanState &scanState) {
-    char marker = scanState.pop();
+bool decoders::d_bool(Reader& reader) {
+    char marker = reader.pop();
 
     if (marker == BOOL_TRUE)
         return true;
@@ -222,10 +220,10 @@ bool decoders::d_bool(ScanState &scanState) {
     return false;
 }
 
-string decoders::d_string(ScanState &scanState) {
+string decoders::d_string(Reader &reader) {
 
     // Parse length of string...
-    string parsed_len = d_literal_primitive(scanState, LiteralType::NUMBER);
+    string parsed_len = d_literal_primitive(reader, LiteralType::NUMBER);
     int length = parsed_len.empty() ? 0 : stoi(parsed_len);
 
     if (length == 0)
@@ -233,52 +231,52 @@ string decoders::d_string(ScanState &scanState) {
 
     string buf;
     for (int i = 0; i < length; ++i) {
-        buf += d_literal_primitive(scanState, LiteralType::UTF8_STRING);
+        buf += d_literal_primitive(reader, LiteralType::UTF8_STRING);
     }
 
     return buf;
 }
 
-reference decoders::d_ref(ScanState &scanState) {
-    string id = d_ident(scanState);
+reference decoders::d_ref(Reader &reader) {
+    string id = d_ident(reader);
     bool flag = false;
 
-    if (scanState.get_version() == jsxbin_version::VERSION_2) {
-        flag = d_bool(scanState);
+    if (reader.get_version() >= JsxbinVersion::v20) {
+        flag = d_bool(reader);
     }
 
     return reference{ id, flag };
 }
 
-int decoders::d_length(ScanState &scanState) {
-    string value = d_literal_primitive(scanState, LiteralType::NUMBER);
+int decoders::d_length(Reader &reader) {
+    string value = d_literal_primitive(reader, LiteralType::NUMBER);
     return value.empty() ? 0 : abs(stoi(value));
 }
 
-string decoders::d_ident(ScanState &scanState) {
-    char marker = scanState.peek(0);
+string decoders::d_ident(Reader &reader) {
+    char marker = reader.peek(0);
 
     if (marker != ID_REFERENCE) {
-        string id = to_string(d_length(scanState));
-        return scanState.get_symbol(id);
+        string id = to_string(d_length(reader));
+        return reader.get_symbol(id);
     } else {
-        char type = scanState.pop();
-        string name = d_string(scanState);
-        string id = to_string(d_length(scanState));
-        scanState.add_symbol(id, name);
+        char type = reader.pop();
+        string name = d_string(reader);
+        string id = to_string(d_length(reader));
+        reader.add_symbol(id, name);
         return name;
     }
 }
 
-vector<AbstractNode *> decoders::d_children(ScanState &scanState) {
-    int length = d_length(scanState);
+vector<AstNode *> decoders::d_children(Reader &reader) {
+    int length = d_length(reader);
     if (length == 0) {
         return {};
     }
 
-    vector<AbstractNode *> result;
+    vector<AstNode *> result;
     for (int i = 0; i < length; ++i) {
-        AbstractNode *child = d_node(scanState);
+        AstNode *child = d_node(reader);
         if (child != nullptr)
             result.push_back(child);
     }
@@ -286,29 +284,29 @@ vector<AbstractNode *> decoders::d_children(ScanState &scanState) {
     return result;
 }
 
-line_info decoders::d_linfo(ScanState &scanState) {
+line_info decoders::d_line_info(Reader &reader) {
     line_info result;
 
-    result.line_number = d_length(scanState);
-    result.child = d_node(scanState);
+    result.line_number = d_length(reader);
+    result.child = d_node(reader);
 
-    int length = d_length(scanState);
+    int length = d_length(reader);
 
     for (int i = 0; i < length; ++i) {
-        result.labels.push_back(d_ident(scanState));
+        result.labels.push_back(d_ident(reader));
     }
 
     return result;
 }
 
-function_signature decoders::d_fsig(ScanState &scanState) {
+function_signature decoders::d_fn_sig(Reader &reader) {
     function_signature result;
 
-    int length = d_length(scanState);
+    int length = d_length(reader);
     if (length > 0) {
         for (int i = 0; i < length; ++i) {
-            string parameterName = d_ident(scanState);
-            int paramLength = d_length(scanState);
+            string parameterName = d_ident(reader);
+            int paramLength = d_length(reader);
 
             // separate local variables from parameter list...
             if (paramLength > 0x1ffffc70 && paramLength < 0x202fbf00)
@@ -318,11 +316,11 @@ function_signature decoders::d_fsig(ScanState &scanState) {
         }
     }
 
-    result.header_1 = d_length(scanState);
-    result.type = d_length(scanState);
-    result.header_3 = d_length(scanState);
-    result.name = d_ident(scanState);
-    result.header_5 = d_literal_num(scanState);
+    result.header_1 = d_length(reader);
+    result.type = d_length(reader);
+    result.header_3 = d_length(reader);
+    result.name = d_ident(reader);
+    result.header_5 = d_literal_num(reader);
     return result;
 }
 

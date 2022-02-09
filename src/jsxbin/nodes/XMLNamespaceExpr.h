@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class XMLNamespaceExpr : public AbstractNode {
+    class XMLNamespaceExpr : public AstNode {
     public:
-        explicit XMLNamespaceExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit XMLNamespaceExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,7 +16,7 @@ namespace jsxbin::nodes {
 
     private:
         decoders::reference namespaceObject;
-        AbstractNode *object;
+        AstNode *object = nullptr;
         string xmlId;
     };
 }

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class ForInStatement : public AbstractNode {
+    class ForInStatement : public AstNode {
     public:
-        explicit ForInStatement(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit ForInStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,8 +16,8 @@ namespace jsxbin::nodes {
 
     private:
         decoders::line_info bodyInfo;
-        AbstractNode *loopVariable;
-        AbstractNode *objExpression;
+        AstNode *loopVariable = nullptr;
+        AstNode *objExpression = nullptr;
         int length;
         string id;
         bool forEach = false;

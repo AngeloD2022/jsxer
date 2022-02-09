@@ -2,8 +2,8 @@
 
 #include "jsxbin.h"
 
-#include "ScanState.h"
-#include "nodes/AbstractNode.h"
+#include "reader.h"
+#include "nodes/AstNode.h"
 
 #include <string>
 #include <vector>
@@ -21,7 +21,7 @@ namespace jsxbin::decoders {
 
     struct line_info {
         int line_number;
-        AbstractNode *child;
+        AstNode *child;
         vector<string> labels;
 
         string lbl_statement() {
@@ -48,19 +48,19 @@ namespace jsxbin::decoders {
         map<string, int> local_vars;
     };
 
-    AbstractNode* d_node(ScanState &scanState);
-    line_info d_linfo(ScanState &scanState);
-    int d_literal_num(ScanState &scanState);
-    string d_variant(ScanState &scanState);
-    string d_string(ScanState &scanState);
-    string d_number(ScanState &scanState);
-    bool d_bool(ScanState &scanState);
-    string d_ident(ScanState &scanState);
-    int d_length(ScanState &scanState);
-    reference d_ref(ScanState &scanState);
-    byte d_byte(ScanState &scanState);
-    vector<AbstractNode *> d_children(ScanState &scanState);
-    function_signature d_fsig(ScanState &scanState);
+    AstNode* d_node(Reader &reader);
+    line_info d_line_info(Reader &reader);
+    int d_literal_num(Reader &reader);
+    string d_variant(Reader &reader);
+    string d_string(Reader &reader);
+    string d_number(Reader &reader);
+    bool d_bool(Reader &reader);
+    string d_ident(Reader &reader);
+    int d_length(Reader &reader);
+    reference d_ref(Reader &reader);
+    byte d_byte(Reader &reader);
+    vector<AstNode *> d_children(Reader &reader);
+    function_signature d_fn_sig(Reader &reader);
 
     // decoding utilities...
     bool valid_id(const string &value);

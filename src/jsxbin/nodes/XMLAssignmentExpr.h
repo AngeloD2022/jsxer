@@ -1,21 +1,21 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class XMLAssignmentExpr : public AbstractNode {
+    class XMLAssignmentExpr : public AstNode {
     public:
-        explicit XMLAssignmentExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit XMLAssignmentExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
     private:
-        map<AbstractNode*, int> children;
+        map<AstNode*, int> children;
 
 
     };

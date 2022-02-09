@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class DebuggerStatement : public AbstractNode {
+    class DebuggerStatement : public AstNode {
     public:
-        explicit DebuggerStatement(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit DebuggerStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

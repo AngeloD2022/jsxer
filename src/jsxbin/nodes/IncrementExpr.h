@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class IncrementExpr : public AbstractNode {
+    class IncrementExpr : public AstNode {
     public:
-        explicit IncrementExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit IncrementExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,8 +16,8 @@ namespace jsxbin::nodes {
 
     private:
         string id;
-        int length;
+        int length = 0;
         string operation;
-        bool postfix;
+        bool postfix = false;
     };
 }

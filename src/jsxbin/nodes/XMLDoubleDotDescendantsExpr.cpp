@@ -1,11 +1,11 @@
 #include "XMLDoubleDotDescendantsExpr.h"
 
 void XMLDoubleDotDescendantsExpr::parse() {
-    descendants = decoders::d_ref(scanState);
-    object = decoders::d_node(scanState);
+    descendants = decoders::d_ref(reader);
+    object = decoders::d_node(reader);
 
-    decoders::d_node(scanState);
-    decoders::d_node(scanState);
+    decoders::d_node(reader);
+    decoders::d_node(reader);
 }
 
 string XMLDoubleDotDescendantsExpr::jsx() {

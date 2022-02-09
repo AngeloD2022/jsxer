@@ -1,8 +1,8 @@
 #include "UnknownNode.h"
 
 void UnknownNode::parse() {
-    id = decoders::d_ident(scanState);
-    node = decoders::d_node(scanState);
+    id = decoders::d_ident(reader);
+    node = decoders::d_node(reader);
 }
 
 string UnknownNode::jsx() {

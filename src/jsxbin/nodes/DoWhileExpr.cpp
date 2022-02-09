@@ -1,8 +1,8 @@
 #include "DoWhileExpr.h"
 
 void DoWhileExpr::parse() {
-    body = decoders::d_linfo(scanState);
-    condition = decoders::d_node(scanState);
+    body = decoders::d_line_info(reader);
+    condition = decoders::d_node(reader);
 }
 
 string DoWhileExpr::jsx() {

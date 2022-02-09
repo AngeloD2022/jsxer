@@ -1,10 +1,10 @@
 #include "ForStatement2.h"
 
 void ForStatement2::parse() {
-    bodyInfo = decoders::d_linfo(scanState);
-    initial = decoders::d_node(scanState);
-    test = decoders::d_node(scanState);
-    update = decoders::d_node(scanState);
+    bodyInfo = decoders::d_line_info(reader);
+    initial = decoders::d_node(reader);
+    test = decoders::d_node(reader);
+    update = decoders::d_node(reader);
 }
 
 string ForStatement2::jsx() {

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class UnaryExpr : public AbstractNode {
+    class UnaryExpr : public AstNode {
     public:
-        explicit UnaryExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit UnaryExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,6 +16,6 @@ namespace jsxbin::nodes {
 
     private:
         string op;
-        AbstractNode *expression;
+        AstNode *expression;
     };
 }

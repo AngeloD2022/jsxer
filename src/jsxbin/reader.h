@@ -7,33 +7,32 @@
 using namespace std;
 
 namespace jsxbin {
-    class ScanState {
+    class Reader {
     public:
-        explicit ScanState(const string &body, jsxbin_version version);
+        explicit Reader(const string& body, JsxbinVersion version);
 
         // meta...
-        jsxbin_version get_version();
+        JsxbinVersion get_version();
 
         // tokens...
         void step();
         char pop();
         char peek(int ahead);
         void seek(int offset);
-        string peek(int position, size_t length);
 
         // argument depth...
         int get_node_depth();
         bool decrement_node_depth();
 
         // symbol...
-        string get_symbol(string key);
-        void add_symbol(string key, string value);
+        string get_symbol(const string& key);
+        void add_symbol(const string& key, string value);
 
     private:
-        jsxbin_version input_version;
+        JsxbinVersion input_version;
         map<string, string> symbols;
         unsigned long index = 0;
-        uint16_t node_depth_lvl= 0;
+        uint16_t node_depth = 0;
         string body;
 
         void update_node_depth();

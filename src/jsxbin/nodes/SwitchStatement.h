@@ -1,15 +1,15 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 #include "ArgumentList.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class SwitchStatement : public AbstractNode {
+    class SwitchStatement : public AstNode {
     public:
-        explicit SwitchStatement(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -17,8 +17,8 @@ namespace jsxbin::nodes {
 
     private:
         decoders::line_info lineInfo;
-        AbstractNode *switchValue;
-        vector<AbstractNode*> cases;
-        vector<AbstractNode*> implementations;
+        AstNode *switchValue;
+        vector<AstNode*> cases;
+        vector<AstNode*> implementations;
     };
 }

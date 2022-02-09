@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "ArgumentList.h"
 #include "../decoders.h"
 #include <vector>
@@ -8,16 +8,16 @@
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class ArrayExpr : public AbstractNode {
+    class ArrayExpr : public AstNode {
     public:
-        explicit ArrayExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit ArrayExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
     private:
-        ArgumentList* argumentList;
+        ArgumentList* argumentList = nullptr;
 
     };
 }

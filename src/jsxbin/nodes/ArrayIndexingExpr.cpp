@@ -1,9 +1,9 @@
 #include "ArrayIndexingExpr.h"
 
 void ArrayIndexingExpr::parse() {
-    decoders::d_ref(scanState); // <str, bool>
-    AbstractNode *name = decoders::d_node(scanState);
-    AbstractNode *expr = decoders::d_node(scanState);
+    decoders::d_ref(reader); // <str, bool>
+    AstNode *name = decoders::d_node(reader);
+    AstNode *expr = decoders::d_node(reader);
 
     arrayName = name->jsx();
     expression = expr->jsx();

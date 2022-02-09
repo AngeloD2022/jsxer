@@ -1,9 +1,9 @@
 #include "FunctionCallExpr.h"
 
 void FunctionCallExpr::parse() {
-    function = decoders::d_node(scanState);
-    args = decoders::d_node(scanState);
-    constructorCall = decoders::d_bool(scanState);
+    function = decoders::d_node(reader);
+    args = decoders::d_node(reader);
+    constructorCall = decoders::d_bool(reader);
 }
 
 string FunctionCallExpr::jsx() {

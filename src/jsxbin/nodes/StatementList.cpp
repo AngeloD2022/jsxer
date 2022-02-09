@@ -1,14 +1,14 @@
 #include "StatementList.h"
 
 void StatementList::parse() {
-    body = decoders::d_linfo(scanState);
+    body = decoders::d_line_info(reader);
 
-    length = decoders::d_length(scanState);
+    length = decoders::d_length(reader);
     for (int i = 0; i < length; ++i) {
-        statements.push_back(decoders::d_node(scanState));
+        statements.push_back(decoders::d_node(reader));
     }
 
-    vector<AbstractNode*> children = decoders::d_children(scanState);
+    vector<AstNode*> children = decoders::d_children(reader);
     statements.insert(statements.end(), children.begin(), children.end());
 }
 

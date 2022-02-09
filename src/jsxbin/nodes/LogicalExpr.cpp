@@ -1,15 +1,15 @@
 #include "LogicalExpr.h"
 
-string get_expr(AbstractNode *node, const string& literal){
+string get_expr(AstNode *node, const string& literal){
     return node == nullptr ? literal : node->jsx();
 }
 
 void LogicalExpr::parse() {
-    opName = decoders::d_ident(scanState);
-    leftExpr = decoders::d_node(scanState);
-    rightExpr = decoders::d_node(scanState);
-    leftLiteral = decoders::d_variant(scanState);
-    rightLiteral = decoders::d_variant(scanState);
+    opName = decoders::d_ident(reader);
+    leftExpr = decoders::d_node(reader);
+    rightExpr = decoders::d_node(reader);
+    leftLiteral = decoders::d_variant(reader);
+    rightLiteral = decoders::d_variant(reader);
 }
 
 string LogicalExpr::jsx() {

@@ -1,9 +1,9 @@
 #include "XMLAccessorExpr.h"
 
 void XMLAccessorExpr::parse() {
-    reference = decoders::d_ref(scanState);
-    object = decoders::d_node(scanState);
-    member = decoders::d_node(scanState);
+    reference = decoders::d_ref(reader);
+    object = decoders::d_node(reader);
+    member = decoders::d_node(reader);
 }
 
 string XMLAccessorExpr::jsx() {

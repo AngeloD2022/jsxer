@@ -7,5 +7,9 @@ using std::string;
 namespace jsxbin::utils {
     bool string_equal(const string &str1, const string &str2);
 
-    bool string_replace(string &str, const string &from, const string &to);
+    void string_replace_char(string& str, char search, char replace);
+
+    void string_strip_char(string& str, char search);
+
+    void replace_str_inplace(string& subject, const string& search, const string& replace);
 };

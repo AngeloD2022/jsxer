@@ -1,9 +1,9 @@
 #include "FunctionDeclaration.h"
 
 void FunctionDeclaration::parse() {
-    bodyInfo = decoders::d_linfo(scanState);
-    signature = decoders::d_fsig(scanState);
-    type = decoders::d_length(scanState);
+    bodyInfo = decoders::d_line_info(reader);
+    signature = decoders::d_fn_sig(reader);
+    type = decoders::d_length(reader);
 }
 
 string FunctionDeclaration::jsx() {

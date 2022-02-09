@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class IfStatement : public AbstractNode {
+    class IfStatement : public AstNode {
     public:
-        explicit IfStatement(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit IfStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,7 +16,7 @@ namespace jsxbin::nodes {
 
     private:
         decoders::line_info bodyInfo;
-        AbstractNode *test;
-        AbstractNode *otherwise;
+        AstNode *test = nullptr;
+        AstNode *otherwise = nullptr;
     };
 }

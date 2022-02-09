@@ -1,14 +1,14 @@
 #include "ForInStatement.h"
 
 void ForInStatement::parse() {
-    bodyInfo = decoders::d_linfo(scanState);
-    loopVariable = decoders::d_node(scanState);
-    objExpression = decoders::d_node(scanState);
-    length = decoders::d_length(scanState);
-    id = decoders::d_ident(scanState);
+    bodyInfo = decoders::d_line_info(reader);
+    loopVariable = decoders::d_node(reader);
+    objExpression = decoders::d_node(reader);
+    length = decoders::d_length(reader);
+    id = decoders::d_ident(reader);
 
-    if (scanState.get_version() == jsxbin_version::VERSION_2)
-        forEach = decoders::d_bool(scanState);
+    if (reader.get_version() >= JsxbinVersion::v20)
+        forEach = decoders::d_bool(reader);
 }
 
 string ForInStatement::jsx() {

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 #include <algorithm>
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class StatementList : public AbstractNode {
+    class StatementList : public AstNode {
     public:
-        explicit StatementList(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit StatementList(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -18,6 +18,6 @@ namespace jsxbin::nodes {
     private:
         size_t length;
         decoders::line_info body;
-        vector<AbstractNode*> statements;
+        vector<AstNode*> statements;
     };
 }

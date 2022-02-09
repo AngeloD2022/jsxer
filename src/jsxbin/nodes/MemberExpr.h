@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 #include <cstdlib>
@@ -8,9 +8,9 @@
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class MemberExpr : public AbstractNode {
+    class MemberExpr : public AstNode {
     public:
-        explicit MemberExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit MemberExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -18,6 +18,6 @@ namespace jsxbin::nodes {
 
     private:
         decoders::reference memberInfo;
-        AbstractNode *objInfo;
+        AstNode *objInfo;
     };
 }

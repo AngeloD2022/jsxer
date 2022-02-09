@@ -1,24 +1,24 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 #include <vector>
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class ArgumentList : public AbstractNode {
+    class ArgumentList : public AstNode {
     public:
-        explicit ArgumentList(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit ArgumentList(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
-        vector<AbstractNode*> arguments;
+        vector<AstNode*> arguments;
 
     private:
-        bool unkValue;
+        bool unkValue = false;
 
     };
 }

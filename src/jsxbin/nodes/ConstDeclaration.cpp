@@ -1,12 +1,12 @@
 #include "ConstDeclaration.h"
 
 void ConstDeclaration::parse() {
-    name = decoders::d_ident(scanState);
-    length = decoders::d_length(scanState);
-    expression = decoders::d_node(scanState);
-    literal = decoders::d_variant(scanState);
-    boolean_1 = decoders::d_bool(scanState);
-    boolean_2 = decoders::d_bool(scanState);
+    name = decoders::d_ident(reader);
+    length = decoders::d_length(reader);
+    expression = decoders::d_node(reader);
+    literal = decoders::d_variant(reader);
+    boolean_1 = decoders::d_bool(reader);
+    boolean_2 = decoders::d_bool(reader);
 }
 
 string ConstDeclaration::jsx() {

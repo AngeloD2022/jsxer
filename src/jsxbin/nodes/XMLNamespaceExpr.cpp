@@ -1,11 +1,11 @@
 #include "XMLNamespaceExpr.h"
 
 void XMLNamespaceExpr::parse() {
-    namespaceObject = decoders::d_ref(scanState);
-    object = decoders::d_node(scanState);
-    decoders::d_node(scanState);
-    decoders::d_node(scanState);
-    xmlId = decoders::d_ident(scanState);
+    namespaceObject = decoders::d_ref(reader);
+    object = decoders::d_node(reader);
+    decoders::d_node(reader);
+    decoders::d_node(reader);
+    xmlId = decoders::d_ident(reader);
 }
 
 string XMLNamespaceExpr::jsx() {
