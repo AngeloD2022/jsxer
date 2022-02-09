@@ -2,23 +2,27 @@
 
 #include "AstNode.h"
 #include "../decoders.h"
-#include "ArgumentList.h"
+#include "ListExpression.h"
 
-using namespace jsxbin;
+BEGIN_NS(jsxbin) BEGIN_NS(nodes)
 
-namespace jsxbin::nodes {
-    class SwitchStatement : public AstNode {
-    public:
-        explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
+class SwitchStatement : public AstNode {
+public:
+    explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
 
-        void parse() override;
+    NodeType type() override {
+        return NodeType::SwitchStatement;
+    }
 
-        string jsx() override;
+    void parse() override;
 
-    private:
-        decoders::line_info lineInfo;
-        AstNode *switchValue;
-        vector<AstNode*> cases;
-        vector<AstNode*> implementations;
-    };
-}
+    string to_string() override;
+
+private:
+    decoders::LineInfo lineInfo;
+    AstNode *switchValue = nullptr;
+    vector<AstNode*> cases;
+    vector<AstNode*> implementations;
+};
+
+END_NS(nodes) END_NS(jsxbin)

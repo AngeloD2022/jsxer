@@ -2,22 +2,25 @@
 
 #include "AstNode.h"
 #include "../decoders.h"
-#include <algorithm>
 
-using namespace jsxbin;
+BEGIN_NS(jsxbin) BEGIN_NS(nodes)
 
-namespace jsxbin::nodes {
-    class StatementList : public AstNode {
-    public:
-        explicit StatementList(Reader& reader) : AstNode(reader) {}
+class StatementList : public AstNode {
+public:
+    explicit StatementList(Reader& reader) : AstNode(reader) {}
 
-        void parse() override;
+    NodeType type() override {
+        return NodeType::StatementList;
+    }
 
-        string jsx() override;
+    void parse() override;
 
-    private:
-        size_t length;
-        decoders::line_info body;
-        vector<AstNode*> statements;
-    };
-}
+    string to_string() override;
+
+private:
+    size_t length = 0;
+    decoders::LineInfo body;
+    vector<AstNode*> statements;
+};
+
+END_NS(nodes) END_NS(jsxbin)

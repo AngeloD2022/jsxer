@@ -1,0 +1,26 @@
+#include "MemberExpression.h"
+
+void MemberExpression::parse() {
+    memberInfo = decoders::d_ref(reader);
+    objInfo = decoders::d_node(reader);
+}
+
+string MemberExpression::to_string() {
+    string result;
+
+    // Check member validity...
+    if (decoders::valid_id(memberInfo.id)){
+        result = "." + memberInfo.id;
+    } else {
+        // check if ID can be converted to an integer...
+        if(decoders::is_integer(memberInfo.id)){
+            result = '[' + memberInfo.id + ']';
+        } else {
+            // TODO: Properly JSON stringify the property key
+            result = "[\"" + memberInfo.id + "\"]";
+        }
+    }
+
+    return (objInfo == nullptr ? "" : objInfo->to_string()) + result;
+}
+

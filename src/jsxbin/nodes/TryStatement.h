@@ -3,28 +3,31 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxbin;
+BEGIN_NS(jsxbin) BEGIN_NS(nodes)
 
-namespace jsxbin::nodes {
-    class TryStatement : public AstNode {
-    public:
-        explicit TryStatement(Reader& reader) : AstNode(reader) {}
+class TryStatement : public AstNode {
+public:
+    explicit TryStatement(Reader& reader) : AstNode(reader) {}
 
-        void parse() override;
+    NodeType type() override {
+        return NodeType::TryStatement;
+    }
 
-        string jsx() override;
+    void parse() override;
 
-    private:
+    string to_string() override;
 
-        struct tc_layer {
-            string arg;
-            AstNode *exceptionFilter;
-            AstNode *catchBlock;
-        };
-
-        decoders::line_info tryBlock;
-        AstNode *finallyBlock;
-        vector<tc_layer> layers;
-        int length;
+private:
+    struct TryCatchLayer {
+        string arg;
+        AstNode* exceptionFilter;
+        AstNode* catchBlock;
     };
-}
+
+    decoders::LineInfo tryBlock;
+    AstNode* finallyBlock = nullptr;
+    vector<TryCatchLayer> layers;
+    int length = 0;
+};
+
+END_NS(nodes) END_NS(jsxbin)

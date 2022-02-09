@@ -1,19 +1,20 @@
 #pragma once
 
-#define istype(x, tname) strcmp(typeid(x).name(), tname) == 0
-
 #include "../reader.h"
+#include "node-types.h"
 
-using namespace jsxbin;
-using namespace std;
+using std::string;
 
-namespace jsxbin::nodes {
-    class AstNode {
-    public:
-        explicit AstNode(Reader& reader) : reader(reader) {};
-        virtual string jsx() = 0;
-        virtual void parse() = 0;
-    protected:
-        Reader& reader;
-    };
-}
+BEGIN_NS(jsxbin) BEGIN_NS(nodes)
+
+class AstNode {
+public:
+    explicit AstNode(Reader& reader) : reader(reader) {};
+    virtual NodeType type() = 0;
+    virtual string to_string() = 0;
+    virtual void parse() = 0;
+protected:
+    Reader& reader;
+};
+
+END_NS(nodes) END_NS(jsxbin)

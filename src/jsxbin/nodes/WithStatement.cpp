@@ -5,6 +5,6 @@ void WithStatement::parse() {
     object = decoders::d_node(reader);
 }
 
-string WithStatement::jsx() {
-    return bodyInfo.lbl_statement() + "with (" + object->jsx() + ") {\n"+bodyInfo.create_body()+"\n}";
+string WithStatement::to_string() {
+    return bodyInfo.lbl_statement() + "with (" + object->to_string() + ") {\n" + bodyInfo.create_body() + "\n}";
 }

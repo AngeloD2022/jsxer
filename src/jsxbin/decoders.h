@@ -10,59 +10,67 @@
 #include <algorithm>
 #include <regex>
 
-using namespace std;
+typedef uint8_t byte;
+
+using std::vector;
+
+using jsxbin::nodes::AstNode;
+
+// Note: better to move to specific file instead of generalization
 using namespace jsxbin::nodes;
 
-namespace jsxbin::decoders {
-    struct reference {
-        string id;
-        bool flag;
-    };
+BEGIN_NS(jsxbin) BEGIN_NS(decoders)
 
-    struct line_info {
-        int line_number;
-        AstNode *child;
-        vector<string> labels;
+struct Reference {
+    string id;
+    bool flag;
+};
 
-        string lbl_statement() {
-            string result;
-            std::for_each(labels.begin(), labels.end(), [&result](const string& x) {
-                result += x +": \n";
-            });
-            return result;
-        }
+struct LineInfo {
+    int line_number;
+    AstNode *child;
+    vector<string> labels;
 
-        [[nodiscard]]
-        string create_body() const {
-            return child == nullptr ? "" : child->jsx();
-        }
-    };
+    string lbl_statement() {
+        string result;
+        std::for_each(labels.begin(), labels.end(), [&result](const string& x) {
+            result += x +": \n";
+        });
+        return result;
+    }
 
-    struct function_signature {
-        int type;
-        string name;
-        int header_1;
-        int header_3;
-        int header_5;
-        map<string, int> parameters;
-        map<string, int> local_vars;
-    };
+    [[nodiscard]]
+    string create_body() const {
+        return child == nullptr ? "" : child->to_string();
+    }
+};
 
-    AstNode* d_node(Reader &reader);
-    line_info d_line_info(Reader &reader);
-    int d_literal_num(Reader &reader);
-    string d_variant(Reader &reader);
-    string d_string(Reader &reader);
-    string d_number(Reader &reader);
-    bool d_bool(Reader &reader);
-    string d_ident(Reader &reader);
-    int d_length(Reader &reader);
-    reference d_ref(Reader &reader);
-    byte d_byte(Reader &reader);
-    vector<AstNode *> d_children(Reader &reader);
-    function_signature d_fn_sig(Reader &reader);
+struct FunctionSignature {
+    int type;
+    string name;
+    int header_1;
+    int header_3;
+    int header_5;
+    map<string, int> parameters;
+    map<string, int> local_vars;
+};
 
-    // decoding utilities...
-    bool valid_id(const string &value);
-    bool is_integer(const string &value);
-}
+AstNode* d_node(Reader& reader);
+LineInfo d_line_info(Reader& reader);
+int d_literal_num(Reader& reader);
+string d_variant(Reader& reader);
+string d_string(Reader& reader);
+string d_number(Reader& reader);
+bool d_bool(Reader& reader);
+string d_sid(Reader& reader);
+int d_length(Reader& reader);
+Reference d_ref(Reader& reader);
+byte d_byte(Reader& reader);
+vector<AstNode *> d_children(Reader& reader);
+FunctionSignature d_fn_sig(Reader& reader);
+
+// decoding utilities...
+bool valid_id(const string &value);
+bool is_integer(const string &value);
+
+END_NS(decoders) END_NS(jsxbin)

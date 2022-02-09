@@ -2,12 +2,15 @@
 #include "decoders.h"
 #include "nodes/nodes.h"
 
-#define is_capital_alpha(x) x - 0x41 <= 0x19
+#define is_capital_alpha(x) ((x) - 0x41 <= 0x19)
 
+using std::to_string;
+
+using namespace jsxbin;
 using namespace jsxbin::decoders;
 
 // Markers / constants...
-enum Markers : char {
+enum class NodeMarker : char {
     ID_REFERENCE = 0x7A,
     NEGATIVE_NUMBER = 0x79,
     NUMBER_8_BYTES = 0x38,
@@ -16,19 +19,6 @@ enum Markers : char {
     BOOL_TRUE = 0x74,
     BOOL_FALSE = 0x66,
 };
-
-// begin utility functions...
-string fromISO8859(const unsigned char &value) {
-    string result;
-    if (value < 0x80) {
-        result.push_back((char) value);
-    } else {
-        result.push_back((char) (0xC0 | value >> 6));
-        result.push_back((char) (0x80 | (value & 0x3f)));
-    }
-    return result;
-}
-// end utility functions.
 
 enum LiteralType {
     NUMBER,
@@ -61,24 +51,26 @@ string d_number_primitive(Reader &reader, int length, bool negative) {
 }
 
 string d_literal_primitive(Reader &reader, LiteralType literalType) {
+    using jsxbin::utils::string_from_ISO8859;
+
     if (reader.decrement_node_depth()) {
         return "";
     }
 
     bool negative = false;
-    if (reader.peek(0) == NEGATIVE_NUMBER) {
+    if (reader.peek(0) == (char) NodeMarker::NEGATIVE_NUMBER) {
         negative = true;
         reader.step();
     }
 
     char marker = reader.peek(0);
 
-    if (marker == NUMBER_4_BYTES) {
+    if (marker == (char) NodeMarker::NUMBER_4_BYTES) {
         reader.step();
         string number = d_number_primitive(reader, 4, negative);
         return number;
 
-    } else if (marker == NUMBER_2_BYTES) {
+    } else if (marker == (char) NodeMarker::NUMBER_2_BYTES) {
         reader.step();
         string number = d_number_primitive(reader, 2, negative);
         return number;
@@ -92,19 +84,19 @@ string d_literal_primitive(Reader &reader, LiteralType literalType) {
             if (literalType == LiteralType::NUMBER) {
                 return to_string((unsigned char) num);
             } else {
-                return fromISO8859((unsigned char) num);
+                return string_from_ISO8859((unsigned char) num);
             }
         }
     }
 }
 
-int decoders::d_literal_num(Reader &reader) {
+int decoders::d_literal_num(Reader& reader) {
     string value = d_literal_primitive(reader, LiteralType::NUMBER);
     return value.empty() ? 0 : stoi(value);
 }
 
 
-AstNode *decoders::d_node(Reader &reader) {
+AstNode *decoders::d_node(Reader& reader) {
     char marker = reader.pop();
 
     AstNode *node = nodes::get((NodeType) marker, reader);
@@ -119,12 +111,12 @@ AstNode *decoders::d_node(Reader &reader) {
     return nullptr;
 }
 
-string decoders::d_number(Reader &reader) {
+string decoders::d_number(Reader& reader) {
     char marker = reader.peek(0);
     string num;
 
     // if the marker suggests
-    if (marker == NUMBER_8_BYTES) {
+    if (marker == (char) NodeMarker::NUMBER_8_BYTES) {
         reader.step();
         num = d_number_primitive(reader, 8, false);
     } else {
@@ -159,7 +151,7 @@ byte decoders::d_byte(Reader& reader) {
     }
 }
 
-string decoders::d_variant(Reader &reader) {
+string decoders::d_variant(Reader& reader) {
     using jsxbin::utils::replace_str_inplace;
 
     string result;
@@ -185,6 +177,7 @@ string decoders::d_variant(Reader &reader) {
             // string type
             result = d_string(reader);
 
+            // TODO: Properly JSON stringify the string literal
             replace_str_inplace(result, "\\", "\\\\");
             replace_str_inplace(result, "\"", "\\\"");
             replace_str_inplace(result, "\n", "\\n");
@@ -211,16 +204,16 @@ string decoders::d_variant(Reader &reader) {
 bool decoders::d_bool(Reader& reader) {
     char marker = reader.pop();
 
-    if (marker == BOOL_TRUE)
+    if (marker == (char) NodeMarker::BOOL_TRUE)
         return true;
-    else if (marker == BOOL_FALSE)
+    else if (marker == (char) NodeMarker::BOOL_FALSE)
         return false;
 
     // TODO: Handle this
     return false;
 }
 
-string decoders::d_string(Reader &reader) {
+string decoders::d_string(Reader& reader) {
 
     // Parse length of string...
     string parsed_len = d_literal_primitive(reader, LiteralType::NUMBER);
@@ -237,30 +230,30 @@ string decoders::d_string(Reader &reader) {
     return buf;
 }
 
-reference decoders::d_ref(Reader &reader) {
-    string id = d_ident(reader);
+Reference decoders::d_ref(Reader& reader) {
+    string id = d_sid(reader);
     bool flag = false;
 
     if (reader.get_version() >= JsxbinVersion::v20) {
         flag = d_bool(reader);
     }
 
-    return reference{ id, flag };
+    return Reference{id, flag };
 }
 
-int decoders::d_length(Reader &reader) {
+int decoders::d_length(Reader& reader) {
     string value = d_literal_primitive(reader, LiteralType::NUMBER);
     return value.empty() ? 0 : abs(stoi(value));
 }
 
-string decoders::d_ident(Reader &reader) {
+string decoders::d_sid(Reader& reader) {
     char marker = reader.peek(0);
 
-    if (marker != ID_REFERENCE) {
+    if (marker != (char) NodeMarker::ID_REFERENCE) {
         string id = to_string(d_length(reader));
         return reader.get_symbol(id);
     } else {
-        char type = reader.pop();
+        char _type = reader.pop();
         string name = d_string(reader);
         string id = to_string(d_length(reader));
         reader.add_symbol(id, name);
@@ -268,7 +261,7 @@ string decoders::d_ident(Reader &reader) {
     }
 }
 
-vector<AstNode *> decoders::d_children(Reader &reader) {
+vector<AstNode *> decoders::d_children(Reader& reader) {
     int length = d_length(reader);
     if (length == 0) {
         return {};
@@ -284,8 +277,8 @@ vector<AstNode *> decoders::d_children(Reader &reader) {
     return result;
 }
 
-line_info decoders::d_line_info(Reader &reader) {
-    line_info result;
+LineInfo decoders::d_line_info(Reader& reader) {
+    LineInfo result;
 
     result.line_number = d_length(reader);
     result.child = d_node(reader);
@@ -293,41 +286,66 @@ line_info decoders::d_line_info(Reader &reader) {
     int length = d_length(reader);
 
     for (int i = 0; i < length; ++i) {
-        result.labels.push_back(d_ident(reader));
+        result.labels.push_back(d_sid(reader));
     }
 
     return result;
 }
 
-function_signature decoders::d_fn_sig(Reader &reader) {
-    function_signature result;
+FunctionSignature decoders::d_fn_sig(Reader& reader) {
+    FunctionSignature result;
 
     int length = d_length(reader);
     if (length > 0) {
         for (int i = 0; i < length; ++i) {
-            string parameterName = d_ident(reader);
+            string parameterName = d_sid(reader);
             int paramLength = d_length(reader);
 
             // separate local variables from parameter list...
             if (paramLength > 0x1ffffc70 && paramLength < 0x202fbf00)
-                result.parameters.insert_or_assign(parameterName, paramLength);
+                result.parameters[parameterName] = paramLength;
             else
-                result.local_vars.insert_or_assign(parameterName, paramLength);
+                result.local_vars[parameterName] = paramLength;
         }
     }
 
     result.header_1 = d_length(reader);
     result.type = d_length(reader);
     result.header_3 = d_length(reader);
-    result.name = d_ident(reader);
+    result.name = d_sid(reader);
     result.header_5 = d_literal_num(reader);
     return result;
 }
 
+bool valid_id_0(char value) {
+    return in_range_i('a', 'z', value) || in_range_i('A', 'Z', value) ||
+            ('_' == value) || ('$' == value);
+}
+
+bool valid_id_x(char value) {
+    return valid_id_0(value) || in_range_i('0', '9', value);
+}
+
 // decoding utilities...
 bool decoders::valid_id(const string& value) {
-    static const regex identifier("^[a-zA-Z_$][0-9a-zA-Z_$]*$");
-    return regex_match(value.c_str(), identifier);
+    // ^[a-zA-Z_$][0-9a-zA-Z_$]*$
+    size_t len = value.length();
+
+    if (len > 0) {
+        if (valid_id_0(value[0])) {
+            for (int i = 1; i < len; ++i) {
+                if (!valid_id_x(value[i])) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+
+    return true;
 }
 
 bool decoders::is_integer(const string& value) {

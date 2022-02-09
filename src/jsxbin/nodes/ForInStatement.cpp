@@ -5,20 +5,20 @@ void ForInStatement::parse() {
     loopVariable = decoders::d_node(reader);
     objExpression = decoders::d_node(reader);
     length = decoders::d_length(reader);
-    id = decoders::d_ident(reader);
+    id = decoders::d_sid(reader);
 
     if (reader.get_version() >= JsxbinVersion::v20)
         forEach = decoders::d_bool(reader);
 }
 
-string ForInStatement::jsx() {
+string ForInStatement::to_string() {
     string result;
     result += bodyInfo.lbl_statement();
 
     result += forEach ? "for each (var " : "for (var ";
-    result += loopVariable->jsx();
+    result += loopVariable->to_string();
     result += " in ";
-    result += objExpression->jsx();
+    result += objExpression->to_string();
     result += ") { \n" + bodyInfo.create_body() + '}';
 
     return result;

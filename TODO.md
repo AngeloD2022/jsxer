@@ -1,4 +1,5 @@
 ## TODO
 
-1) Add a type attribute to AstNode to replace the typeid checking.
-2) Better error handling.
+1) Better error handling.
+2) Use operators for ast parsing.
+3) CodeGen with proper syntax style and stuff.

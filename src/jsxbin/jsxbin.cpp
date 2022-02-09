@@ -1,10 +1,6 @@
 #include "jsxbin.h"
 #include "util.h"
-#include "nodes/RootNode.h"
-
-#include <string>
-
-using namespace std;
+#include "nodes/Program.h"
 
 #define JSXBIN_SIGNATURE_V10 "@JSXBIN@ES@1.0@"
 #define JSXBIN_SIGNATURE_V20 "@JSXBIN@ES@2.0@"
@@ -44,7 +40,7 @@ bool verifySignature(const char* code, JsxbinVersion* version = nullptr, int* st
     return true;
 }
 
-void append_header(string& code) {
+void prepend_header(string& code) {
     string header = "/*\n"
                     "* Decompiled with Jsxbin Decompiler\n"
                     "* Version: 1.0.1\n"
@@ -71,16 +67,16 @@ int jsxbin::decompile(const string& input, string& output) {
         return -3;
     }
 
-    auto *reader = new Reader(compiled, version);
+    auto* reader = new Reader(compiled, version);
     reader->seek(start);
 
     // Parse into an Ast
-    auto *root = new RootNode(*reader);
-    root->parse();
+    auto* program = new Program(*reader);
+    program->parse();
 
     // Generate code from the ast
-    output = root->jsx();
-    append_header(output);
+    output = program->to_string();
+    prepend_header(output);
 
     return 0;
 }

@@ -1,41 +1,47 @@
 #pragma once
 
-#include <string>
-#include <map>
 #include "jsxbin.h"
 
-using namespace std;
+#include "common.h"
 
-namespace jsxbin {
-    class Reader {
-    public:
-        explicit Reader(const string& body, JsxbinVersion version);
+#include <string>
+#include <map>
 
-        // meta...
-        JsxbinVersion get_version();
+using std::string;
+using std::map;
 
-        // tokens...
-        void step();
-        char pop();
-        char peek(int ahead);
-        void seek(int offset);
+BEGIN_NS(jsxbin)
 
-        // argument depth...
-        int get_node_depth();
-        bool decrement_node_depth();
+class Reader {
+public:
+    explicit Reader(const string& body, JsxbinVersion version);
 
-        // symbol...
-        string get_symbol(const string& key);
-        void add_symbol(const string& key, string value);
+    // meta...
+    JsxbinVersion get_version();
 
-    private:
-        JsxbinVersion input_version;
-        map<string, string> symbols;
-        unsigned long index = 0;
-        uint16_t node_depth = 0;
-        string body;
+    // tokens...
+    void step();
+    char pop();
+    char peek(int ahead);
+    void seek(int offset);
 
-        void update_node_depth();
-        int parse_node_depth();
-    };
-}
+    // argument depth...
+    int get_node_depth();
+    bool decrement_node_depth();
+
+    // symbol...
+    string get_symbol(const string& key);
+    void add_symbol(const string& key, string value);
+
+private:
+    JsxbinVersion input_version;
+    map<string, string> symbols;
+    unsigned long index = 0;
+    uint16_t node_depth = 0;
+    string body;
+
+    void update_node_depth();
+    int parse_node_depth();
+};
+
+END_NS(jsxbin)

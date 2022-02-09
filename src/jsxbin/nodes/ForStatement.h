@@ -3,24 +3,25 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxbin;
+BEGIN_NS(jsxbin) BEGIN_NS(nodes)
 
-namespace jsxbin::nodes {
-    class ForStatement : public AstNode {
-    public:
-        explicit ForStatement(Reader& reader) : AstNode(reader) {}
+class ForStatement : public AstNode {
+public:
+    explicit ForStatement(Reader& reader) : AstNode(reader) {}
 
-        void parse() override;
+    NodeType type() override {
+        return NodeType::ForStatement;
+    }
 
-        string jsx() override;
+    void parse() override;
 
-    private:
-        decoders::line_info bodyInfo;
-        AstNode *loopVar = nullptr;
-        string iteratorInitial;
-        AstNode *upperBound = nullptr;
-        string stepSize;
-        int length;
-        string comparisonOperator;
-    };
-}
+    string to_string() override;
+
+private:
+    decoders::LineInfo bodyInfo;
+    AstNode* initial = nullptr;
+    AstNode* test = nullptr;
+    AstNode* update = nullptr;
+};
+
+END_NS(nodes) END_NS(jsxbin)

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 using std::string;
 
-enum class JsxbinVersion : unsigned short {
-    Invalid = (unsigned short) -1,
+enum class JsxbinVersion : uint16_t {
+    Invalid = (uint16_t) -1,
 
     v10 = 0x0100,
     v20 = 0x0200,

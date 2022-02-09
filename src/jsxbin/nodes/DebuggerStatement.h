@@ -3,18 +3,22 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxbin;
+BEGIN_NS(jsxbin) BEGIN_NS(nodes)
 
-namespace jsxbin::nodes {
-    class DebuggerStatement : public AstNode {
-    public:
-        explicit DebuggerStatement(Reader& reader) : AstNode(reader) {}
+class DebuggerStatement : public AstNode {
+public:
+    explicit DebuggerStatement(Reader& reader) : AstNode(reader) {}
 
-        void parse() override;
+    NodeType type() override {
+        return NodeType::DebuggerStatement;
+    }
 
-        string jsx() override;
+    void parse() override;
 
-    private:
-        decoders::line_info lineInfo;
-    };
-}
+    string to_string() override;
+
+private:
+    decoders::LineInfo lineInfo;
+};
+
+END_NS(nodes) END_NS(jsxbin)

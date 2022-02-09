@@ -10,7 +10,7 @@ namespace jsxbin::nodes {
 
         void parse() override;
 
-        string jsx() override;
+        string to_string() override;
 
     private:
 

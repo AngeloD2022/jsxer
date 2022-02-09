@@ -5,8 +5,8 @@ void ReturnStatement::parse() {
     expression = decoders::d_node(reader);
 }
 
-string ReturnStatement::jsx() {
-    string result = expression == nullptr ? "" : ' ' + expression->jsx();
+string ReturnStatement::to_string() {
+    string result = expression == nullptr ? "" : ' ' + expression->to_string();
     result = lineInfo.lbl_statement() + "return" + result + ';';
     
     return result;
