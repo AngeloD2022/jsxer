@@ -1,16 +1,16 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "BinaryExpr.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class AssignmentExpr : public AbstractNode {
+    class AssignmentExpr : public AstNode {
     public:
 
-        explicit AssignmentExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit AssignmentExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -18,9 +18,9 @@ namespace jsxbin::nodes {
 
     private:
         string var_name;
-        AbstractNode *expression;
         string literal;
-        bool shorthand;
-        bool declaration;
+        AstNode *expression = nullptr;
+        bool shorthand = false;
+        bool declaration = false;
     };
 }

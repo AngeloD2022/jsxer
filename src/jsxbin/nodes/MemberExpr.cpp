@@ -1,8 +1,8 @@
 #include "MemberExpr.h"
 
 void MemberExpr::parse() {
-    memberInfo = decoders::d_ref(scanState);
-    objInfo = decoders::d_node(scanState);
+    memberInfo = decoders::d_ref(reader);
+    objInfo = decoders::d_node(reader);
 }
 
 string MemberExpr::jsx() {

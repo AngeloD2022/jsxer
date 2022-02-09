@@ -1,23 +1,23 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class ConditionalExpr : public AbstractNode {
+    class ConditionalExpr : public AstNode {
     public:
-        explicit ConditionalExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit ConditionalExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
     private:
-        AbstractNode *condition;
-        AbstractNode *node_true;
-        AbstractNode *node_false;
+        AstNode *condition;
+        AstNode *node_true;
+        AstNode *node_false;
 
     };
 }

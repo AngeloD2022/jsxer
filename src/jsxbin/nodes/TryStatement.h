@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class TryStatement : public AbstractNode {
+    class TryStatement : public AstNode {
     public:
-        explicit TryStatement(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit TryStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -18,12 +18,12 @@ namespace jsxbin::nodes {
 
         struct tc_layer {
             string arg;
-            AbstractNode *exceptionFilter;
-            AbstractNode *catchBlock;
+            AstNode *exceptionFilter;
+            AstNode *catchBlock;
         };
 
         decoders::line_info tryBlock;
-        AbstractNode *finallyBlock;
+        AstNode *finallyBlock;
         vector<tc_layer> layers;
         int length;
     };

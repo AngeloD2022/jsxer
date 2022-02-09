@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class LogicalExpr : public AbstractNode {
+    class LogicalExpr : public AstNode {
     public:
-        explicit LogicalExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit LogicalExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,8 +16,8 @@ namespace jsxbin::nodes {
 
     private:
         string opName;
-        AbstractNode *leftExpr;
-        AbstractNode *rightExpr;
+        AstNode *leftExpr;
+        AstNode *rightExpr;
         string leftLiteral;
         string rightLiteral;
     };

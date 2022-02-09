@@ -1,15 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-
-    class RegExpLiteral : public AbstractNode {
+    class RegExpLiteral : public AstNode {
     public:
-        explicit RegExpLiteral(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit RegExpLiteral(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

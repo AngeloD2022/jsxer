@@ -1,22 +1,22 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class IndexingIncrementExpr : public AbstractNode {
+    class IndexingIncrementExpr : public AstNode {
     public:
-        explicit IndexingIncrementExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit IndexingIncrementExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
     private:
-        AbstractNode *variable;
-        int operation;
-        bool postfix;
+        AstNode *variable = nullptr;
+        int operation = 0;
+        bool postfix = false;
     };
 }

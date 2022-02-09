@@ -1,8 +1,8 @@
 #include "UnaryExpr.h"
 
 void UnaryExpr::parse() {
-    op = decoders::d_ident(scanState);
-    expression = decoders::d_node(scanState);
+    op = decoders::d_ident(reader);
+    expression = decoders::d_node(reader);
 }
 
 string UnaryExpr::jsx() {

@@ -1,11 +1,11 @@
 #include "ArrayExpr.h"
 
 void ArrayExpr::parse() {
-    argumentList = (ArgumentList *) decoders::d_node(scanState);
+    argumentList = (ArgumentList *) decoders::d_node(reader);
 }
 
 string ArrayExpr::jsx() {
-    if (argumentList == nullptr) {
+    if (!argumentList) {
         return "[]";
     }
 

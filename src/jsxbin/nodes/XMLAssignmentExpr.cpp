@@ -1,10 +1,10 @@
 #include "XMLAssignmentExpr.h"
 
 void XMLAssignmentExpr::parse() {
-    size_t length = decoders::d_length(scanState);
+    size_t length = decoders::d_length(reader);
 
     for (int i = 0; i < length; ++i) {
-        children.insert_or_assign(decoders::d_node(scanState), decoders::d_length(scanState));
+        children.insert_or_assign(decoders::d_node(reader), decoders::d_length(reader));
     }
 
 }
@@ -18,7 +18,7 @@ string XMLAssignmentExpr::jsx() {
 
     string result;
 
-    for (std::pair<AbstractNode*, int> child : children){
+    for (std::pair<AstNode*, int> child : children){
         if (child.second == TYPE_NORMAL){
             result += child.first->jsx();
         } else {

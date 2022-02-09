@@ -1,10 +1,10 @@
 #include "IdNode.h"
 
 void IdNode::parse() {
-    id = decoders::d_ident(scanState);
+    id = decoders::d_ident(reader);
 
-    if (scanState.get_version() == jsxbin_version::VERSION_2)
-        unknown = decoders::d_bool(scanState);
+    if (reader.get_version() >= JsxbinVersion::v20)
+        unknown = decoders::d_bool(reader);
 }
 
 string IdNode::jsx() {

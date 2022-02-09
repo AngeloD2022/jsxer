@@ -1,7 +1,7 @@
 #include "DebuggerStatement.h"
 
 void DebuggerStatement::parse() {
-    lineInfo = decoders::d_linfo(scanState);
+    lineInfo = decoders::d_line_info(reader);
 }
 
 string DebuggerStatement::jsx() {

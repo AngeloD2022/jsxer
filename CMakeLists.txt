@@ -11,9 +11,9 @@ add_library(jsxbin_decomp STATIC
     src/jsxbin/util.cpp
     src/jsxbin/decoders.cpp
     src/jsxbin/decoders.h
-    src/jsxbin/nodes/AbstractNode.h
-    src/jsxbin/ScanState.cpp
-    src/jsxbin/ScanState.h
+    src/jsxbin/reader.cpp
+    src/jsxbin/reader.h
+    src/jsxbin/nodes/AstNode.h
     src/jsxbin/nodes/RootNode.cpp
     src/jsxbin/nodes/RootNode.h
     src/jsxbin/nodes/nodes.h

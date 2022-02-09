@@ -1,9 +1,9 @@
 #include "JumpStatement.h"
 
 void JumpStatement::parse() {
-    labelInfo = decoders::d_linfo(scanState);
-    jmpLocation = decoders::d_ident(scanState);
-    breakStatement = decoders::d_bool(scanState);
+    labelInfo = decoders::d_line_info(reader);
+    jmpLocation = decoders::d_ident(reader);
+    breakStatement = decoders::d_bool(reader);
 }
 
 string JumpStatement::jsx() {

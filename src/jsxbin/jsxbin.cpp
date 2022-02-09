@@ -3,10 +3,8 @@
 #include "nodes/RootNode.h"
 
 #include <string>
-#include <regex>
 
 using namespace std;
-using namespace jsxbin::utils;
 
 #define JSXBIN_SIGNATURE_V10 "@JSXBIN@ES@1.0@"
 #define JSXBIN_SIGNATURE_V20 "@JSXBIN@ES@2.0@"
@@ -55,14 +53,17 @@ void append_header(string& code) {
 }
 
 int jsxbin::decompile(const string& input, string& output) {
+    using jsxbin::utils::string_strip_char;
+
     string compiled = input;
 
-    string_replace(compiled, "\n", "");
-    string_replace(compiled, "\r", "");
-    string_replace(compiled, "\\", "");
+    string_strip_char(compiled, '\n');
+    string_strip_char(compiled, '\r');
+    string_strip_char(compiled, '\\');
 
-    JsxbinVersion version;
     int start = -1;
+    JsxbinVersion version;
+
     if ( !verifySignature(compiled.c_str(), &version, &start) ) {
         // TODO: Handle this properly
         fprintf(stderr, "JSXBIN signature verification failed!");
@@ -70,16 +71,14 @@ int jsxbin::decompile(const string& input, string& output) {
         return -3;
     }
 
-    auto *scanState = new ScanState(compiled,
-                                    (version == JsxbinVersion::v10)
-                                        ? jsxbin_version::VERSION_1
-                                        : jsxbin_version::VERSION_2);
-    scanState->seek(start);
+    auto *reader = new Reader(compiled, version);
+    reader->seek(start);
 
-    // Start de-compilation.
-    auto *root = new RootNode(*scanState);
+    // Parse into an Ast
+    auto *root = new RootNode(*reader);
     root->parse();
 
+    // Generate code from the ast
     output = root->jsx();
     append_header(output);
 

@@ -1,12 +1,12 @@
 #include "AssignmentExpr.h"
 
 void AssignmentExpr::parse() {
-    var_name = decoders::d_ident(scanState);
-    int type = decoders::d_length(scanState);
-    expression = decoders::d_node(scanState);
-    literal = decoders::d_variant(scanState);
-    shorthand = decoders::d_bool(scanState);
-    declaration = decoders::d_bool(scanState);
+    var_name = decoders::d_ident(reader);
+    int type = decoders::d_length(reader);
+    expression = decoders::d_node(reader);
+    literal = decoders::d_variant(reader);
+    shorthand = decoders::d_bool(reader);
+    declaration = decoders::d_bool(reader);
 }
 
 string AssignmentExpr::jsx() {

@@ -1,20 +1,20 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class RootNode : AbstractNode {
+    class RootNode : AstNode {
     public:
-        explicit RootNode(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit RootNode(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
     private:
-        AbstractNode *child = nullptr;
+        AstNode *child = nullptr;
     };
 }

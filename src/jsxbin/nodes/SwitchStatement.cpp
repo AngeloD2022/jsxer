@@ -1,20 +1,20 @@
 #include "SwitchStatement.h"
 
 void SwitchStatement::parse() {
-    lineInfo = decoders::d_linfo(scanState);
-    switchValue = decoders::d_node(scanState);
+    lineInfo = decoders::d_line_info(reader);
+    switchValue = decoders::d_node(reader);
 
-    size_t len_cases = decoders::d_length(scanState);
+    size_t len_cases = decoders::d_length(reader);
     for (int i = 0; i < len_cases; ++i){
-        AbstractNode *node = decoders::d_node(scanState);
+        AstNode *node = decoders::d_node(reader);
         if (node != nullptr){
             cases.push_back(node);
         }
     }
 
-    size_t len_implementations = decoders::d_length(scanState);
+    size_t len_implementations = decoders::d_length(reader);
     for (int i = 0; i < len_implementations; ++i){
-        AbstractNode *node = decoders::d_node(scanState);
+        AstNode *node = decoders::d_node(reader);
         if (node != nullptr){
             implementations.push_back(node);
         }
@@ -27,9 +27,9 @@ string SwitchStatement::jsx() {
 
     for (int i = 0; i < cases.size(); ++i){
 
-        vector<AbstractNode*> caseArgs = ((ArgumentList*)cases[i])->arguments;
+        vector<AstNode*> caseArgs = ((ArgumentList*)cases[i])->arguments;
         if (!caseArgs.empty()){
-            for (AbstractNode* arg : caseArgs){
+            for (AstNode* arg : caseArgs){
                 result += "case " + arg->jsx() + ":\n";
             }
         } else {

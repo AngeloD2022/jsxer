@@ -1,20 +1,20 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class SetDefaultXMLNamespaceExpr : public AbstractNode {
+    class SetDefaultXMLNamespaceExpr : public AstNode {
     public:
-        explicit SetDefaultXMLNamespaceExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit SetDefaultXMLNamespaceExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
     private:
-        AbstractNode *defaultNamespaceFxnCall;
+        AstNode *defaultNamespaceFxnCall;
     };
 }

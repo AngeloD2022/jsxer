@@ -1,8 +1,8 @@
 #include "ArgumentList.h"
 
 void ArgumentList::parse() {
-    arguments = decoders::d_children(scanState);
-    unkValue = decoders::d_bool(scanState);
+    arguments = decoders::d_children(reader);
+    unkValue = decoders::d_bool(reader);
 }
 
 string ArgumentList::jsx() {

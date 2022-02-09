@@ -1,8 +1,8 @@
 #include "WhileStatement.h"
 
 void WhileStatement::parse() {
-    bodyInfo = decoders::d_linfo(scanState);
-    condition = decoders::d_node(scanState);
+    bodyInfo = decoders::d_line_info(reader);
+    condition = decoders::d_node(reader);
 }
 
 string WhileStatement::jsx() {

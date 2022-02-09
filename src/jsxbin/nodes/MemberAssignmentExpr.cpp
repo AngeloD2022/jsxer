@@ -1,10 +1,10 @@
 #include "MemberAssignmentExpr.h"
 
 void MemberAssignmentExpr::parse() {
-    variable = decoders::d_node(scanState);
-    expression = decoders::d_node(scanState);
-    literal = decoders::d_variant(scanState);
-    shorthand = decoders::d_bool(scanState);
+    variable = decoders::d_node(reader);
+    expression = decoders::d_node(reader);
+    literal = decoders::d_variant(reader);
+    shorthand = decoders::d_bool(reader);
 }
 
 string MemberAssignmentExpr::jsx() {

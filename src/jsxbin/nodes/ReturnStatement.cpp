@@ -1,8 +1,8 @@
 #include "ReturnStatement.h"
 
 void ReturnStatement::parse() {
-    lineInfo = decoders::d_linfo(scanState);
-    expression = decoders::d_node(scanState);
+    lineInfo = decoders::d_line_info(reader);
+    expression = decoders::d_node(reader);
 }
 
 string ReturnStatement::jsx() {

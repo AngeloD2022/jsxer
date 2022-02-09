@@ -1,8 +1,8 @@
 #include "WithStatement.h"
 
 void WithStatement::parse() {
-    bodyInfo = decoders::d_linfo(scanState);
-    object = decoders::d_node(scanState);
+    bodyInfo = decoders::d_line_info(reader);
+    object = decoders::d_node(reader);
 }
 
 string WithStatement::jsx() {

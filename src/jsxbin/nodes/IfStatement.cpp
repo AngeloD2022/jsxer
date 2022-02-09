@@ -3,9 +3,9 @@
 
 
 void IfStatement::parse() {
-    bodyInfo = decoders::d_linfo(scanState);
-    test = decoders::d_node(scanState);
-    otherwise = decoders::d_node(scanState);
+    bodyInfo = decoders::d_line_info(reader);
+    test = decoders::d_node(reader);
+    otherwise = decoders::d_node(reader);
 }
 
 string IfStatement::jsx() {
@@ -16,7 +16,7 @@ string IfStatement::jsx() {
         return result;
     }
 
-    AbstractNode *current = otherwise;
+    AstNode *current = otherwise;
     while (istype(current, "IfStatement") && ((IfStatement *)current)->otherwise != nullptr) {
         IfStatement *elif = (IfStatement *)current;
         result += '\n' + elif->bodyInfo.lbl_statement() + "else if (" + elif->test->jsx() + ") {\n"

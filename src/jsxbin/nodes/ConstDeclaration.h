@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class ConstDeclaration : public AbstractNode {
+    class ConstDeclaration : public AstNode {
     public:
-        explicit ConstDeclaration(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit ConstDeclaration(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -17,7 +17,7 @@ namespace jsxbin::nodes {
     private:
         string name;
         int length;
-        AbstractNode *expression;
+        AstNode *expression;
         string literal;
         bool boolean_1;
         bool boolean_2;

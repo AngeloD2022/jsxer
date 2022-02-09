@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class DoWhileExpr : public AbstractNode {
+    class DoWhileExpr : public AstNode {
     public:
-        explicit DoWhileExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit DoWhileExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,6 +16,6 @@ namespace jsxbin::nodes {
 
     private:
         decoders::line_info body;
-        AbstractNode *condition;
+        AstNode *condition = nullptr;
     };
 }

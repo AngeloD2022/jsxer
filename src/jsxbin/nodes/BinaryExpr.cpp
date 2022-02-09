@@ -3,7 +3,7 @@
 
 using namespace jsxbin::nodes;
 
-string BinaryExpr::create_expr(const string &literal, AbstractNode *exprNode) {
+string BinaryExpr::create_expr(const string &literal, AstNode *exprNode) {
     bool parenthesis = false;
     string expression;
 
@@ -25,11 +25,11 @@ string BinaryExpr::create_expr(const string &literal, AbstractNode *exprNode) {
 }
 
 void BinaryExpr::parse() {
-    op_name = decoders::d_ident(scanState);
-    left = decoders::d_node(scanState);
-    right = decoders::d_node(scanState);
-    literalLeft = decoders::d_variant(scanState);
-    literalRight = decoders::d_variant(scanState);
+    op_name = decoders::d_ident(reader);
+    left = decoders::d_node(reader);
+    right = decoders::d_node(reader);
+    literalLeft = decoders::d_variant(reader);
+    literalRight = decoders::d_variant(reader);
 
     string leftExp = create_expr(literalLeft, left);
     string rightExp = create_expr(literalRight, right);

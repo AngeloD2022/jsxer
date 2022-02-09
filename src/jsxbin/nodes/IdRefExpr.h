@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class IdRefExpr : public AbstractNode {
+    class IdRefExpr : public AstNode {
     public:
-        explicit IdRefExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit IdRefExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,6 +16,6 @@ namespace jsxbin::nodes {
 
     private:
         decoders::reference reference;
-        int type;
+        int type = 0;
     };
 }

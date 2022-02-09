@@ -1,23 +1,23 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 #include "ArgumentList.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class FunctionCallExpr : public AbstractNode {
+    class FunctionCallExpr : public AstNode {
     public:
-        explicit FunctionCallExpr(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit FunctionCallExpr(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
         string jsx() override;
 
     private:
-        AbstractNode *function;
-        AbstractNode *args;
+        AstNode *function = nullptr;
+        AstNode *args = nullptr;
         bool constructorCall;
     };
 }

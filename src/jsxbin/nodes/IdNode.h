@@ -1,14 +1,14 @@
 #pragma once
 
-#include "AbstractNode.h"
+#include "AstNode.h"
 #include "../decoders.h"
 
 using namespace jsxbin;
 
 namespace jsxbin::nodes {
-    class IdNode : public AbstractNode {
+    class IdNode : public AstNode {
     public:
-        explicit IdNode(ScanState &scanState) : AbstractNode(scanState) {}
+        explicit IdNode(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 
@@ -16,6 +16,6 @@ namespace jsxbin::nodes {
 
     private:
         string id;
-        bool unknown;
+        bool unknown = false;
     };
 }

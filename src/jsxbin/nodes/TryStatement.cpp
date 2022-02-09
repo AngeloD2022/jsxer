@@ -1,14 +1,14 @@
 #include "TryStatement.h"
 
 void TryStatement::parse() {
-    tryBlock = decoders::d_linfo(scanState);
-    length = decoders::d_length(scanState);
-    finallyBlock = decoders::d_node(scanState);
+    tryBlock = decoders::d_line_info(reader);
+    length = decoders::d_length(reader);
+    finallyBlock = decoders::d_node(reader);
 
     for (int i = 0; i < length; ++i) {
-        layers.push_back({decoders::d_ident(scanState),
-                          decoders::d_node(scanState),
-                          decoders::d_node(scanState)});
+        layers.push_back({decoders::d_ident(reader),
+                          decoders::d_node(reader),
+                          decoders::d_node(reader)});
     }
 }
 
