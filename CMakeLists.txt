@@ -3,6 +3,10 @@ project(jsxbin_decompiler)
 
 set(CMAKE_CXX_STANDARD 20)
 
+if(UNIX AND NOT APPLE)
+    set(CMAKE_CXX_FLAGS "-fPIC")
+endif()
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_library(jsxbin_decomp STATIC
