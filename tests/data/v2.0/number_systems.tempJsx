@@ -1,0 +1,2 @@
+var octalTest = 0337;
+var hexTest = 0xFF;
