@@ -10,6 +10,10 @@ namespace jsxbin { namespace nodes {
     public:
         explicit DebuggerStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::DebuggerStatement;
+        }
+
         void parse() override;
 
         string to_string() override;

@@ -10,6 +10,10 @@ namespace jsxbin { namespace nodes {
     public:
         explicit RegExpLiteral(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::RegExpLiteral;
+        }
+
         void parse() override;
 
         string to_string() override;

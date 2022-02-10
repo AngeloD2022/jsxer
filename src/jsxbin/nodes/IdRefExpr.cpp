@@ -1,10 +1,10 @@
 #include "IdRefExpr.h"
 
-void IdRefExpr::parse() {
+void LocalIdentifier::parse() {
     reference = decoders::d_ref(reader);
-    type = decoders::d_length(reader);
+    _type = decoders::d_length(reader);
 }
 
-string IdRefExpr::to_string() {
+string LocalIdentifier::to_string() {
     return reference.id;
 }

@@ -10,12 +10,16 @@ namespace jsxbin { namespace nodes {
     public:
         explicit ReturnStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::ReturnStatement;
+        }
+
         void parse() override;
 
         string to_string() override;
 
     private:
         decoders::LineInfo lineInfo;
-        AstNode *expression;
+        AstNode* expression;
     };
 } }

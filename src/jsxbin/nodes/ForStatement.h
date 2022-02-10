@@ -10,17 +10,18 @@ namespace jsxbin { namespace nodes {
     public:
         explicit ForStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::ForStatement;
+        }
+
         void parse() override;
 
         string to_string() override;
 
     private:
         decoders::LineInfo bodyInfo;
-        AstNode *loopVar = nullptr;
-        string iteratorInitial;
-        AstNode *upperBound = nullptr;
-        string stepSize;
-        int length;
-        string comparisonOperator;
+        AstNode *initial = nullptr;
+        AstNode *test = nullptr;
+        AstNode *update = nullptr;
     };
 } }

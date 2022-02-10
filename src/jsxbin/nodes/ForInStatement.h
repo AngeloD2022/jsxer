@@ -10,6 +10,10 @@ namespace jsxbin { namespace nodes {
     public:
         explicit ForInStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::ForInStatement;
+        }
+
         void parse() override;
 
         string to_string() override;

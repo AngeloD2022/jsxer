@@ -11,6 +11,10 @@ namespace jsxbin { namespace nodes {
     public:
         explicit StatementList(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::StatementList;
+        }
+
         void parse() override;
 
         string to_string() override;

@@ -2,148 +2,108 @@
 
 #include "AstNode.h"
 
-#include "ArgumentList.h"
-#include "ArrayExpr.h"
-#include "ArrayIndexingExpr.h"
-#include "AssignmentExpr.h"
-#include "BinaryExpr.h"
-#include "ConditionalExpr.h"
-#include "ConstDeclaration.h"
+#include "ListExpression.h"
+#include "ArrayExpression.h"
+#include "IndexingExpression.h"
+#include "LocalAssignmentExpression.h"
+#include "BinaryExpression.h"
+#include "TernaryExpression.h"
+#include "ConstAssignment.h"
 #include "DebuggerStatement.h"
-#include "DeleteExpr.h"
-#include "DoWhileExpr.h"
-#include "ExprNode.h"
+#include "UnaryRefExpression.h"
+#include "DoWhileStatement.h"
+#include "ExpressionStatement.h"
 #include "ForInStatement.h"
+#include "SimpleForStatement.h"
 #include "ForStatement.h"
-#include "ForStatement2.h"
-#include "FunctionCallExpr.h"
+#include "CallExpression.h"
 #include "FunctionDeclaration.h"
-#include "FunctionExpr.h"
-#include "IdNode.h"
+#include "FunctionExpression.h"
+#include "Identifier.h"
 #include "IdRefExpr.h"
 #include "IfStatement.h"
-#include "IncrementExpr.h"
-#include "IndexingIncrementExpr.h"
-#include "JumpStatement.h"
-#include "LogicalExpr.h"
-#include "MemberAssignmentExpr.h"
-#include "MemberExpr.h"
-#include "ObjectExpr.h"
+#include "LocalUpdateExpression.h"
+#include "UpdateExpression.h"
+#include "BreakStatement.h"
+#include "LogicalExpression.h"
+#include "AssignmentExpression.h"
+#include "MemberExpression.h"
+#include "ObjectExpression.h"
 #include "RegExpLiteral.h"
 #include "ReturnStatement.h"
-#include "SetDefaultXMLNamespaceExpr.h"
+#include "VoidExpression.h"
 #include "StatementList.h"
 #include "SwitchStatement.h"
-#include "ThisExpr.h"
+#include "ThisExpression.h"
 #include "ThrowStatement.h"
 #include "TryStatement.h"
-#include "UnaryExpr.h"
-#include "UnknownNode.h"
-#include "ValueNode.h"
+#include "UnaryExpression.h"
+#include "XMLUnaryRefExpression.h"
+#include "ConstantLiteral.h"
 #include "WhileStatement.h"
 #include "WithStatement.h"
-#include "XMLAccessorExpr.h"
-#include "XMLAssignmentExpr.h"
-#include "XMLDoubleDotDescendantsExpr.h"
-#include "XMLNamespaceExpr.h"
+#include "XMLPredicateExpression.h"
+#include "XMLConstantExpression.h"
+#include "XMLDescendantsExpression.h"
+#include "XMLQualifiedNameExpression.h"
 
-namespace jsxbin { namespace nodes {
-    enum NodeType {
-        ArgumentList = 'R',
-        ArrayExpr = 'A',
-        ArrayIndexingExpr = 'Q',
-        AssignmentExpr = 'S',
-        BinaryExpr = 'C',
-        ConditionalExpr = 'd',
-        ConstDeclaration = 'G',
-        DebuggerStatement = 'H',
-        DeleteExpr = 'i',
-        DoWhileExpr = 'I',
-        ExprNode = 'J',
-        ForInStatement = 'L',
-        ForStatement = 'a',
-        ForStatement2 = 'K',
-        FunctionCallExpr = 'E',
-        FunctionDeclaration = 'M',
-        FunctionExpr = 'N',
-        IdNode = 'j',
-        IdRefExpr = 'V',
-        IfStatement = 'O',
-        IncrementExpr = 'T',
-        IndexingIncrementExpr = 'P',
-        JumpStatement = 'D',
-        LogicalExpr = 'U',
-        MemberAssignmentExpr = 'B',
-        MemberExpr = 'X',
-        ObjectExpr = 'W',
-        RegExpLiteral = 'Y',
-        ReturnStatement = 'Z',
-        SetDefaultXMLNamespaceExpr = 'k',
-        StatementList = 'b',
-        SwitchStatement = 'c',
-        ThisExpr = 'e',
-        ThrowStatement = 'f',
-        TryStatement = 'g',
-        UnaryExpr = 'h',
-        UnknownNode = 's',
-        ValueNode = 'F',
-        WhileStatement = 'l',
-        WithStatement = 'm',
-        XMLAccessorExpr = 'r',
-        XMLAssignmentExpr = 'o',
-        XMLDoubleDotDescendantsExpr = 'q',
-        XMLNamespaceExpr = 'p'
-    };
+BEGIN_NS(jsxbin) BEGIN_NS(nodes)
 
-    AstNode* get(NodeType type, Reader& reader) {
-        switch (type) {
-            case ArgumentList: return new class ArgumentList(reader);
-            case ArrayExpr: return new class ArrayExpr(reader);
-            case ArrayIndexingExpr: return new class ArrayIndexingExpr(reader);
-            case AssignmentExpr: return new class AssignmentExpr(reader);
-            case BinaryExpr: return new class BinaryExpr(reader);
-            case ConditionalExpr: return new class ConditionalExpr(reader);
-            case ConstDeclaration: return new class ConstDeclaration(reader);
-            case DebuggerStatement: return new class DebuggerStatement(reader);
-            case DeleteExpr: return new class DeleteExpr(reader);
-            case DoWhileExpr: return new class DoWhileExpr(reader);
-            case ExprNode: return new class ExprNode(reader);
-            case ForInStatement: return new class ForInStatement(reader);
-            case ForStatement: return new class ForStatement(reader);
-            case ForStatement2: return new class ForStatement2(reader);
-            case FunctionCallExpr: return new class FunctionCallExpr(reader);
-            case FunctionDeclaration: return new class FunctionDeclaration(reader);
-            case FunctionExpr: return new class FunctionExpr(reader);
-            case IdNode: return new class IdNode(reader);
-            case IdRefExpr: return new class IdRefExpr(reader);
-            case IfStatement: return new class IfStatement(reader);
-            case IncrementExpr: return new class IncrementExpr(reader);
-            case IndexingIncrementExpr: return new class IndexingIncrementExpr(reader);
-            case JumpStatement: return new class JumpStatement(reader);
-            case LogicalExpr: return new class LogicalExpr(reader);
-            case MemberAssignmentExpr: return new class MemberAssignmentExpr(reader);
-            case MemberExpr: return new class MemberExpr(reader);
-            case ObjectExpr: return new class ObjectExpr(reader);
-            case RegExpLiteral: return new class RegExpLiteral(reader);
-            case ReturnStatement: return new class ReturnStatement(reader);
-            case SetDefaultXMLNamespaceExpr: return new class SetDefaultXMLNamespaceExpr(reader);
-            case StatementList: return new class StatementList(reader);
-            case SwitchStatement: return new class SwitchStatement(reader);
-            case ThisExpr: return new class ThisExpr(reader);
-            case ThrowStatement: return new class ThrowStatement(reader);
-            case TryStatement: return new class TryStatement(reader);
-            case UnaryExpr: return new class UnaryExpr(reader);
-            case UnknownNode: return new class UnknownNode(reader);
-            case ValueNode: return new class ValueNode(reader);
-            case WhileStatement: return new class WhileStatement(reader);
-            case WithStatement: return new class WithStatement(reader);
-            case XMLAccessorExpr: return new class XMLAccessorExpr(reader);
-            case XMLAssignmentExpr: return new class XMLAssignmentExpr(reader);
-            case XMLDoubleDotDescendantsExpr: return new class XMLDoubleDotDescendantsExpr(reader);
-            case XMLNamespaceExpr: return new class XMLNamespaceExpr(reader);
+AstNode* get(NodeType type, Reader& reader) {
+    switch (type) {
+        case NodeType::ArrayExpression: return new ArrayExpression(reader);
+        case NodeType::AssignmentExpression: return new AssignmentExpression(reader);
+        case NodeType::BinaryExpression: return new BinaryExpression(reader);
+        case NodeType::BreakStatement: return new BreakStatement(reader);
+        case NodeType::CallExpression: return new CallExpression(reader);
+        case NodeType::ConstantLiteral: return new ConstantLiteral(reader);
+        case NodeType::ConstAssignment: return new ConstAssignment(reader);
+        case NodeType::DebuggerStatement: return new DebuggerStatement(reader);
+        case NodeType::DoWhileStatement: return new DoWhileStatement(reader);
+        case NodeType::ExpressionStatement: return new ExpressionStatement(reader);
+        case NodeType::ForStatement: return new ForStatement(reader);
+        case NodeType::ForInStatement: return new ForInStatement(reader);
+        case NodeType::FunctionDeclaration: return new FunctionDeclaration(reader);
+        case NodeType::FunctionExpression: return new FunctionExpression(reader);
+        case NodeType::IfStatement: return new IfStatement(reader);
+        case NodeType::UpdateExpression: return new UpdateExpression(reader);
+        case NodeType::IndexingExpression: return new IndexingExpression(reader);
+        case NodeType::ListExpression: return new ListExpression(reader);
+        case NodeType::LocalAssignmentExpression: return new LocalAssignmentExpression(reader);
+        case NodeType::LocalUpdateExpression: return new LocalUpdateExpression(reader);
+        case NodeType::LogicalExpression: return new LogicalExpression(reader);
+        case NodeType::LocalIdentifier: return new LocalIdentifier(reader);
+        case NodeType::ObjectExpression: return new ObjectExpression(reader);
+        case NodeType::MemberExpression: return new MemberExpression(reader);
+        case NodeType::RegExpLiteral: return new RegExpLiteral(reader);
+        case NodeType::ReturnStatement: return new ReturnStatement(reader);
 
-            default:
-                return nullptr;
-        }
+        case NodeType::SimpleForStatement: return new SimpleForStatement(reader);
+        case NodeType::StatementList: return new StatementList(reader);
+        case NodeType::SwitchStatement: return new SwitchStatement(reader);
+        case NodeType::TernaryExpression: return new TernaryExpression(reader);
+        case NodeType::ThisExpression: return new ThisExpression(reader);
+        case NodeType::ThrowStatement: return new ThrowStatement(reader);
+        case NodeType::TryStatement: return new TryStatement(reader);
+        case NodeType::UnaryExpression: return new UnaryExpression(reader);
+        case NodeType::UnaryRefExpression: return new UnaryRefExpression(reader);
+        case NodeType::Identifier: return new Identifier(reader);
+        case NodeType::VoidExpression: return new VoidExpression(reader);
+        case NodeType::WhileStatement: return new WhileStatement(reader);
+        case NodeType::WithStatement: return new WithStatement(reader);
+
+        // Note: need to do some empty expr tests before uncommenting this
+        // case NodeType::EmptyExpression: return new EmptyExpression(reader);
+
+        case NodeType::XMLConstantExpression: return new XMLConstantExpression(reader);
+        case NodeType::XMLQualifiedNameExpression: return new XMLQualifiedNameExpression(reader);
+        case NodeType::XMLDescendantsExpression: return new XMLDescendantsExpression(reader);
+        case NodeType::XMLPredicateExpression: return new XMLPredicateExpression(reader);
+        case NodeType::XMLUnaryRefExpression: return new XMLUnaryRefExpression(reader);
+
+        default:
+            return nullptr;
     }
-} }
+}
+
+END_NS(nodes) END_NS(jsxbin)

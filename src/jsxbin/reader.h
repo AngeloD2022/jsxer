@@ -1,6 +1,7 @@
 #pragma once
 
 #include "jsxbin.h"
+#include "common.h"
 
 #include <string>
 #include <map>
@@ -8,36 +9,38 @@
 using std::string;
 using std::map;
 
-namespace jsxbin {
-    class Reader {
-    public:
-        explicit Reader(const string& body, JsxbinVersion version);
+BEGIN_NS(jsxbin)
 
-        // meta...
-        JsxbinVersion get_version();
+class Reader {
+public:
+    explicit Reader(const string& body, JsxbinVersion version);
 
-        // tokens...
-        void step();
-        char pop();
-        char peek(int ahead);
-        void seek(int offset);
+    // meta...
+    JsxbinVersion get_version();
 
-        // argument depth...
-        int get_node_depth();
-        bool decrement_node_depth();
+    // tokens...
+    void step();
+    char pop();
+    char peek(int ahead);
+    void seek(int offset);
 
-        // symbol...
-        string get_symbol(const string& key);
-        void add_symbol(const string& key, string value);
+    // argument depth...
+    int get_node_depth();
+    bool decrement_node_depth();
 
-    private:
-        JsxbinVersion input_version;
-        map<string, string> symbols;
-        unsigned long index = 0;
-        uint16_t node_depth = 0;
-        string body;
+    // symbol...
+    string get_symbol(const string& key);
+    void add_symbol(const string& key, string value);
 
-        void update_node_depth();
-        int parse_node_depth();
-    };
-}
+private:
+    JsxbinVersion input_version;
+    map<string, string> symbols;
+    unsigned long index = 0;
+    uint16_t node_depth = 0;
+    string body;
+
+    void update_node_depth();
+    int parse_node_depth();
+};
+
+END_NS(jsxbin)
