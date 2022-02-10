@@ -17,7 +17,7 @@ string TryStatement::to_string() {
     result += tryBlock.create_body() + '\n';
 
     for (int i = 0; i < layers.size(); ++i) {
-        tc_layer layer = layers[i];
+        TryCatchLayer layer = layers[i];
 
         result += "} catch (" + layer.arg;
 

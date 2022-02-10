@@ -2,7 +2,7 @@
 
 #include "AstNode.h"
 #include "../decoders.h"
-#include "ArgumentList.h"
+#include "ListExpression.h"
 
 using namespace jsxbin;
 
@@ -10,6 +10,10 @@ namespace jsxbin { namespace nodes {
     class SwitchStatement : public AstNode {
     public:
         explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
+
+        NodeType type() override {
+            return NodeType::SwitchStatement;
+        }
 
         void parse() override;
 

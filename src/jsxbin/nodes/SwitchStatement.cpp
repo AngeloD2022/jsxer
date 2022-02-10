@@ -27,7 +27,7 @@ string SwitchStatement::to_string() {
 
     for (int i = 0; i < cases.size(); ++i){
 
-        vector<AstNode*> caseArgs = ((ArgumentList*)cases[i])->arguments;
+        vector<AstNode*> caseArgs = ((ListExpression*)cases[i])->arguments;
         if (!caseArgs.empty()){
             for (AstNode* arg : caseArgs){
                 result += "case " + arg->to_string() + ":\n";

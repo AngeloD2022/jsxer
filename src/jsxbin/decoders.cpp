@@ -250,7 +250,7 @@ string decoders::d_sid(Reader& reader) {
     }
 }
 
-vector<AstNode *> decoders::d_children(Reader& reader) {
+vector<AstNode*> decoders::d_children(Reader& reader) {
     int length = d_length(reader);
     if (length == 0) {
         return {};
@@ -303,17 +303,37 @@ FunctionSignature decoders::d_fn_sig(Reader& reader) {
     result.header_3 = d_length(reader);
     result.name = d_sid(reader);
     result.header_5 = d_literal_num(reader);
+
     return result;
 }
 
+inline
+bool is_capital_alpha(char value) {
+    return in_range_i('A', 'Z', value);
+}
+
+inline
+bool is_small_alpha(char value) {
+    return in_range_i('a', 'z', value);
+}
+
+inline
+bool is_numerical_digit(char value) {
+    return in_range_i('0', '9', value);
+}
+
+/* Validator for an id's first character */
+inline
 bool valid_id_0(char value) {
-    return in_range_i('a', 'z', value) ||
-        in_range_i('A', 'Z', value) ||
+    return is_small_alpha(value) ||
+        is_capital_alpha(value) ||
         ('_' == value) || ('$' == value);
 }
 
+/* Validator for an id's after first characters */
+inline
 bool valid_id_x(char value) {
-    return valid_id_0(value) || in_range_i('0', '9', value);
+    return valid_id_0(value) || is_numerical_digit(value);
 }
 
 // decoding utilities...
@@ -342,7 +362,7 @@ bool decoders::is_integer(const string& value) {
     size_t len = value.length();
 
     for (int i = 0; i < len; ++i) {
-        if (!isdigit(value[i])) {
+        if (!is_numerical_digit(value[i])) {
             return false;
         }
     }

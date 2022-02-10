@@ -3,7 +3,7 @@
 void FunctionDeclaration::parse() {
     bodyInfo = decoders::d_line_info(reader);
     signature = decoders::d_fn_sig(reader);
-    type = decoders::d_length(reader);
+    _type = decoders::d_length(reader);
 }
 
 string FunctionDeclaration::to_string() {

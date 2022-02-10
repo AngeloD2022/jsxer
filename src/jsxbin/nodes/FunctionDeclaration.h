@@ -10,6 +10,10 @@ namespace jsxbin { namespace nodes {
     public:
         explicit FunctionDeclaration(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::FunctionDeclaration;
+        }
+
         void parse() override;
 
         string to_string() override;
@@ -17,6 +21,6 @@ namespace jsxbin { namespace nodes {
     private:
         decoders::LineInfo bodyInfo;
         decoders::FunctionSignature signature;
-        int type;
+        int _type;
     };
 } }

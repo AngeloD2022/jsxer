@@ -10,13 +10,17 @@ namespace jsxbin { namespace nodes {
     public:
         explicit IfStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::IfStatement;
+        }
+
         void parse() override;
 
         string to_string() override;
 
     private:
         decoders::LineInfo bodyInfo;
-        AstNode *test = nullptr;
-        AstNode *otherwise = nullptr;
+        AstNode* test = nullptr;
+        AstNode* otherwise = nullptr;
     };
 } }

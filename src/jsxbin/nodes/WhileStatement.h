@@ -10,6 +10,10 @@ namespace jsxbin { namespace nodes {
     public:
         explicit WhileStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::WhileStatement;
+        }
+
         void parse() override;
 
         string to_string() override;

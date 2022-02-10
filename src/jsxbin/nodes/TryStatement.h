@@ -10,21 +10,24 @@ namespace jsxbin { namespace nodes {
     public:
         explicit TryStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::TryStatement;
+        }
+
         void parse() override;
 
         string to_string() override;
 
     private:
-
-        struct tc_layer {
+        struct TryCatchLayer {
             string arg;
-            AstNode *exceptionFilter;
-            AstNode *catchBlock;
+            AstNode* exceptionFilter;
+            AstNode* catchBlock;
         };
 
         decoders::LineInfo tryBlock;
-        AstNode *finallyBlock;
-        vector<tc_layer> layers;
+        AstNode* finallyBlock;
+        vector<TryCatchLayer> layers;
         int length;
     };
 } }

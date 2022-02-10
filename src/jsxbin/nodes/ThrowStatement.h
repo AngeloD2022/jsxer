@@ -10,6 +10,10 @@ namespace jsxbin { namespace nodes {
     public:
         explicit ThrowStatement(Reader& reader) : AstNode(reader) {}
 
+        NodeType type() override {
+            return NodeType::ThrowStatement;
+        }
+
         void parse() override;
 
         string to_string() override;

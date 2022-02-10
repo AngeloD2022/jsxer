@@ -6,9 +6,13 @@
 using namespace jsxbin;
 
 namespace jsxbin { namespace nodes {
-    class IdRefExpr : public AstNode {
+    class LocalIdentifier : public AstNode {
     public:
-        explicit IdRefExpr(Reader& reader) : AstNode(reader) {}
+        explicit LocalIdentifier(Reader& reader) : AstNode(reader) {}
+
+        NodeType type() override {
+            return NodeType::LocalIdentifier;
+        }
 
         void parse() override;
 
@@ -16,6 +20,6 @@ namespace jsxbin { namespace nodes {
 
     private:
         decoders::Reference reference;
-        int type = 0;
+        int _type = 0;
     };
 } }

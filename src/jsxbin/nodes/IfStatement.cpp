@@ -1,7 +1,5 @@
 #include "IfStatement.h"
 
-#include <typeinfo>
-
 void IfStatement::parse() {
     bodyInfo = decoders::d_line_info(reader);
     test = decoders::d_node(reader);
@@ -18,7 +16,7 @@ string IfStatement::to_string() {
 
     AstNode *current = otherwise;
 
-    while ((strcmp(typeid(current).name(), "IfStatement") == 0) && ((IfStatement*) current)->otherwise != nullptr) {
+    while ((current->type() == NodeType::IfStatement) && ((IfStatement*) current)->otherwise != nullptr) {
         auto* elif = (IfStatement *)current;
         result += '\n' + elif->bodyInfo.lbl_statement() + "else if (" + elif->test->to_string() + ") {\n"
                   + elif->bodyInfo.create_body() + "\n}";
@@ -26,7 +24,7 @@ string IfStatement::to_string() {
         current = elif->otherwise;
     }
 
-    // WARNME: something feels wrong here...
+    // WARN_ME: something feels wrong here...
     result += "\nelse {\n" + current->to_string() + "\n}";
 
     return result;
