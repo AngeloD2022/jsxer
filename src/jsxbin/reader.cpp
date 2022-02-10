@@ -7,7 +7,7 @@ Reader::Reader(const string &body, JsxbinVersion version) {
     this->input_version = version;
 }
 
-JsxbinVersion Reader::get_version() {
+JsxbinVersion Reader::version() {
     return input_version;
 }
 
@@ -68,10 +68,14 @@ bool Reader::decrement_node_depth() {
     return true;
 }
 
-string Reader::get_symbol(const string& key) {
-    return symbols.at(key);
+string DataPool::get(const string &key) {
+    return _pool.at(key);
 }
 
-void Reader::add_symbol(const string& key, string value) {
-    symbols[key] = std::move(value);
+void DataPool::add(const string &key, string value) {
+    _pool[key] = std::move(value);
+}
+
+void DataPool::clear() {
+    _pool.clear();
 }

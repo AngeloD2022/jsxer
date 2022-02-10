@@ -17,9 +17,8 @@ string ObjectExpression::to_string() {
 
     if (!properties.empty()) {
         int i = 0;
-        for(std::pair<string, AstNode*> entry : properties){
+        for(std::pair<string, AstNode*> entry : properties) {
             if (decoders::valid_id(entry.first)) {
-                // TODO: Properly JSON stringify the string literal
                 result += '\"' + entry.first + '\"';
             } else {
                 result += entry.first;

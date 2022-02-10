@@ -20,7 +20,7 @@
 #include "FunctionDeclaration.h"
 #include "FunctionExpression.h"
 #include "Identifier.h"
-#include "IdRefExpr.h"
+#include "LocalIdentifier.h"
 #include "IfStatement.h"
 #include "LocalUpdateExpression.h"
 #include "UpdateExpression.h"

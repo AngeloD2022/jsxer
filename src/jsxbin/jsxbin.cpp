@@ -47,7 +47,7 @@ bool verifySignature(const char* code, JsxbinVersion* version = nullptr, int* st
 void prepend_header(string& code) {
     string header = "/*\n"
                     "* Decompiled with Jsxbin Decompiler\n"
-                    "* Version: 1.0.1\n"
+                    "* Version: " CONFIG_VERSION "\n"
                     "*/\n\n";
     code = header + code;
 }
@@ -62,14 +62,14 @@ int jsxbin::decompile(const string& input, string& output) {
     int start = -1;
     JsxbinVersion version;
 
-    if ( !verifySignature(compiled.c_str(), &version, &start) ) {
+    if (!verifySignature(compiled.c_str(), &version, &start)) {
         // TODO: Handle this properly
         fprintf(stderr, "JSXBIN signature verification failed!");
         output = "";
         return -3;
     }
 
-    auto *reader = new Reader(compiled, version);
+    auto* reader = new Reader(compiled, version);
     reader->seek(start);
 
     // Parse into an Ast

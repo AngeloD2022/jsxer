@@ -7,7 +7,7 @@ void ForInStatement::parse() {
     length = decoders::d_length(reader);
     id = decoders::d_sid(reader);
 
-    if (reader.get_version() >= JsxbinVersion::v20)
+    if (reader.version() >= JsxbinVersion::v20)
         forEach = decoders::d_bool(reader);
 }
 

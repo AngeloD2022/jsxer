@@ -3,6 +3,10 @@
 #include <string>
 #include <cstdint>
 
+#ifndef CONFIG_VERSION
+    #define CONFIG_VERSION "0.0.0"
+#endif
+
 using std::string;
 
 enum class JsxbinVersion : uint16_t {

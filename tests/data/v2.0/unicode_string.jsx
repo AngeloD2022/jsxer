@@ -1,1 +1,0 @@
-var unicodetest = "雷電";
