@@ -1,1 +1,0 @@
-var result = bookstoreXML.book["@category"] == "CHILDREN";
