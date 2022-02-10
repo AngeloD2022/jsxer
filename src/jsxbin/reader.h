@@ -11,12 +11,24 @@ using std::map;
 
 BEGIN_NS(jsxbin)
 
+class DataPool {
+public:
+    DataPool() = default;
+
+    string get(const string& key);
+    void add(const string& key, string value);
+    void clear();
+
+private:
+    map<string, string> _pool;
+};
+
 class Reader {
 public:
     explicit Reader(const string& body, JsxbinVersion version);
 
     // meta...
-    JsxbinVersion get_version();
+    JsxbinVersion version();
 
     // tokens...
     void step();
@@ -28,13 +40,11 @@ public:
     int get_node_depth();
     bool decrement_node_depth();
 
-    // symbol...
-    string get_symbol(const string& key);
-    void add_symbol(const string& key, string value);
+    // symbols map
+    DataPool symbols;
 
 private:
     JsxbinVersion input_version;
-    map<string, string> symbols;
     unsigned long index = 0;
     uint16_t node_depth = 0;
     string body;

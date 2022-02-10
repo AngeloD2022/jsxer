@@ -224,7 +224,7 @@ Reference decoders::d_ref(Reader& reader) {
     string id = d_sid(reader);
     bool flag = false;
 
-    if (reader.get_version() >= JsxbinVersion::v20) {
+    if (reader.version() >= JsxbinVersion::v20) {
         flag = d_bool(reader);
     }
 
@@ -241,12 +241,12 @@ string decoders::d_sid(Reader& reader) {
 
     if (marker != (char) Markers::ID_REFERENCE) {
         string id = std::to_string(d_length(reader));
-        return reader.get_symbol(id);
+        return reader.symbols.get(id);
     } else {
         char type = reader.pop();
         string name = d_string(reader);
         string id = std::to_string(d_length(reader));
-        reader.add_symbol(id, name);
+        reader.symbols.add(id, name);
         return name;
     }
 }
