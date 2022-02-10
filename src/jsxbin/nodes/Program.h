@@ -19,6 +19,6 @@ namespace jsxbin { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode *child = nullptr;
+        AstNode *body = nullptr;
     };
 } }

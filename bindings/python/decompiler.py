@@ -1,10 +1,24 @@
+import os
+import platform
 from ctypes import CDLL, POINTER, \
     c_int, c_char_p, c_size_t, byref, create_string_buffer
 
-# replace the below path with the path to the built dll/dylib (target libjd in cmake)
-_backend_binding_lib_path = r'..\..\build\debug\libjd.dylib'
-# _backend_binding_lib_path = r'..\..\build\debug\libjd.dll'
-# _backend_binding_lib_path = r'..\..\build\debug\libjd.so'
+
+pf = platform.system()
+
+if pf == 'Windows':
+    _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.dll'
+elif pf == 'Linux':
+    _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.so'
+elif pf == 'Darwin':
+    _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.dylib'
+else:
+    raise EnvironmentError(f'Unknown platform: {pf}')
+
+_backend_binding_lib_path = os.path.realpath(_backend_binding_lib_path)
+
+if not os.path.isfile(_backend_binding_lib_path):
+    raise FileNotFoundError(f'Backend lib not exists in place: {_backend_binding_lib_path}')
 
 """
 int decompile(const char* input, size_t in_len, char* output, size_t* out_len)
@@ -55,5 +69,6 @@ def decompile(compiled: str):
 
 if __name__ == '__main__':
     print(
-        decompile("@JSXBIN@ES@2.0@MyBbyBn0ABJAnABXzBjBBfjzGjHjMjPjCjBjMCfEjzGiTjUjSjJjOjHDfRBFctffnf0DzAEByB")
+        decompile("""@JSXBIN@ES@2.0@MyBbyBn0ACJAnABjzBjYBfneB2nfnffJBnAEXzIjUjPiTjUjSjJjOjHCfEXzKjDjI
+jBjSiDjPjEjFiBjUDfjBfRBFdAffRBFdQff0DzAEByB""")
     )

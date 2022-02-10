@@ -45,6 +45,7 @@ string d_number_primitive(Reader& reader, int length, bool negative) {
 }
 
 string d_literal_primitive(Reader& reader, LiteralType literalType) {
+    // TODO: fix decoding (not decoding js string entirely)
     if (reader.decrement_node_depth()) {
         return "";
     }
@@ -76,7 +77,7 @@ string d_literal_primitive(Reader& reader, LiteralType literalType) {
             if (literalType == LiteralType::NUMBER) {
                 return std::to_string((unsigned char) num);
             } else {
-                return utils::string_from_ISO8859((unsigned char) num);
+                return utils::string_literal_escape(num);
             }
         }
     }
@@ -165,17 +166,7 @@ string decoders::d_variant(Reader& reader) {
             break;
         case 4: // 'e'
             // string type
-            result = d_string(reader);
-
-            // TODO: Properly JSON stringify the string literal
-            utils::replace_str_inplace(result, "\\", "\\\\");
-            utils::replace_str_inplace(result, "\"", "\\\"");
-            utils::replace_str_inplace(result, "\n", "\\n");
-            utils::replace_str_inplace(result, "\t", "\\t");
-            utils::replace_str_inplace(result, "\t", "\\t");
-            utils::replace_str_inplace(result, "\r", "\\r");
-
-            result = '\"' + result + '\"';
+            result = '\"' + d_string(reader) + '\"';
             break;
 
         case 13: // 'n' | NO_VARIANT
@@ -213,7 +204,17 @@ string decoders::d_string(Reader& reader) {
 
     string buf;
     for (int i = 0; i < length; ++i) {
-        buf += d_literal_primitive(reader, LiteralType::UTF8_STRING);
+        string str_literal_char = d_literal_primitive(reader, LiteralType::UTF8_STRING);
+
+        // A quick fix for utf-16 chars
+        if (str_literal_char.length() > 1) {
+            if (is_integer(str_literal_char)) {
+                uint32_t charCode = std::stoi(str_literal_char);
+                str_literal_char = utils::string_literal_escape(charCode);
+            }
+        }
+
+        buf += str_literal_char;
     }
 
     return buf;

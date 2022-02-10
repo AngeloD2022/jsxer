@@ -16,6 +16,6 @@ void string_strip_char(string& str, char search);
 
 void replace_str_inplace(string& subject, const string& search, const string& replace);
 
-string string_from_ISO8859(unsigned char value);
+string string_literal_escape(uint16_t value, bool capital = false);
 
 END_NS(utils) END_NS(jsxbin)

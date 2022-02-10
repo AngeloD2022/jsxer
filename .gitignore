@@ -2,5 +2,6 @@
 /.vscode/
 /.idea/
 /.history/
+/bin/
 /build/
 /cmake-build-debug/

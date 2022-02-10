@@ -26,17 +26,69 @@ void replace_str_inplace(string& subject, const string& search, const string& re
     }
 }
 
-string string_from_ISO8859(unsigned char value) {
-    string result;
+#define HEX_CHARSET_CAPITAL ("0123456789" "ABCDEF")
+#define HEX_CHARSET_SMALL   ("0123456789" "abcdef")
 
-    if (value < 0x80) {
-        result.push_back((char) value);
-    } else {
-        result.push_back((char) (0xC0 | value >> 6));
-        result.push_back((char) (0x80 | (value & 0x3f)));
+string unicode_escape(uint16_t value, bool capital = false) {
+    auto* cs = capital ? HEX_CHARSET_CAPITAL : HEX_CHARSET_SMALL;
+    char result[] = { '\\', 'u', '0', '0', '0', '0', '\0' };
+
+    for (int i = 0; i < 4; ++i) {
+        auto hc = cs[(value >> (4 * i)) & 0xF];
+        result[sizeof(result) - (i + 2)] = hc;
     }
 
     return result;
+}
+
+string hex_escape(uint8_t value, bool capital = false) {
+    auto* cs = capital ? HEX_CHARSET_CAPITAL : HEX_CHARSET_SMALL;
+    char result[] = { '\\', 'x', '0', '0', '\0' };
+
+    for (int i = 0; i < 2; ++i) {
+        auto hc = cs[(value >> (4 * i)) & 0xF];
+        result[sizeof(result) - (i + 2)] = hc;
+    }
+
+    return result;
+}
+
+bool is_non_printable_ascii(uint8_t value) {
+    // ([\x00-\x07\x0E-\x1F\x7F])
+    return in_range_i(0, 7, value) ||
+           in_range_i(0x0E, 0x1F, value) || (value == 0x7F);
+}
+
+bool is_non_printable_utf8(uint8_t value) {
+    // ([\x00-\x07\x0E-\x1F\x7F\x80-\xFF])
+    return is_non_printable_ascii(value) || in_range_i(0x80, 0xFF, value);
+}
+
+string escape_hex_or_unicode(uint16_t value, bool capital = false) {
+    if (in_range_i(0x00, 0xFF, value)) {
+        return hex_escape((uint8_t) value, capital);
+    }
+
+    return unicode_escape(value, capital);
+}
+
+string string_literal_escape(uint16_t value, bool capital) {
+    switch (value)
+    {
+        case '\b': return "\\b";
+        case '\f': return "\\f";
+        case '\n': return "\\n";
+        case '\r': return "\\r";
+        case '\v': return "\\v";
+        case '\t': return "\\t";
+        case '\"': return "\\\"";
+        case '\'': return "\\\'";
+        case '\\': return "\\\\";
+        default:
+            return is_non_printable_utf8((uint8_t) value)
+                ? escape_hex_or_unicode(value, capital)
+                : string(1, (char) value);
+    }
 }
 
 END_NS(utils) END_NS(jsxbin)
