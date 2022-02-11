@@ -19,9 +19,17 @@ void replace_str_inplace(string& subject, const string& search, const string& re
 
 string string_literal_escape(uint16_t value, bool capital = false);
 
+string string_literal_escape(const ByteString& value, bool capital = false);
+
 string to_string_literal(const ByteString& value, bool capital = false);
 
 string to_string(const ByteString& value);
+
+int byte_length(uint64_t value);
+
+bool is_double_type(double value);
+
+uint64_t to_integer(double value);
 
 string number_to_string(double value);
 

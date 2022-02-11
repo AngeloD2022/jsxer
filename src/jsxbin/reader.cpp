@@ -4,10 +4,17 @@
 using namespace jsxbin;
 
 Reader::Reader(const string& jsxbin) {
-    size_t input_len = jsxbin.length();
+    string _input = jsxbin;
+
+    utils::string_strip_char(_input, ' ');
+    utils::string_strip_char(_input, '\t');
+    utils::string_strip_char(_input, '\r');
+    utils::string_strip_char(_input, '\n');
+
+    size_t input_len = _input.length();
 
     _data.resize(input_len);
-    memcpy(_data.data(), jsxbin.c_str(), input_len);
+    memcpy(_data.data(), _input.data(), input_len);
 
     _start = _cursor = 0;
     _end = input_len - 1;
@@ -210,26 +217,35 @@ bool Reader::getBoolean() {
 }
 
 ByteString Reader::readSID() {
-    Token t = get();
-
     ByteString symbol;
     Number id;
 
-    if (t == 'z') {
+    if (get() == 'z') {
         symbol = getString();
         id = getNumber();
-        addSymbol((int) id, symbol);
+        addSymbol(id, symbol);
+
+        if (!utils::is_double_type(id)) {
+            id = (double) utils::to_integer(id);
+        }
+
+        printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
+        fflush(stdout);
     } else {
+        step(-1);
         id = getNumber();
-        symbol = getSymbol((int) id);
+        symbol = getSymbol(id);
     }
 
     return symbol;
 }
 
 Variant* Reader::getVariant() {
-    if (peek() == 'n') {
+    // TODO: This shouldn't be possible, verify it before removal
+    if (get() == 'n') {
         return nullptr;
+    } else {
+        step(-1);
     }
 
     uint8_t type = get() - 'a';
@@ -270,18 +286,6 @@ Variant* Reader::getVariant() {
     return result;
 }
 
-string DataPool::get(const string &key) {
-    return _pool.at(key);
-}
-
-void DataPool::add(const string &key, string value) {
-    _pool[key] = std::move(value);
-}
-
-void DataPool::clear() {
-    _pool.clear();
-}
-
 Token Reader::_next() {
     if (_cursor < _end) {
         return _data[_cursor++];
@@ -304,12 +308,12 @@ bool Reader::_ignorable(Token value) {
     }
 }
 
-void Reader::addSymbol(int id, const ByteString& symbol) {
-    _symbols[id] = symbol;
+ByteString Reader::getSymbol(Number id) {
+    return _symbols[id];
 }
 
-ByteString Reader::getSymbol(int id) {
-    return _symbols[id];
+void Reader::addSymbol(Number id, const ByteString& symbol) {
+    _symbols[id] = symbol;
 }
 
 Variant::Variant() {

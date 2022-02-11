@@ -90,6 +90,16 @@ string string_literal_escape(uint16_t value, bool capital) {
     }
 }
 
+string string_literal_escape(const ByteString& value, bool capital) {
+    string res;
+
+    for (const auto& c : value) {
+        res += string_literal_escape(c, capital);
+    }
+
+    return res;
+}
+
 string to_string_literal(const ByteString& value, bool capital) {
     string res = "\"";
 
@@ -118,13 +128,14 @@ vector<string> string_split(const string& str, const string& delimiter) {
     while ((pos_end = str.find(delimiter, pos_start)) != string::npos) {
         token = str.substr(pos_start, pos_end - pos_start);
         pos_start = pos_end + delim_len;
-        res.push_back (token);
+        res.push_back(token);
     }
 
     res.push_back(str.substr(pos_start));
     return res;
 }
 
+// TODO: complete this
 string double_to_string(double value) {
     size_t val = (*(size_t*) &value);
     string res;
@@ -213,14 +224,12 @@ int byte_length(uint64_t value) {
     return len;
 }
 
-string ltrim(const string& s, char target = ' ')
-{
+string ltrim(const string& s, char target = ' ') {
     size_t start = s.find_first_not_of(target);
     return (start == string::npos) ? "" : s.substr(start);
 }
 
-string rtrim(const string& s, char target = ' ')
-{
+string rtrim(const string& s, char target = ' ') {
     size_t end = s.find_last_not_of(target);
     return (end == string::npos) ? "" : s.substr(0, end + 1);
 }
@@ -233,36 +242,53 @@ bool is_double_type(double value) {
     return byte_length(*(uint64_t*) &value) == 8;
 }
 
-// TODO: do it properly
+uint64_t to_integer(double value) {
+    return *(uint64_t*) &value;
+}
+
+string simplify_number_literal(const string& value) {
+    return value;
+}
+
+// TODO: fix formatting and rounding as in es
 string number_to_string(double value) {
-    char _buff[24] = {0};
-    int fp = 15;
+    int fp_precision = 15;
     const char* fmt;
 
     if (is_double_type(value)) {
-        if (value < 1.0e21 && value >= 0.000001) {
-            int l10 = (int) log10(value);
-            int fpn = (l10 >= 0) ? l10 : 0;
-            fp = 15 - (value >= 1.0) - fpn;
-            if (fp > 15) { fp = 15; }
-
-            fmt = "%20.*f";
-        } else {
-            fmt = "%20.*e";
+        uint64_t val = to_integer(value);
+        if (val == 0x7FEFFFFFFFFFFFFF) {
+            return "1.7976931348623157e+308";
+        } else if (val == 0xFFEFFFFFFFFFFFFF) {
+            return "-1.7976931348623157e+308";
         }
-    } else {
+
+        if ((value >= 1.0e21) || (floor(value) != value)) {
+            if ((value < 1.0e21) && (value >= 0.000001)) {
+                int l10 = (int) log10(value);
+                int fpn = (l10 >= 0) ? l10 : 0;
+                fp_precision = 15 - (value >= 1.0) - fpn;
+                if (fp_precision > 15) {
+                    fp_precision = 15;
+                }
+
+                fmt = "%20.*f";
+            } else {
+                fmt = "%20.*e";
+            }
+        } else if (value >= 1000000000.0) {
+            fmt = "%*.0f";
+        } else {
+            fmt = "%*.f";
+        }
+    }  else {
         fmt = "%*ld";
     }
 
-    snprintf(_buff, sizeof(_buff), fmt, fp, value);
+    char _buff[32] = {0};
+    snprintf(_buff, sizeof(_buff), fmt, fp_precision, value);
 
-    string res = trim(_buff, ' ');
-
-    if (is_double_type(value)) {
-        res = rtrim(res, '0');
-    }
-
-    return res;
+    return trim(_buff, ' ');
 }
 
 bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
