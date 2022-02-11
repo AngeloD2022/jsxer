@@ -18,4 +18,6 @@ void replace_str_inplace(string& subject, const string& search, const string& re
 
 string string_literal_escape(uint16_t value, bool capital = false);
 
+bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size);
+
 END_NS(utils) END_NS(jsxbin)

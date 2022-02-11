@@ -91,4 +91,15 @@ string string_literal_escape(uint16_t value, bool capital) {
     }
 }
 
+bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        if (b1[i] != b2[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 END_NS(utils) END_NS(jsxbin)
