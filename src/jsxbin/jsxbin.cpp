@@ -59,25 +59,21 @@ int jsxbin::decompile(const string& input, string& output) {
     utils::string_strip_char(compiled, '\r');
     utils::string_strip_char(compiled, '\\');
 
-    int start = -1;
-    JsxbinVersion version;
+    Reader reader(compiled);
 
-    if (!verifySignature(compiled.c_str(), &version, &start)) {
+    if (!reader.verifySignature()) {
         // TODO: Handle this properly
         fprintf(stderr, "JSXBIN signature verification failed!");
         output = "";
         return -3;
     }
 
-    auto* reader = new Reader(compiled, version);
-    reader->seek(start);
-
     // Parse into an Ast
-    auto* ast = new Program(*reader);
-    ast->parse();
+    Program ast(reader);
+    ast.parse();
 
     // Generate code from the ast
-    output = ast->to_string();
+    output = ast.to_string();
     prepend_header(output);
 
     return 0;
