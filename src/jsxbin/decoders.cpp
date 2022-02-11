@@ -4,16 +4,6 @@
 
 using namespace jsxbin::decoders;
 
-enum class Markers : char {
-    ID_REFERENCE = 0x7A,
-    NEGATIVE_NUMBER = 0x79,
-    NUMBER_8_BYTES = 0x38,
-    NUMBER_4_BYTES = 0x34,
-    NUMBER_2_BYTES = 0x32,
-    BOOL_TRUE = 0x74,
-    BOOL_FALSE = 0x66,
-};
-
 enum LiteralType {
     NUMBER,
     UTF8_STRING
@@ -51,23 +41,21 @@ string d_literal_primitive(Reader& reader, LiteralType literalType) {
     }
 
     bool negative = false;
-    if (reader.peek(0) == (char) Markers::NEGATIVE_NUMBER) {
+    if (reader.peek() == 'y') {
         negative = true;
         reader.step();
     }
 
-    Token marker = reader.peek(0);
+    Token marker = reader.peek();
 
-    if (marker == (char) Markers::NUMBER_4_BYTES) {
+    if (marker == '4') {
         reader.step();
         string number = d_number_primitive(reader, 4, negative);
         return number;
-
-    } else if (marker == (char) Markers::NUMBER_2_BYTES) {
+    } else if (marker == '2') {
         reader.step();
         string number = d_number_primitive(reader, 2, negative);
         return number;
-
     } else {
         byte num = d_byte(reader);
 
@@ -109,7 +97,7 @@ string decoders::d_number(Reader& reader) {
     string num;
 
     // if the marker suggests
-    if (marker == (char) Markers::NUMBER_8_BYTES) {
+    if (marker == '8') {
         reader.step();
         num = d_number_primitive(reader, 8, false);
     } else {
@@ -185,9 +173,9 @@ string decoders::d_variant(Reader& reader) {
 bool decoders::d_bool(Reader& reader) {
     Token marker = reader.get();
 
-    if (marker == (char) Markers::BOOL_TRUE)
+    if (marker == 't')
         return true;
-    else if (marker == (char) Markers::BOOL_FALSE)
+    else if (marker == 'f')
         return false;
 
     // TODO: Handle this
@@ -252,15 +240,12 @@ string decoders::d_sid(Reader& reader) {
 vector<AstNode*> decoders::d_children(Reader& reader) {
     int length = d_length(reader);
 
-    if (length == 0) {
-        return {};
-    }
-
     vector<AstNode*> result;
     for (int i = 0; i < length; ++i) {
         AstNode* child = d_node(reader);
-        if (child != nullptr)
+        if (child != nullptr) {
             result.push_back(child);
+        }
     }
 
     return result;
