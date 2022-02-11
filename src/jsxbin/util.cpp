@@ -247,6 +247,7 @@ uint64_t to_integer(double value) {
 }
 
 string simplify_number_literal(const string& value) {
+    // TODO: impl
     return value;
 }
 
@@ -288,7 +289,7 @@ string number_to_string(double value) {
     char _buff[32] = {0};
     snprintf(_buff, sizeof(_buff), fmt, fp_precision, value);
 
-    return trim(_buff, ' ');
+    return simplify_number_literal(trim(_buff, ' '));
 }
 
 bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
