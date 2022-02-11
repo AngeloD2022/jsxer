@@ -3,6 +3,7 @@
 #include <string>
 
 #include "common.h"
+#include "reader.h"
 
 using std::string;
 
@@ -18,6 +19,14 @@ void replace_str_inplace(string& subject, const string& search, const string& re
 
 string string_literal_escape(uint16_t value, bool capital = false);
 
+string to_string_literal(const ByteString& value, bool capital = false);
+
+string to_string(const ByteString& value);
+
+string number_to_string(double value);
+
 bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size);
+
+void zero_mem(const void* buff, size_t size);
 
 END_NS(utils) END_NS(jsxbin)

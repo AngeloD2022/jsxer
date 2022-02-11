@@ -53,13 +53,7 @@ void prepend_header(string& code) {
 }
 
 int jsxbin::decompile(const string& input, string& output) {
-    string compiled = input;
-
-    utils::string_strip_char(compiled, '\n');
-    utils::string_strip_char(compiled, '\r');
-    utils::string_strip_char(compiled, '\\');
-
-    Reader reader(compiled);
+    Reader reader(input);
 
     if (!reader.verifySignature()) {
         // TODO: Handle this properly

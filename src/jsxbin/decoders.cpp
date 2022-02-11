@@ -216,7 +216,7 @@ Reference decoders::d_ref(Reader& reader) {
         flag = d_bool(reader);
     }
 
-    return Reference{id, flag };
+    return Reference{ id, flag };
 }
 
 int decoders::d_length(Reader& reader) {
