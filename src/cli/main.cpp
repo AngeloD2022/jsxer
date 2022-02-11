@@ -7,8 +7,7 @@
 string get_filename(const char* path) {
     for(size_t i = strlen(path) - 1; i; --i)
     {
-        if ((path[i] == '/') || (path[i] == '\\'))
-        {
+        if ((path[i] == '/') || (path[i] == '\\')) {
             return &path[i + 1];
         }
     }

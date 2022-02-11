@@ -28,39 +28,46 @@ BEGIN_NS(jsxbin)
 
 #define JSXBIN_SIGNATURE_LEN 15
 
-class DataPool {
-public:
-    DataPool() = default;
-
-    string get(const string& key);
-    void add(const string& key, string value);
-    void clear();
-
-private:
-    map<string, string> _pool;
-};
-
 enum class ParseError : int {
     None = 0,
     InvalidVersion,
-    ReachedStart,
     ReachedEnd = 51,
     Error8 = 8,
 };
 
-enum class ESVariant {
+enum class VariantType : int {
+    None = -1,
+
     Undefined = 0,
     Null = 1,
     Boolean = 2,
     Number = 3,
+    String = 4,
 };
 
 class Variant {
 public:
     Variant();
 
+    void doErase();
+
+    void setNull();
+
+    void setString(const ByteString& value);
+
+    void setBool(bool value);
+
+    void setDouble(double value);
+
+    String toString();
+
 private:
-    //
+    VariantType _type;
+    struct ValueType {
+        bool _bool;
+        double _double;
+        ByteString _string;
+    } _value;
 };
 
 class Reader {
@@ -81,16 +88,14 @@ public:
     Number getNumber();
     ByteString getString();
     bool getBoolean();
-    ByteString getVariant();
+    Variant* getVariant();
     ByteString readSID();
 
-    void addSymbol(int id, const ByteString& symbol);
-    ByteString getSymbol(int id);
+    void addSymbol(Number id, const ByteString& symbol);
+    ByteString getSymbol(Number id);
 
     size_t get_node_depth();
     bool decrement_node_depth();
-
-    DataPool symbols;
 
 private:
     vector<Token> _data;
@@ -101,7 +106,7 @@ private:
     ParseError _error;
     JsxbinVersion _version;
 
-    map<int, ByteString> _symbols;
+    map<Number, ByteString> _symbols;
 
     void update_node_depth();
     int parse_node_depth();

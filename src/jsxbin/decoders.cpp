@@ -93,14 +93,13 @@ AstNode* decoders::d_node(Reader& reader) {
 }
 
 string decoders::d_number(Reader& reader) {
-    Token marker = reader.peek();
     string num;
 
     // if the marker suggests
-    if (marker == '8') {
-        reader.step();
+    if (reader.get() == '8') {
         num = d_number_primitive(reader, 8, false);
     } else {
+        reader.step(-1);
         num = d_literal_primitive(reader, LiteralType::NUMBER);
     }
 
@@ -108,78 +107,23 @@ string decoders::d_number(Reader& reader) {
 }
 
 byte decoders::d_byte(Reader& reader) {
-    static const string alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "abcdef";
-
-    // if it is nested, decrement depth level and return 0
-    // (sorta feels like it should never happen)
-    if (reader.decrement_node_depth()) {
-        return static_cast<byte>(0);
-    }
-
-    Token cur = reader.get();
-
-    // if result is capital letter...
-    if ((cur - 0x41) <= 0x19) {
-        return static_cast<byte>(cur - 'A');
-    } else {
-        // cur must be within [103, 111]
-        int n = (cur - 0x67) * 32; // ranges from 0 to 256
-        Token second = reader.get();
-        size_t up_index = alphabet_upper.find((char) second);
-
-        // takes advantage of 8-bit overflow for encoding...
-        return (byte) (n + up_index);
-    }
+    return reader.getByte();
 }
 
 string decoders::d_variant(Reader& reader) {
-    string result;
+    auto* var = reader.getVariant();
 
-    // types are 'a' or 'b':null 'c':boolean 'd':number 'e':string
-    uint8_t type = reader.get() - 'a';
-
-    switch (type) {
-        case 0: // 'a' - also recognized as a null at runtime.
-        case 1: // 'b' - null always encoded to 'b'
-            // null type
-            result = "null";
-            break;
-        case 2: // 'c'
-            // boolean type
-            result = d_bool(reader) ? "true" : "false";
-            break;
-        case 3: // 'd'
-            // number type
-            result = d_number(reader);
-            break;
-        case 4: // 'e'
-            // string type
-            result = '\"' + d_string(reader) + '\"';
-            break;
-
-        case 13: // 'n' | NO_VARIANT
-            result = "";
-            break;
-
-        default:
-            // TODO: Handle this
-            printf("Unexpected: %c\n", type);
-            break;
+    if (var) {
+        string result = var->toString();
+        delete var;
+        return result;
     }
 
-    return result;
+    return "";
 }
 
 bool decoders::d_bool(Reader& reader) {
-    Token marker = reader.get();
-
-    if (marker == 't')
-        return true;
-    else if (marker == 'f')
-        return false;
-
-    // TODO: Handle this
-    return false;
+    return reader.getBoolean();
 }
 
 string decoders::d_string(Reader& reader) {
@@ -216,7 +160,7 @@ Reference decoders::d_ref(Reader& reader) {
         flag = d_bool(reader);
     }
 
-    return Reference{id, flag };
+    return Reference{ id, flag };
 }
 
 int decoders::d_length(Reader& reader) {
@@ -225,16 +169,7 @@ int decoders::d_length(Reader& reader) {
 }
 
 string decoders::d_sid(Reader& reader) {
-    if (reader.get() == 'z') {
-        string name = d_string(reader);
-        string id = std::to_string(d_length(reader));
-        reader.symbols.add(id, name);
-        return name;
-    } else {
-        reader.step(-1);
-        string id = std::to_string(d_length(reader));
-        return reader.symbols.get(id);
-    }
+    return utils::to_string(reader.readSID());
 }
 
 vector<AstNode*> decoders::d_children(Reader& reader) {

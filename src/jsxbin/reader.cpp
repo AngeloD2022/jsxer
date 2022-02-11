@@ -4,10 +4,17 @@
 using namespace jsxbin;
 
 Reader::Reader(const string& jsxbin) {
-    size_t input_len = jsxbin.length();
+    string _input = jsxbin;
+
+    utils::string_strip_char(_input, ' ');
+    utils::string_strip_char(_input, '\t');
+    utils::string_strip_char(_input, '\r');
+    utils::string_strip_char(_input, '\n');
+
+    size_t input_len = _input.length();
 
     _data.resize(input_len);
-    memcpy(_data.data(), jsxbin.c_str(), input_len);
+    memcpy(_data.data(), _input.data(), input_len);
 
     _start = _cursor = 0;
     _end = input_len - 1;
@@ -87,6 +94,7 @@ bool Reader::verifySignature() {
         _version = JsxbinVersion::v21;
     } else {
         _error = ParseError::InvalidVersion;
+        printf("[!]: %s\n", "Parse Error at verifySignature()");
 
         return false;
     }
@@ -146,8 +154,9 @@ Byte Reader::getByte() {
 
     return m - 0x41;
 
-    error8:
+error8:
     _error = ParseError::Error8;
+    printf("[!]: %s\n", "Parse Error at getByte()");
     return 0;
 }
 
@@ -158,7 +167,7 @@ Number Reader::getNumber() {
     }
 
     Token t = get();
-    Number res, sign = (t != 'y') ? 1.0 : (t = get(), -1.0);
+    Number res = 0, sign = (t != 'y') ? 1.0 : (t = get(), -1.0);
 
     switch (t) {
         case '2':
@@ -185,6 +194,7 @@ ByteString Reader::getString() {
     int length = (int) getNumber();
 
     for (int i = 0; i < length; ++i) {
+        // Each char is a unicode (utf-16) codepoint.
         result.push_back((uint16_t) getNumber());
     }
 
@@ -200,81 +210,80 @@ bool Reader::getBoolean() {
         return false;
     } else {
         _error = ParseError::Error8;
+        printf("[!]: %s\n", "Parse Error at getBoolean()");
     }
 
     return false;
 }
 
 ByteString Reader::readSID() {
-    Token t = get();
-
     ByteString symbol;
     Number id;
 
-    if (t == 'z') {
+    if (get() == 'z') {
         symbol = getString();
         id = getNumber();
-        addSymbol((int) id, symbol);
+        addSymbol(id, symbol);
+
+        if (!utils::is_double_type(id)) {
+            id = (double) utils::to_integer(id);
+        }
+
+        printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
+        fflush(stdout);
     } else {
+        step(-1);
         id = getNumber();
-        symbol = getSymbol((int) id);
+        symbol = getSymbol(id);
     }
 
     return symbol;
 }
 
-// TODO return a Variant type
-ByteString Reader::getVariant() {
-    ByteString result;
+Variant* Reader::getVariant() {
+    // TODO: This shouldn't be possible, verify it before removal
+    if (get() == 'n') {
+        return nullptr;
+    } else {
+        step(-1);
+    }
 
-    Token type = get() - 'a';
+    uint8_t type = get() - 'a';
 
+    auto* result = new Variant();
     switch (type) {
         case 0: // 'a' - also recognized as a null at runtime.
+            // looks like it meant for undefined
+            // but not utilized.
+            result->doErase();
+
+            // TODO: find a better way for this
+            result->setNull();
+            break;
         case 1: // 'b' - null always encoded to 'b'
             // null type
-            result = {'n', 'u', 'l', 'l'};
+            result->setNull();
             break;
         case 2: // 'c'
             // Boolean type
-            result = getBoolean()
-                    ? ByteString({'t', 'r', 'u', 'e'})
-                    : ByteString({'f', 'a', 'l', 's', 'e'});
+            result->setBool(getBoolean());
             break;
         case 3: // 'd'
             // Number type
-            for (auto& c: std::to_string(getNumber())) {
-                result.push_back((uint16_t) c);
-            };
+            result->setDouble(getNumber());
             break;
         case 4: // 'e'
             // String type
-            result.push_back('\"');
-            for (auto& c: getString()) {
-                result.push_back((uint16_t) c);
-            };
-            result.push_back('\"');
+            result->setString(getString());
             break;
 
         default:
-            // TODO: Handle this
-            printf("Unexpected: %c\n", type);
+            _error = ParseError::Error8;
+            printf("[!]: %s\n", "Parse Error at getVariant()");
             break;
     }
 
     return result;
-}
-
-string DataPool::get(const string &key) {
-    return _pool.at(key);
-}
-
-void DataPool::add(const string &key, string value) {
-    _pool[key] = std::move(value);
-}
-
-void DataPool::clear() {
-    _pool.clear();
 }
 
 Token Reader::_next() {
@@ -299,10 +308,61 @@ bool Reader::_ignorable(Token value) {
     }
 }
 
-void Reader::addSymbol(int id, const ByteString& symbol) {
+ByteString Reader::getSymbol(Number id) {
+    return _symbols[id];
+}
+
+void Reader::addSymbol(Number id, const ByteString& symbol) {
     _symbols[id] = symbol;
 }
 
-ByteString Reader::getSymbol(int id) {
-    return _symbols[id];
+Variant::Variant() {
+    _type = VariantType::None;
+    doErase();
+}
+
+void Variant::setNull() {
+    _type = VariantType::Null;
+    doErase();
+}
+
+void Variant::setBool(bool value) {
+    _type = VariantType::Boolean;
+    doErase();
+    _value._bool = value;
+}
+
+void Variant::setDouble(double value) {
+    _type = VariantType::Number;
+    doErase();
+    _value._double = value;
+}
+
+void Variant::setString(const ByteString& value) {
+    _type = VariantType::String;
+    doErase();
+    _value._string = value;
+}
+
+void Variant::doErase() {
+    if (_type == VariantType::String) {
+        _value._string.clear();
+    }
+
+    utils::zero_mem(&_value, sizeof(ValueType));
+}
+
+String Variant::toString() {
+    switch (_type) {
+        case VariantType::Undefined: return "undefined";
+        case VariantType::Null: return "null";
+        case VariantType::Boolean:
+            return _value._bool ? "true" : "false";
+        case VariantType::Number:
+            return utils::number_to_string(_value._double);
+        case VariantType::String:
+            return utils::to_string_literal(_value._string);
+        default:
+            return "";
+    }
 }

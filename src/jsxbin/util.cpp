@@ -73,8 +73,7 @@ string escape_hex_or_unicode(uint16_t value, bool capital = false) {
 }
 
 string string_literal_escape(uint16_t value, bool capital) {
-    switch (value)
-    {
+    switch (value) {
         case '\b': return "\\b";
         case '\f': return "\\f";
         case '\n': return "\\n";
@@ -91,6 +90,207 @@ string string_literal_escape(uint16_t value, bool capital) {
     }
 }
 
+string string_literal_escape(const ByteString& value, bool capital) {
+    string res;
+
+    for (const auto& c : value) {
+        res += string_literal_escape(c, capital);
+    }
+
+    return res;
+}
+
+string to_string_literal(const ByteString& value, bool capital) {
+    string res = "\"";
+
+    for (auto& c : value) {
+        res += string_literal_escape(c, capital);
+    }
+
+    return res + "\"";
+}
+
+string to_string(const ByteString& value) {
+    string res;
+
+    for (auto& c : value) {
+        res += (char) c;
+    }
+
+    return res;
+}
+
+vector<string> string_split(const string& str, const string& delimiter) {
+    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    string token;
+    vector<string> res;
+
+    while ((pos_end = str.find(delimiter, pos_start)) != string::npos) {
+        token = str.substr(pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+        res.push_back(token);
+    }
+
+    res.push_back(str.substr(pos_start));
+    return res;
+}
+
+// TODO: complete this
+string double_to_string(double value) {
+    size_t val = (*(size_t*) &value);
+    string res;
+
+    if (value == 0.0) {
+        return "0";
+    }
+    else if (val == 0x7FEFFFFFFFFFFFFF) {
+        return "1.7976931348623157e+308";
+    }
+    else if (val == 0xFFEFFFFFFFFFFFFF) {
+        return "-1.7976931348623157e+308";
+    } else if (value >= 1.0e21 || floor(value) != value) {
+        if (value < 1.0e21 && value >= 0.000001) {
+            int v11 = (int) log10(value);
+            int v12 = 0;
+            if (v11 >= 0) {
+                v12 = v11;
+            }
+
+            int v13 = 15 - (value >= 1.0) - v12;
+
+            if (v13 > 15) {
+                v13 = 15;
+            }
+
+            char _buff[24] = {0};
+            snprintf(_buff, sizeof(_buff), "%20.*f", v13, value);
+            res.clear();
+            res.append(_buff);
+        } else {
+            char _buff[24] = {0};
+            snprintf(_buff, sizeof(_buff), "%20.*e", 15, value);
+            res.clear();
+            res.append(_buff);
+            std::transform(
+                res.begin(),
+                res.end(),
+                res.begin(),
+                std::tolower
+            );
+        }
+
+        vector<string> splits = string_split(res, "e");
+        char* sp0 = (char*) splits[0].c_str();
+        size_t l = splits.size();
+        while (l > 1) {
+            l--;
+            char v17 = *sp0--;
+            if ( v17 != '0' ) {
+                if ( v17 == '.' ) {
+                    l--;
+                }
+                splits[0].erase(-1, l + 1);
+                break;
+            }
+        }
+
+        if (res.length() > 1) {
+            int i = 0;
+
+            while (res[i] == '0') {
+                if ((++i + 1) >= res.length()) {
+                    goto LABEL_50;
+                }
+            }
+
+            res.erase(i, 1);
+        }
+
+LABEL_50:
+        return res;
+    }
+
+    return std::to_string(value);
+}
+
+int byte_length(uint64_t value) {
+    int len = sizeof(uint64_t);
+    auto* p = (uint8_t*) &value;
+
+    while ((p[len - 1] == 0) && len) {
+        len--;
+    }
+
+    return len;
+}
+
+string ltrim(const string& s, char target = ' ') {
+    size_t start = s.find_first_not_of(target);
+    return (start == string::npos) ? "" : s.substr(start);
+}
+
+string rtrim(const string& s, char target = ' ') {
+    size_t end = s.find_last_not_of(target);
+    return (end == string::npos) ? "" : s.substr(0, end + 1);
+}
+
+string trim(const string& s, char target = ' ') {
+    return rtrim(ltrim(s, target), target);
+}
+
+bool is_double_type(double value) {
+    return byte_length(*(uint64_t*) &value) == 8;
+}
+
+uint64_t to_integer(double value) {
+    return *(uint64_t*) &value;
+}
+
+string simplify_number_literal(const string& value) {
+    return value;
+}
+
+// TODO: fix formatting and rounding as in es
+string number_to_string(double value) {
+    int fp_precision = 15;
+    const char* fmt;
+
+    if (is_double_type(value)) {
+        uint64_t val = to_integer(value);
+        if (val == 0x7FEFFFFFFFFFFFFF) {
+            return "1.7976931348623157e+308";
+        } else if (val == 0xFFEFFFFFFFFFFFFF) {
+            return "-1.7976931348623157e+308";
+        }
+
+        if ((value >= 1.0e21) || (floor(value) != value)) {
+            if ((value < 1.0e21) && (value >= 0.000001)) {
+                int l10 = (int) log10(value);
+                int fpn = (l10 >= 0) ? l10 : 0;
+                fp_precision = 15 - (value >= 1.0) - fpn;
+                if (fp_precision > 15) {
+                    fp_precision = 15;
+                }
+
+                fmt = "%20.*f";
+            } else {
+                fmt = "%20.*e";
+            }
+        } else if (value >= 1000000000.0) {
+            fmt = "%*.0f";
+        } else {
+            fmt = "%*.f";
+        }
+    }  else {
+        fmt = "%*ld";
+    }
+
+    char _buff[32] = {0};
+    snprintf(_buff, sizeof(_buff), fmt, fp_precision, value);
+
+    return trim(_buff, ' ');
+}
+
 bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         if (b1[i] != b2[i]) {
@@ -101,5 +301,10 @@ bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
     return true;
 }
 
+void zero_mem(const void* buff, size_t size) {
+    for (int i = 0; i < size; ++i) {
+        ((uint8_t*) buff)[i] = '\0';
+    }
+}
 
 END_NS(utils) END_NS(jsxbin)
