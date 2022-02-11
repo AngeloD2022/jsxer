@@ -1,5 +1,6 @@
 ## TODO
 
+- [ ] Implement an Utf-16 native ByteString class.
 - [ ] Fix decoding.
 - [ ] Better error handling and cross-platform support.
 - [ ] Use operators for ast parsing.
