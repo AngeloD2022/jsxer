@@ -8,4 +8,5 @@
 - [ ] Better error handling and cross-platform support.
 - [ ] Use operators for ast parsing.
 - [ ] CodeGen with proper syntax and formatting.
-- [ ] Add code documentation.
+- [ ] Add code documentation and setup wiki page.
+- [ ] Setup CI/CD pipelines.
