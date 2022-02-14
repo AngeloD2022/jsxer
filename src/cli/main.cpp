@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 
-#include "jsxbin.h"
+#include "jsxer.h"
 
 string get_filename(const char* path) {
     for(size_t i = strlen(path) - 1; i; --i)
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
         // begin de-compilation...
         std::string output;
-        jsxbin::decompile(content, output);
+        jsxer::decompile(content, output);
         std::cout << "Finished." << std::endl;
 
         std::ofstream outfile(output_path);

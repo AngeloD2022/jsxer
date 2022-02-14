@@ -5,7 +5,7 @@
 int decompile(const char* input, size_t in_len, char* output, size_t* out_len) {
     std::string compiled(input, in_len), decompiled;
 
-    int err = jsxbin::decompile(compiled, decompiled);
+    int err = jsxer::decompile(compiled, decompiled);
 
     if (err != 0) {
         if (output) {
