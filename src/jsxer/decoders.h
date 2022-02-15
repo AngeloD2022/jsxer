@@ -1,6 +1,6 @@
 #pragma once
 
-#include "jsxbin.h"
+#include "jsxer.h"
 
 #include "reader.h"
 #include "nodes/AstNode.h"

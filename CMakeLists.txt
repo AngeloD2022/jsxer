@@ -63,13 +63,13 @@ set(BIN_LIB_NAME "libjsxer")
 set(JSXER_CORE_TARGET jsxer-core)
 
 file(GLOB_RECURSE JSXER_CORE_HEADERS
-    ${JSXER_SOURCE_DIR}/jsxbin/*.h
-    ${JSXER_SOURCE_DIR}/jsxbin/*.hpp
+    ${JSXER_SOURCE_DIR}/jsxer/*.h
+    ${JSXER_SOURCE_DIR}/jsxer/*.hpp
 )
 
 file(GLOB_RECURSE JSXER_CORE_SOURCES
-    ${JSXER_SOURCE_DIR}/jsxbin/*.c
-    ${JSXER_SOURCE_DIR}/jsxbin/*.cpp
+    ${JSXER_SOURCE_DIR}/jsxer/*.c
+    ${JSXER_SOURCE_DIR}/jsxer/*.cpp
 )
 
 add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURCES})

@@ -1,4 +1,4 @@
-#include <jsxbin.h>
+#include <jsxer.h>
 
 const char compiled[] = "@JSXBIN@ES@2.0@MyBbyBn0ADJAnABjzDiHjJjYBfWzGiPjCjKjFjDjUCEzADFeFjXjCjFjUjWDARFFd\n"
                         "BFdCFdDFdEFdFfzBBEFeC2hdmY2kbmczBhQFFd2lRhAnfJGnAEXzJjTjUjSjJjOjHjJjGjZGfjzEiKi\n"

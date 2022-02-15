@@ -1,4 +1,4 @@
-#include "jsxbin.h"
+#include "jsxer.h"
 #include "util.h"
 #include "nodes/Program.h"
 

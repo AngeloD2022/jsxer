@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 
-#include "jsxbin.h"
+#include "jsxer.h"
 
 string get_filename(const char* path) {
     for(size_t i = strlen(path) - 1; i; --i)
