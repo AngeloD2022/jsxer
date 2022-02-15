@@ -195,23 +195,23 @@ FunctionSignature decoders::d_fn_sig(Reader& reader) {
 }
 
 inline
-bool is_capital_alpha(char value) {
+bool is_capital_alpha(uint32_t value) {
     return in_range_i('A', 'Z', value);
 }
 
 inline
-bool is_small_alpha(char value) {
+bool is_small_alpha(uint32_t value) {
     return in_range_i('a', 'z', value);
 }
 
 inline
-bool is_numerical_digit(char value) {
+bool is_numerical_digit(uint32_t value) {
     return in_range_i('0', '9', value);
 }
 
 /* Validator for an id's first character */
 inline
-bool valid_id_0(char value) {
+bool valid_id_0(uint32_t value) {
     return is_small_alpha(value) ||
         is_capital_alpha(value) ||
         ('_' == value) || ('$' == value);
@@ -219,7 +219,7 @@ bool valid_id_0(char value) {
 
 /* Validator for an id's after first characters */
 inline
-bool valid_id_x(char value) {
+bool valid_id_x(uint32_t value) {
     return valid_id_0(value) || is_numerical_digit(value);
 }
 
@@ -244,9 +244,41 @@ bool decoders::valid_id(const string& value) {
 
     return true;
 }
+bool decoders::valid_id(const ByteString& value) {
+    // ^[a-zA-Z_$][0-9a-zA-Z_$]*$
+    size_t len = value.size();
+
+    if (len > 0) {
+        if (valid_id_0(value[0])) {
+            for (int i = 1; i < len; ++i) {
+                if (!valid_id_x(value[i])) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+
+    return true;
+}
 
 bool decoders::is_integer(const string& value) {
     size_t len = value.length();
+
+    for (int i = 0; i < len; ++i) {
+        if (!is_numerical_digit(value[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool decoders::is_integer(const ByteString& value) {
+    size_t len = value.size();
 
     for (int i = 0; i < len; ++i) {
         if (!is_numerical_digit(value[i])) {

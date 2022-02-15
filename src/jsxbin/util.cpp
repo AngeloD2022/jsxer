@@ -53,15 +53,19 @@ string hex_escape(uint8_t value, bool capital = false) {
     return result;
 }
 
-bool is_non_printable_ascii(uint8_t value) {
+bool is_non_printable_ascii(uint32_t value) {
     // ([\x00-\x07\x0E-\x1F\x7F])
     return in_range_i(0, 7, value) ||
            in_range_i(0x0E, 0x1F, value) || (value == 0x7F);
 }
 
-bool is_non_printable_utf8(uint8_t value) {
+bool is_non_printable_utf8(uint32_t value) {
     // ([\x00-\x07\x0E-\x1F\x7F\x80-\xFF])
     return is_non_printable_ascii(value) || in_range_i(0x80, 0xFF, value);
+}
+
+bool is_non_printable_utf16(uint32_t value) {
+    return is_non_printable_ascii(value) || in_range_i(0x80, 0xFF, value) || (value > 0xFF);
 }
 
 string escape_hex_or_unicode(uint16_t value, bool capital = false) {
@@ -84,7 +88,7 @@ string string_literal_escape(uint16_t value, bool capital) {
         case '\'': return "\\\'";
         case '\\': return "\\\\";
         default:
-            return is_non_printable_utf8((uint8_t) value)
+            return is_non_printable_utf16(value)
                 ? escape_hex_or_unicode(value, capital)
                 : string(1, (char) value);
     }

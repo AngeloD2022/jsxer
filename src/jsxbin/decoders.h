@@ -67,7 +67,9 @@ vector<AstNode*> d_children(Reader& reader);
 FunctionSignature d_fn_sig(Reader& reader);
 
 // decoding utilities...
-bool valid_id(const string &value);
-bool is_integer(const string &value);
+bool valid_id(const string& value);
+bool valid_id(const ByteString& value);
+bool is_integer(const string& value);
+bool is_integer(const ByteString& value);
 
 END_NS(decoders) END_NS(jsxbin)
