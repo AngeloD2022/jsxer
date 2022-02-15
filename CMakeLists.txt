@@ -72,7 +72,7 @@ file(GLOB_RECURSE JSXER_CORE_SOURCES
     ${JSXER_SOURCE_DIR}/jsxer/*.cpp
 )
 
-add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURCES})
+add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURCES} src/jsxer/nodes/MemberExpression.cpp)
 
 target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
 
