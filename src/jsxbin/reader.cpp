@@ -232,12 +232,12 @@ ByteString Reader::readSID() {
         id = getNumber();
         addSymbol(id, symbol);
 
-        if (!utils::is_double_type(id)) {
-            id = (double) utils::to_integer(id);
-        }
-
-        // printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
-        // fflush(stdout);
+//        if (!utils::is_double_type(id)) {
+//            id = (double) utils::to_integer(id);
+//        }
+//
+//         printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
+//         fflush(stdout);
     } else {
         step(-1);
         id = getNumber();
@@ -248,8 +248,10 @@ ByteString Reader::readSID() {
 }
 
 Variant* Reader::getVariant() {
-    if (peek() == 'n') {
+    if (get() == 'n') {
         return nullptr;
+    } else {
+        step(-1);
     }
 
     uint8_t type = get() - 'a';
@@ -257,8 +259,7 @@ Variant* Reader::getVariant() {
     auto* result = new Variant();
     switch (type) {
         case 0: // 'a' - also recognized as a null at runtime.
-            // looks like it meant for undefined
-            // but not utilized.
+            // looks like it's meant for undefined, but not utilized.
             result->doErase();
 
             // TODO: find a better way for this

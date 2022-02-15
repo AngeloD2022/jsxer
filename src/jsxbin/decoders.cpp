@@ -111,41 +111,13 @@ byte decoders::d_byte(Reader& reader) {
 }
 
 string decoders::d_variant(Reader& reader) {
-    string result;
-
-    // types are 'a' or 'b':null 'c':boolean 'd':number 'e':string
-    uint8_t type = reader.get() - 'a';
-
-    switch (type) {
-        case 0: // 'a' - also recognized as a null at runtime.
-        case 1: // 'b' - null always encoded to 'b'
-            // null type
-            result = "null";
-            break;
-        case 2: // 'c'
-            // boolean type
-            result = d_bool(reader) ? "true" : "false";
-            break;
-        case 3: // 'd'
-            // number type
-            result = d_number(reader);
-            break;
-        case 4: // 'e'
-            // string type
-            result = utils::to_string_literal(reader.getString());
-            break;
-
-        case 13: // 'n' | NO_VARIANT
-            result = "";
-            break;
-
-        default:
-            // TODO: Handle this
-            printf("Unexpected: %c\n", type);
-            break;
+    auto* var = reader.getVariant();
+    if (var) {
+        string result = var->toString();
+        delete var;
+        return result;
     }
-
-    return result;
+    return "";
 }
 
 bool decoders::d_bool(Reader& reader) {
