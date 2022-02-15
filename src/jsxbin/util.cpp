@@ -110,6 +110,16 @@ string to_string_literal(const ByteString& value, bool capital) {
     return res + "\"";
 }
 
+string to_string_literal(const string& value, bool capital) {
+    string res = "\"";
+
+    for (auto& c : value) {
+        res += string_literal_escape(c, capital);
+    }
+
+    return res + "\"";
+}
+
 string to_string(const ByteString& value) {
     string res;
 
