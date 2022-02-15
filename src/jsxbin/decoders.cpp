@@ -132,7 +132,7 @@ string decoders::d_variant(Reader& reader) {
             break;
         case 4: // 'e'
             // string type
-            result = '\"' + d_string(reader) + '\"';
+            result = utils::to_string_literal(reader.getString());
             break;
 
         case 13: // 'n' | NO_VARIANT

@@ -191,7 +191,14 @@ Number Reader::getNumber() {
 ByteString Reader::getString() {
     ByteString result;
 
-    int length = (int) getNumber();
+    int length;
+    double len = getNumber();
+
+    if (utils::is_double_type(len)) {
+        length = (int) len;
+    } else {
+        length = ((int *) &len)[0];
+    }
 
     for (int i = 0; i < length; ++i) {
         // Each char is a unicode (utf-16) codepoint.
