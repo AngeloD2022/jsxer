@@ -165,3 +165,8 @@ add_executable(jsxer-test-obj-expr ${JSXER_TESTS_SRC_DIR}/obj-expr.cpp)
 target_link_libraries(jsxer-test-obj-expr PRIVATE ${JSXER_CORE_TARGET})
 
 add_test("Object-Expression" jsxer-test-obj-expr)
+
+add_executable(jsxer-test-member-expr ${JSXER_TESTS_SRC_DIR}/member-expr.cpp)
+target_link_libraries(jsxer-test-member-expr PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("Member-Expression" jsxer-test-member-expr)
