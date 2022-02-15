@@ -1,7 +1,8 @@
 ## TODO
 
-- [ ] Add GitHub actions for building, testing and releases.
 - [ ] Implement an Utf-16 ES native String class.
+- [ ] Fix IIFEs.
+- [ ] Fix declarations using comma expressions.
 - [ ] Fix literal decoding (especially, literals).
 - [ ] Fix memory leaks.
 - [ ] Add test data and tests (ctest or google test).
@@ -9,4 +10,4 @@
 - [ ] Use operators for ast parsing.
 - [ ] CodeGen with proper syntax and formatting.
 - [ ] Add code documentation and setup wiki page.
-- [ ] Setup CI/CD pipelines.
+- [ ] Add GitHub actions for building, testing and releases (CI/CD).

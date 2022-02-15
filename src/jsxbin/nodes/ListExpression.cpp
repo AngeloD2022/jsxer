@@ -8,6 +8,7 @@ void ListExpression::parse() {
 string ListExpression::to_string() {
     string result;
 
+    // TODO: fix declarations using comma expressions
     for (int i = 0; i < arguments.size(); ++i) {
         result += arguments[i]->to_string() + (i + 1 == arguments.size() ? "" : ", ");
     }
