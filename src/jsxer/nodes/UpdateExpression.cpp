@@ -3,7 +3,7 @@
 void UpdateExpression::parse() {
     variable = decoders::d_node(reader);
     operation = decoders::d_literal_num(reader);
-    postfix = decoders::d_bool(reader);
+    postfix = reader.getBoolean();
 }
 
 string UpdateExpression::to_string() {

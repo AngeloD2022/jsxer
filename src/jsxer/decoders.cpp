@@ -6,7 +6,6 @@ using namespace jsxer::decoders;
 
 enum LiteralType {
     NUMBER,
-    UTF8_STRING
 };
 
 string d_number_primitive(Reader& reader, int length, bool negative) {
@@ -112,52 +111,20 @@ byte decoders::d_byte(Reader& reader) {
 
 string decoders::d_variant(Reader& reader) {
     auto* var = reader.getVariant();
-
     if (var) {
         string result = var->toString();
         delete var;
         return result;
     }
-
     return "";
 }
 
-bool decoders::d_bool(Reader& reader) {
-    return reader.getBoolean();
-}
-
-string decoders::d_string(Reader& reader) {
-    // Parse length of string...
-    string parsed_len = d_literal_primitive(reader, LiteralType::NUMBER);
-    int length = parsed_len.empty() ? 0 : stoi(parsed_len);
-
-    if (length == 0)
-        return "";
-
-    string buf;
-    for (int i = 0; i < length; ++i) {
-        string str_literal_char = d_literal_primitive(reader, LiteralType::UTF8_STRING);
-
-        // A quick fix for utf-16 chars
-        if (str_literal_char.length() > 1) {
-            if (is_integer(str_literal_char)) {
-                uint32_t charCode = std::stoi(str_literal_char);
-                str_literal_char = utils::string_literal_escape(charCode);
-            }
-        }
-
-        buf += str_literal_char;
-    }
-
-    return buf;
-}
-
 Reference decoders::d_ref(Reader& reader) {
-    string id = d_sid(reader);
+    auto id = reader.readSID();
     bool flag = false;
 
     if (reader.version() >= JsxbinVersion::v20) {
-        flag = d_bool(reader);
+        flag = reader.getBoolean();
     }
 
     return Reference{ id, flag };
@@ -228,23 +195,23 @@ FunctionSignature decoders::d_fn_sig(Reader& reader) {
 }
 
 inline
-bool is_capital_alpha(char value) {
+bool is_capital_alpha(uint32_t value) {
     return in_range_i('A', 'Z', value);
 }
 
 inline
-bool is_small_alpha(char value) {
+bool is_small_alpha(uint32_t value) {
     return in_range_i('a', 'z', value);
 }
 
 inline
-bool is_numerical_digit(char value) {
+bool is_numerical_digit(uint32_t value) {
     return in_range_i('0', '9', value);
 }
 
 /* Validator for an id's first character */
 inline
-bool valid_id_0(char value) {
+bool valid_id_0(uint32_t value) {
     return is_small_alpha(value) ||
         is_capital_alpha(value) ||
         ('_' == value) || ('$' == value);
@@ -252,7 +219,7 @@ bool valid_id_0(char value) {
 
 /* Validator for an id's after first characters */
 inline
-bool valid_id_x(char value) {
+bool valid_id_x(uint32_t value) {
     return valid_id_0(value) || is_numerical_digit(value);
 }
 
@@ -277,9 +244,41 @@ bool decoders::valid_id(const string& value) {
 
     return true;
 }
+bool decoders::valid_id(const ByteString& value) {
+    // ^[a-zA-Z_$][0-9a-zA-Z_$]*$
+    size_t len = value.size();
+
+    if (len > 0) {
+        if (valid_id_0(value[0])) {
+            for (int i = 1; i < len; ++i) {
+                if (!valid_id_x(value[i])) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+
+    return true;
+}
 
 bool decoders::is_integer(const string& value) {
     size_t len = value.length();
+
+    for (int i = 0; i < len; ++i) {
+        if (!is_numerical_digit(value[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool decoders::is_integer(const ByteString& value) {
+    size_t len = value.size();
 
     for (int i = 0; i < len; ++i) {
         if (!is_numerical_digit(value[i])) {

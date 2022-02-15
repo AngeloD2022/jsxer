@@ -1,4 +1,7 @@
 #include "ObjectExpression.h"
+#include "../util.h"
+
+using namespace jsxer;
 
 void ObjectExpression::parse() {
     objectId = decoders::d_sid(reader);
@@ -18,8 +21,8 @@ string ObjectExpression::to_string() {
     if (!properties.empty()) {
         int i = 0;
         for(std::pair<string, AstNode*> entry : properties) {
-            if (decoders::valid_id(entry.first)) {
-                result += '\"' + entry.first + '\"';
+            if (!decoders::valid_id(entry.first)) {
+                result += utils::to_string_literal(entry.first);
             } else {
                 result += entry.first;
             }

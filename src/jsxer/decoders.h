@@ -19,7 +19,7 @@ using namespace jsxer::nodes;
 
 BEGIN_NS(jsxer) BEGIN_NS(decoders)
 struct Reference {
-    string id;
+    ByteString id;
     bool flag;
 };
 
@@ -58,9 +58,7 @@ AstNode* d_node(Reader& reader);
 LineInfo d_line_info(Reader& reader);
 int d_literal_num(Reader& reader);
 string d_variant(Reader& reader);
-string d_string(Reader& reader);
 string d_number(Reader& reader);
-bool d_bool(Reader& reader);
 string d_sid(Reader& reader);
 int d_length(Reader& reader);
 Reference d_ref(Reader& reader);
@@ -69,7 +67,9 @@ vector<AstNode*> d_children(Reader& reader);
 FunctionSignature d_fn_sig(Reader& reader);
 
 // decoding utilities...
-bool valid_id(const string &value);
-bool is_integer(const string &value);
+bool valid_id(const string& value);
+bool valid_id(const ByteString& value);
+bool is_integer(const string& value);
+bool is_integer(const ByteString& value);
 
 END_NS(decoders) END_NS(jsxbin)

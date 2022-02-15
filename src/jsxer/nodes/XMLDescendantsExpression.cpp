@@ -1,4 +1,5 @@
 #include "XMLDescendantsExpression.h"
+#include "../util.h"
 
 void XMLDescendantsExpression::parse() {
     descendants = decoders::d_ref(reader);
@@ -9,5 +10,5 @@ void XMLDescendantsExpression::parse() {
 }
 
 string XMLDescendantsExpression::to_string() {
-    return object->to_string() + ".." + descendants.id;
+    return object->to_string() + ".." + utils::to_string(descendants.id);
 }

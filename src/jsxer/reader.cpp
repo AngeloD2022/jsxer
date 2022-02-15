@@ -125,21 +125,21 @@ Byte Reader::getByte() {
     if (m == '0') {
         Token n = get();
 
-        if ((n - 0x41) > 0x19) {
+        if (n > 0x5A) {
             goto error8;
         } else {
             _depth = n - 0x40;
             return 0;
         }
-    } else if ((m - 0x41) > 0x19) {
-        if ((m - 0x67) > 7) {
+    } else if (m > 0x5A) {
+        if (m > 0x6E) {
             goto error8;
         } else {
             Token z = get();
             uint8_t l, r = 32 * (m + 1);
 
-            if ((z - 0x41) > 0x19) {
-                if ((z - 0x61) > 5) {
+            if (z > 0x5A) {
+                if (z > 0x66) {
                     goto error8;
                 } else {
                     l = z - 0x47;
@@ -191,11 +191,27 @@ Number Reader::getNumber() {
 ByteString Reader::getString() {
     ByteString result;
 
-    int length = (int) getNumber();
+    int length;
+    double len = getNumber();
+
+    if (utils::is_double_type(len)) {
+        length = (int) len;
+    } else {
+        length = ((int *) &len)[0];
+    }
 
     for (int i = 0; i < length; ++i) {
         // Each char is a unicode (utf-16) codepoint.
-        result.push_back((uint16_t) getNumber());
+        auto ch = getNumber();
+
+        uint16_t u16Char;
+        if (utils::is_double_type(ch)) {
+            u16Char = (uint16_t) ch;
+        } else {
+            u16Char = ((uint16_t*) &ch)[0];
+        }
+
+        result.push_back(u16Char);
     }
 
     return result;
@@ -225,12 +241,12 @@ ByteString Reader::readSID() {
         id = getNumber();
         addSymbol(id, symbol);
 
-        if (!utils::is_double_type(id)) {
-            id = (double) utils::to_integer(id);
-        }
-
-        printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
-        fflush(stdout);
+//        if (!utils::is_double_type(id)) {
+//            id = (double) utils::to_integer(id);
+//        }
+//
+//         printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
+//         fflush(stdout);
     } else {
         step(-1);
         id = getNumber();
@@ -241,7 +257,6 @@ ByteString Reader::readSID() {
 }
 
 Variant* Reader::getVariant() {
-    // TODO: This shouldn't be possible, verify it before removal
     if (get() == 'n') {
         return nullptr;
     } else {
@@ -253,8 +268,7 @@ Variant* Reader::getVariant() {
     auto* result = new Variant();
     switch (type) {
         case 0: // 'a' - also recognized as a null at runtime.
-            // looks like it meant for undefined
-            // but not utilized.
+            // looks like it's meant for undefined, but not utilized.
             result->doErase();
 
             // TODO: find a better way for this

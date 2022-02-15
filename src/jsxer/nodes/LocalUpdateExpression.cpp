@@ -4,7 +4,7 @@ void LocalUpdateExpression::parse() {
     id = decoders::d_sid(reader);
     length = decoders::d_length(reader);
     operation = decoders::d_number(reader);
-    postfix = decoders::d_bool(reader);
+    postfix = reader.getBoolean();
 }
 
 string LocalUpdateExpression::to_string() {

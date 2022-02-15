@@ -8,7 +8,7 @@ void ForInStatement::parse() {
     id = decoders::d_sid(reader);
 
     if (reader.version() >= JsxbinVersion::v20)
-        forEach = decoders::d_bool(reader);
+        forEach = reader.getBoolean();
 }
 
 string ForInStatement::to_string() {
