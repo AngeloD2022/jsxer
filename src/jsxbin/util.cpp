@@ -248,15 +248,20 @@ string trim(const string& s, char target = ' ') {
     return rtrim(ltrim(s, target), target);
 }
 
-bool is_double_type(double value) {
-    return byte_length(*(uint64_t*) &value) == 8;
-}
-
 uint64_t to_integer(double value) {
     return *(uint64_t*) &value;
 }
 
+bool is_double_type(double value) {
+    return byte_length(*(uint64_t*) &value) == 8;
+}
+
 string simplify_number_literal(const string& value) {
+    // TODO: impl
+    // stuff like
+    // - stripping off excess suffix zeroes for doubles.
+    // - stripping off excess prefix zeroes for integers.
+    // - formatting scientific number literal (eg: 1e5, 1.72e+5, etc).
     return value;
 }
 
@@ -265,40 +270,43 @@ string number_to_string(double value) {
     int fp_precision = 15;
     const char* fmt;
 
+    // integer -> 1-7 bytes in memory
+    // double  -> 8 bytes in memory
     if (is_double_type(value)) {
-        uint64_t val = to_integer(value);
-        if (val == 0x7FEFFFFFFFFFFFFF) {
-            return "1.7976931348623157e+308";
-        } else if (val == 0xFFEFFFFFFFFFFFFF) {
-            return "-1.7976931348623157e+308";
-        }
+        uint64_t val_u64 = to_integer(value);
 
-        if ((value >= 1.0e21) || (floor(value) != value)) {
-            if ((value < 1.0e21) && (value >= 0.000001)) {
-                int l10 = (int) log10(value);
-                int fpn = (l10 >= 0) ? l10 : 0;
-                fp_precision = 15 - (value >= 1.0) - fpn;
-                if (fp_precision > 15) {
-                    fp_precision = 15;
+        switch (val_u64) {
+            case 0x7FEFFFFFFFFFFFFF: return "1.7976931348623157e+308";
+            case 0xFFEFFFFFFFFFFFFF: return "-1.7976931348623157e+308";
+            default: {
+                if ((value >= 1.0e21) || (floor(value) != value)) {
+                    if ((value < 1.0e21) && (value >= 0.000001)) {
+                        int l10 = (int) log10(value);
+                        int fpn = (l10 >= 0) ? l10 : 0;
+                        fp_precision = 15 - (value >= 1.0) - fpn;
+                        if (fp_precision > 15) {
+                            fp_precision = 15;
+                        }
+
+                        fmt = "%20.*f";
+                    } else {
+                        fmt = "%20.*e";
+                    }
+                } else if (value >= 1000000000.0) {
+                    fmt = "%*.0f";
+                } else {
+                    fmt = "%*.f";
                 }
-
-                fmt = "%20.*f";
-            } else {
-                fmt = "%20.*e";
             }
-        } else if (value >= 1000000000.0) {
-            fmt = "%*.0f";
-        } else {
-            fmt = "%*.f";
         }
     }  else {
         fmt = "%*ld";
     }
 
-    char _buff[32] = {0};
-    snprintf(_buff, sizeof(_buff), fmt, fp_precision, value);
+    char _num_str_buff[32] = {0};
+    snprintf(_num_str_buff, sizeof(_num_str_buff), fmt, fp_precision, value);
 
-    return trim(_buff, ' ');
+    return simplify_number_literal(trim(_num_str_buff, ' '));
 }
 
 bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
