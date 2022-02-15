@@ -7,7 +7,7 @@
 
 using std::string;
 
-BEGIN_NS(jsxbin) BEGIN_NS(utils)
+BEGIN_NS(jsxer) BEGIN_NS(utils)
 
 bool string_equal(const string &str1, const string &str2);
 

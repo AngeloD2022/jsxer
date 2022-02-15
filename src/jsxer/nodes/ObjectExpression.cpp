@@ -1,7 +1,7 @@
 #include "ObjectExpression.h"
 #include "../util.h"
 
-using namespace jsxbin;
+using namespace jsxer;
 
 void ObjectExpression::parse() {
     objectId = decoders::d_sid(reader);

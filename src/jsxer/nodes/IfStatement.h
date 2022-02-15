@@ -3,9 +3,9 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxbin;
+using namespace jsxer;
 
-namespace jsxbin { namespace nodes {
+namespace jsxer { namespace nodes {
     class IfStatement : public AstNode {
     public:
         explicit IfStatement(Reader& reader) : AstNode(reader) {}

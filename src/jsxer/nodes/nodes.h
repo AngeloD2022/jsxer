@@ -47,7 +47,7 @@
 #include "XMLDescendantsExpression.h"
 #include "XMLQualifiedNameExpression.h"
 
-BEGIN_NS(jsxbin) BEGIN_NS(nodes)
+BEGIN_NS(jsxer) BEGIN_NS(nodes)
 
 AstNode* get(NodeType type, Reader& reader) {
     switch (type) {

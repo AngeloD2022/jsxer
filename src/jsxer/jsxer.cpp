@@ -52,7 +52,7 @@ void prepend_header(string& code) {
     code = header + code;
 }
 
-int jsxbin::decompile(const string& input, string& output) {
+int jsxer::decompile(const string& input, string& output) {
     Reader reader(input);
 
     if (!reader.verifySignature()) {

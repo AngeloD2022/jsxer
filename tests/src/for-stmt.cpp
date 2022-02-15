@@ -7,7 +7,7 @@ const char compiled[] = "@JSXBIN@ES@2.0@MyBbyBn0ABKAbyCn0ABKCbyEn0ABOEbyFn0ABDFn
 
 int main() {
     string decompiled;
-    int err = jsxbin::decompile(compiled, decompiled);
+    int err = jsxer::decompile(compiled, decompiled);
 
     printf("--------------------------------------------------\n");
     printf("%s\n", decompiled.c_str());

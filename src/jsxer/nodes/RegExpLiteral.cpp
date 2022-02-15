@@ -1,7 +1,7 @@
 #include "RegExpLiteral.h"
 #include "../util.h"
 
-using namespace jsxbin;
+using namespace jsxer;
 
 void RegExpLiteral::parse() {
     regex = utils::to_string(reader.getString());

@@ -3,9 +3,9 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxbin;
+using namespace jsxer;
 
-namespace jsxbin { namespace nodes {
+namespace jsxer { namespace nodes {
     class XMLConstantExpression : public AstNode {
     public:
         explicit XMLConstantExpression(Reader& reader) : AstNode(reader) {}

@@ -2,7 +2,7 @@
 #include "decoders.h"
 #include "nodes/nodes.h"
 
-using namespace jsxbin::decoders;
+using namespace jsxer::decoders;
 
 enum LiteralType {
     NUMBER,

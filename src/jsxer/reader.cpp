@@ -1,7 +1,7 @@
 #include "reader.h"
 #include "util.h"
 
-using namespace jsxbin;
+using namespace jsxer;
 
 Reader::Reader(const string& jsxbin) {
     string _input = jsxbin;

@@ -4,9 +4,9 @@
 #include "../decoders.h"
 #include <algorithm>
 
-using namespace jsxbin;
+using namespace jsxer;
 
-namespace jsxbin { namespace nodes {
+namespace jsxer { namespace nodes {
     class StatementList : public AstNode {
     public:
         explicit StatementList(Reader& reader) : AstNode(reader) {}

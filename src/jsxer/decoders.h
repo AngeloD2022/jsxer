@@ -15,9 +15,9 @@ using std::string;
 using std::vector;
 using std::map;
 
-using namespace jsxbin::nodes;
+using namespace jsxer::nodes;
 
-BEGIN_NS(jsxbin) BEGIN_NS(decoders)
+BEGIN_NS(jsxer) BEGIN_NS(decoders)
 struct Reference {
     ByteString id;
     bool flag;

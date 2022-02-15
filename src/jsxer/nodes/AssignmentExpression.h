@@ -4,9 +4,9 @@
 #include "../decoders.h"
 #include "BinaryExpression.h"
 
-using namespace jsxbin;
+using namespace jsxer;
 
-namespace jsxbin { namespace nodes {
+namespace jsxer { namespace nodes {
     class AssignmentExpression : public AstNode {
     public:
         explicit AssignmentExpression(Reader& reader) : AstNode(reader) {}

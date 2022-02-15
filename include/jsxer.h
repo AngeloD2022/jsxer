@@ -17,6 +17,6 @@ enum class JsxbinVersion : uint16_t {
     v21 = 0x0201,
 };
 
-namespace jsxbin {
+namespace jsxer {
     int decompile(const string& input, string& output);
 }

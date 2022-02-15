@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
         // begin de-compilation...
         std::string output;
-        jsxbin::decompile(content, output);
+        jsxer::decompile(content, output);
         std::cout << "Finished." << std::endl;
 
         std::ofstream outfile(output_path);

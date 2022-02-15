@@ -4,7 +4,7 @@
 
 #include "../common.h"
 
-BEGIN_NS(jsxbin) BEGIN_NS(nodes)
+BEGIN_NS(jsxer) BEGIN_NS(nodes)
 
 enum class NodeType : uint8_t {
     Invalid = (uint8_t) -1,

@@ -20,7 +20,7 @@ using String = std::string;
 using Bytes = std::vector<uint8_t>;
 using ByteString = std::vector<uint16_t>;
 
-BEGIN_NS(jsxbin)
+BEGIN_NS(jsxer)
 
 #define JSXBIN_SIGNATURE_V10 "@JSXBIN@ES@1.0@"
 #define JSXBIN_SIGNATURE_V20 "@JSXBIN@ES@2.0@"

@@ -1,6 +1,6 @@
 #include "BinaryExpression.h"
 
-using namespace jsxbin::nodes;
+using namespace jsxer::nodes;
 
 string BinaryExpression::create_expr(const string &literal, AstNode *exprNode) {
     bool parenthesis = false;

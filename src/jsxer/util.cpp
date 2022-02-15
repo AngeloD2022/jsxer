@@ -3,7 +3,7 @@
 #include <cstring>
 #include <algorithm>
 
-BEGIN_NS(jsxbin) BEGIN_NS(utils)
+BEGIN_NS(jsxer) BEGIN_NS(utils)
 
 bool string_equal(const string& str1, const string& str2) {
     return strncmp(str1.c_str(), str2.c_str(), MIN(str1.length(), str2.length())) == 0;

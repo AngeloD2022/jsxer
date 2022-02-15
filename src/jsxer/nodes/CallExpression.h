@@ -4,9 +4,9 @@
 #include "../decoders.h"
 #include "ListExpression.h"
 
-using namespace jsxbin;
+using namespace jsxer;
 
-namespace jsxbin { namespace nodes {
+namespace jsxer { namespace nodes {
     class CallExpression : public AstNode {
     public:
         explicit CallExpression(Reader& reader) : AstNode(reader) {}

@@ -5,7 +5,7 @@
 
 using std::string;
 
-BEGIN_NS(jsxbin) BEGIN_NS(nodes)
+BEGIN_NS(jsxer) BEGIN_NS(nodes)
 
 class AstNode {
 public:

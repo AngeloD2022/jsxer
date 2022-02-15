@@ -5,9 +5,9 @@
 #include "../decoders.h"
 #include <vector>
 
-using namespace jsxbin;
+using namespace jsxer;
 
-namespace jsxbin { namespace nodes {
+namespace jsxer { namespace nodes {
     class ArrayExpression : public AstNode {
     public:
         explicit ArrayExpression(Reader& reader) : AstNode(reader) {}

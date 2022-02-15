@@ -5,9 +5,9 @@
 
 #include <cstdlib>
 
-using namespace jsxbin;
+using namespace jsxer;
 
-namespace jsxbin { namespace nodes {
+namespace jsxer { namespace nodes {
     class MemberExpression : public AstNode {
     public:
         explicit MemberExpression(Reader& reader) : AstNode(reader) {}
