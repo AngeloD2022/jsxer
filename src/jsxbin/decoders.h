@@ -19,7 +19,7 @@ using namespace jsxbin::nodes;
 
 BEGIN_NS(jsxbin) BEGIN_NS(decoders)
 struct Reference {
-    string id;
+    ByteString id;
     bool flag;
 };
 

@@ -120,7 +120,7 @@ string decoders::d_variant(Reader& reader) {
 }
 
 Reference decoders::d_ref(Reader& reader) {
-    string id = d_sid(reader);
+    auto id = reader.readSID();
     bool flag = false;
 
     if (reader.version() >= JsxbinVersion::v20) {

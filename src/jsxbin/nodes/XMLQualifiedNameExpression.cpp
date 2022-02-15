@@ -1,4 +1,5 @@
 #include "XMLQualifiedNameExpression.h"
+#include "../util.h"
 
 void XMLQualifiedNameExpression::parse() {
     namespaceObject = decoders::d_ref(reader);
@@ -9,6 +10,7 @@ void XMLQualifiedNameExpression::parse() {
 }
 
 string XMLQualifiedNameExpression::to_string() {
-    string ns = namespaceObject.flag ? '@' + namespaceObject.id : namespaceObject.id;
+    auto ns_id = utils::to_string(namespaceObject.id);
+    string ns = namespaceObject.flag ? '@' + ns_id : ns_id;
     return object->to_string() + '.' + ns + "::" + xmlId;
 }

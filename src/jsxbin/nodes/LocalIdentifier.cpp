@@ -1,4 +1,5 @@
 #include "LocalIdentifier.h"
+#include "../util.h"
 
 void LocalIdentifier::parse() {
     reference = decoders::d_ref(reader);
@@ -6,5 +7,5 @@ void LocalIdentifier::parse() {
 }
 
 string LocalIdentifier::to_string() {
-    return reference.id;
+    return utils::to_string(reference.id);
 }
