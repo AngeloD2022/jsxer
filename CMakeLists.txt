@@ -63,13 +63,13 @@ set(BIN_LIB_NAME "libjsxer")
 set(JSXER_CORE_TARGET jsxer-core)
 
 file(GLOB_RECURSE JSXER_CORE_HEADERS
-    ${JSXER_SOURCE_DIR}/jsxbin/*.h
-    ${JSXER_SOURCE_DIR}/jsxbin/*.hpp
+    ${JSXER_SOURCE_DIR}/jsxer/*.h
+    ${JSXER_SOURCE_DIR}/jsxer/*.hpp
 )
 
 file(GLOB_RECURSE JSXER_CORE_SOURCES
-    ${JSXER_SOURCE_DIR}/jsxbin/*.c
-    ${JSXER_SOURCE_DIR}/jsxbin/*.cpp
+    ${JSXER_SOURCE_DIR}/jsxer/*.c
+    ${JSXER_SOURCE_DIR}/jsxer/*.cpp
 )
 
 add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURCES})
@@ -148,3 +148,30 @@ set_target_properties(${JSXER_CLI_TARGET} PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
     LIBRARY_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
 )
+
+enable_testing()
+
+set(JSXER_TESTS_DIR ${CMAKE_CURRENT_LIST_DIR}/tests)
+
+set(JSXER_TESTS_SRC_DIR ${JSXER_TESTS_DIR}/src)
+set(JSXER_TESTS_DATA_DIR ${JSXER_TESTS_DIR}/data)
+
+add_executable(jsxer-test-array-expr ${JSXER_TESTS_SRC_DIR}/array-expr.cpp)
+target_link_libraries(jsxer-test-array-expr PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("ArrayExpression" jsxer-test-array-expr)
+
+add_executable(jsxer-test-obj-expr ${JSXER_TESTS_SRC_DIR}/obj-expr.cpp)
+target_link_libraries(jsxer-test-obj-expr PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("ObjectExpression" jsxer-test-obj-expr)
+
+add_executable(jsxer-test-member-expr ${JSXER_TESTS_SRC_DIR}/member-expr.cpp)
+target_link_libraries(jsxer-test-member-expr PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("MemberExpression" jsxer-test-member-expr)
+
+add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
+target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("ForStatement" jsxer-test-for-stmt)
