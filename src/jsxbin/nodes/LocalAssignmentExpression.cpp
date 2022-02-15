@@ -5,8 +5,8 @@ void LocalAssignmentExpression::parse() {
     int type = decoders::d_length(reader);
     expression = decoders::d_node(reader);
     literal = decoders::d_variant(reader);
-    shorthand = decoders::d_bool(reader);
-    declaration = decoders::d_bool(reader);
+    shorthand = reader.getBoolean();
+    declaration = reader.getBoolean();
 }
 
 string LocalAssignmentExpression::to_string() {

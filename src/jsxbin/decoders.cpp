@@ -6,7 +6,6 @@ using namespace jsxbin::decoders;
 
 enum LiteralType {
     NUMBER,
-    UTF8_STRING
 };
 
 string d_number_primitive(Reader& reader, int length, bool negative) {
@@ -120,42 +119,12 @@ string decoders::d_variant(Reader& reader) {
     return "";
 }
 
-bool decoders::d_bool(Reader& reader) {
-    return reader.getBoolean();
-}
-
-string decoders::d_string(Reader& reader) {
-    // Parse length of string...
-    string parsed_len = d_literal_primitive(reader, LiteralType::NUMBER);
-    int length = parsed_len.empty() ? 0 : stoi(parsed_len);
-
-    if (length == 0)
-        return "";
-
-    string buf;
-    for (int i = 0; i < length; ++i) {
-        string str_literal_char = d_literal_primitive(reader, LiteralType::UTF8_STRING);
-
-        // A quick fix for utf-16 chars
-        if (str_literal_char.length() > 1) {
-            if (is_integer(str_literal_char)) {
-                uint32_t charCode = std::stoi(str_literal_char);
-                str_literal_char = utils::string_literal_escape(charCode);
-            }
-        }
-
-        buf += str_literal_char;
-    }
-
-    return buf;
-}
-
 Reference decoders::d_ref(Reader& reader) {
     string id = d_sid(reader);
     bool flag = false;
 
     if (reader.version() >= JsxbinVersion::v20) {
-        flag = d_bool(reader);
+        flag = reader.getBoolean();
     }
 
     return Reference{ id, flag };

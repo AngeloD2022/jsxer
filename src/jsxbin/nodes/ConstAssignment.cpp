@@ -5,8 +5,8 @@ void ConstAssignment::parse() {
     length = decoders::d_length(reader);
     expression = decoders::d_node(reader);
     literal = decoders::d_variant(reader);
-    boolean_1 = decoders::d_bool(reader);
-    boolean_2 = decoders::d_bool(reader);
+    boolean_1 = reader.getBoolean();
+    boolean_2 = reader.getBoolean();
 }
 
 string ConstAssignment::to_string() {

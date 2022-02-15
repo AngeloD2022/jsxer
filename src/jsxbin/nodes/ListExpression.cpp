@@ -2,7 +2,7 @@
 
 void ListExpression::parse() {
     arguments = decoders::d_children(reader);
-    unkBool = decoders::d_bool(reader);
+    unkBool = reader.getBoolean();
 }
 
 string ListExpression::to_string() {

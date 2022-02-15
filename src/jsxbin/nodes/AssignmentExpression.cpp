@@ -4,7 +4,7 @@ void AssignmentExpression::parse() {
     variable = decoders::d_node(reader);
     expression = decoders::d_node(reader);
     literal = decoders::d_variant(reader);
-    shorthand = decoders::d_bool(reader);
+    shorthand = reader.getBoolean();
 }
 
 string AssignmentExpression::to_string() {

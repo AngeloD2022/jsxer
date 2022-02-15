@@ -3,7 +3,7 @@
 void CallExpression::parse() {
     function = decoders::d_node(reader);
     args = decoders::d_node(reader);
-    constructorCall = decoders::d_bool(reader);
+    constructorCall = reader.getBoolean();
 }
 
 string CallExpression::to_string() {

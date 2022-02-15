@@ -3,7 +3,7 @@
 void BreakStatement::parse() {
     labelInfo = decoders::d_line_info(reader);
     jmpLocation = decoders::d_sid(reader);
-    breakStatement = decoders::d_bool(reader);
+    breakStatement = reader.getBoolean();
 }
 
 string BreakStatement::to_string() {
