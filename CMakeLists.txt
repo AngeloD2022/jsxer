@@ -159,14 +159,19 @@ set(JSXER_TESTS_DATA_DIR ${JSXER_TESTS_DIR}/data)
 add_executable(jsxer-test-array-expr ${JSXER_TESTS_SRC_DIR}/array-expr.cpp)
 target_link_libraries(jsxer-test-array-expr PRIVATE ${JSXER_CORE_TARGET})
 
-add_test("Array-Expression" jsxer-test-array-expr)
+add_test("ArrayExpression" jsxer-test-array-expr)
 
 add_executable(jsxer-test-obj-expr ${JSXER_TESTS_SRC_DIR}/obj-expr.cpp)
 target_link_libraries(jsxer-test-obj-expr PRIVATE ${JSXER_CORE_TARGET})
 
-add_test("Object-Expression" jsxer-test-obj-expr)
+add_test("ObjectExpression" jsxer-test-obj-expr)
 
 add_executable(jsxer-test-member-expr ${JSXER_TESTS_SRC_DIR}/member-expr.cpp)
 target_link_libraries(jsxer-test-member-expr PRIVATE ${JSXER_CORE_TARGET})
 
-add_test("Member-Expression" jsxer-test-member-expr)
+add_test("MemberExpression" jsxer-test-member-expr)
+
+add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
+target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("ForStatement" jsxer-test-for-stmt)
