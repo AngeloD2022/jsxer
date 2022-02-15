@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <algorithm>
+#include <cmath>
 
 BEGIN_NS(jsxer) BEGIN_NS(utils)
 
