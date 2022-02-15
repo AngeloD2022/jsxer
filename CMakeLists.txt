@@ -148,3 +148,20 @@ set_target_properties(${JSXER_CLI_TARGET} PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
     LIBRARY_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
 )
+
+enable_testing()
+
+set(JSXER_TESTS_DIR ${CMAKE_CURRENT_LIST_DIR}/tests)
+
+set(JSXER_TESTS_SRC_DIR ${JSXER_TESTS_DIR}/src)
+set(JSXER_TESTS_DATA_DIR ${JSXER_TESTS_DIR}/data)
+
+add_executable(jsxer-test-array-expr ${JSXER_TESTS_SRC_DIR}/array-expr.cpp)
+target_link_libraries(jsxer-test-array-expr PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("Array-Expression" jsxer-test-array-expr)
+
+add_executable(jsxer-test-obj-expr ${JSXER_TESTS_SRC_DIR}/obj-expr.cpp)
+target_link_libraries(jsxer-test-obj-expr PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("Object-Expression" jsxer-test-obj-expr)
