@@ -202,7 +202,16 @@ ByteString Reader::getString() {
 
     for (int i = 0; i < length; ++i) {
         // Each char is a unicode (utf-16) codepoint.
-        result.push_back((uint16_t) getNumber());
+        auto ch = getNumber();
+
+        uint16_t u16Char;
+        if (utils::is_double_type(ch)) {
+            u16Char = (uint16_t) ch;
+        } else {
+            u16Char = ((uint16_t*) &ch)[0];
+        }
+
+        result.push_back(u16Char);
     }
 
     return result;
