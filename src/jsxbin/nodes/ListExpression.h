@@ -21,7 +21,7 @@ public:
     vector<AstNode*> arguments;
 
 private:
-    bool unkBool = false;
+    bool sequence_expr = false;
 };
 
 END_NS(nodes) END_NS(jsxbin)

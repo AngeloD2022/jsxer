@@ -20,7 +20,11 @@ string FunctionDeclaration::to_string() {
         result += parameter.first + (j + 1 == signature.parameters.size() ? "" : ", ");
         j++;
     }
-    result += ") {\n" +body + "\n}";
+    result += ") {\n" + body + "\n}";
+
+    if (!signature.name.length()) {
+        result = '(' + result + ')';
+    }
 
 
     return result;
