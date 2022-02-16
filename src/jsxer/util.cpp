@@ -150,84 +150,6 @@ vector<string> string_split(const string& str, const string& delimiter) {
     return res;
 }
 
-// TODO: complete this
-string double_to_string(double value) {
-    size_t val = (*(size_t*) &value);
-    string res;
-
-    if (value == 0.0) {
-        return "0";
-    }
-    else if (val == 0x7FEFFFFFFFFFFFFF) {
-        return "1.7976931348623157e+308";
-    }
-    else if (val == 0xFFEFFFFFFFFFFFFF) {
-        return "-1.7976931348623157e+308";
-    } else if (value >= 1.0e21 || floor(value) != value) {
-        if (value < 1.0e21 && value >= 0.000001) {
-            int v11 = (int) log10(value);
-            int v12 = 0;
-            if (v11 >= 0) {
-                v12 = v11;
-            }
-
-            int v13 = 15 - (value >= 1.0) - v12;
-
-            if (v13 > 15) {
-                v13 = 15;
-            }
-
-            char _buff[24] = {0};
-            snprintf(_buff, sizeof(_buff), "%20.*f", v13, value);
-            res.clear();
-            res.append(_buff);
-        } else {
-            char _buff[24] = {0};
-            snprintf(_buff, sizeof(_buff), "%20.*e", 15, value);
-            res.clear();
-            res.append(_buff);
-            std::transform(
-                res.begin(),
-                res.end(),
-                res.begin(),
-                std::tolower
-            );
-        }
-
-        vector<string> splits = string_split(res, "e");
-        char* sp0 = (char*) splits[0].c_str();
-        size_t l = splits.size();
-        while (l > 1) {
-            l--;
-            char v17 = *sp0--;
-            if ( v17 != '0' ) {
-                if ( v17 == '.' ) {
-                    l--;
-                }
-                splits[0].erase(-1, l + 1);
-                break;
-            }
-        }
-
-        if (res.length() > 1) {
-            int i = 0;
-
-            while (res[i] == '0') {
-                if ((++i + 1) >= res.length()) {
-                    goto LABEL_50;
-                }
-            }
-
-            res.erase(i, 1);
-        }
-
-LABEL_50:
-        return res;
-    }
-
-    return std::to_string(value);
-}
-
 int byte_length(uint64_t value) {
     int len = sizeof(uint64_t);
     auto* p = (uint8_t*) &value;
@@ -253,8 +175,36 @@ string trim(const string& s, char target = ' ') {
     return rtrim(ltrim(s, target), target);
 }
 
+template<typename T, typename F>
+T raw_cast(F value) {
+    return *((T*) &value);
+}
+
 uint64_t to_integer(double value) {
     return *(uint64_t*) &value;
+}
+
+#define NUMBER_SIGN_BIT_MASK (1LL << 63)
+
+bool is_number_negative(double value) {
+    // is the sign(63rd) bit is set
+    return raw_cast<uint64_t>(value) & NUMBER_SIGN_BIT_MASK;
+}
+
+uint64_t number_to_integer(double value) {
+    // ignore the sign(63rd) bit
+    return raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK;
+}
+
+double number_to_double(double value) {
+    // ignore the sign(63rd) bit
+    return raw_cast<double>(
+        raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK
+    );
+}
+
+bool is_number_integer(double value) {
+    return byte_length(number_to_integer(value)) < 8;
 }
 
 bool is_double_type(double value) {
@@ -267,20 +217,83 @@ string simplify_number_literal(const string& value) {
     // - stripping off excess suffix zeroes for doubles.
     // - stripping off excess prefix zeroes for integers.
     // - formatting scientific number literal (eg: 1e5, 1.72e+5, etc).
-    return value;
+
+    // 0001232.42903000
+    string result = value;
+
+    auto es = string_split(result, "e");
+    if (es.size() > 1) {
+        auto e2 = es[1];
+        if (e2.length()) {
+            char sign = e2[0];
+            for (char i : e2.substr(1)) {
+                if (i != '0') {
+                    goto skip_e_sfy;
+                }
+            }
+            result = es[0];
+        }
+    }
+
+skip_e_sfy:
+    auto ds = string_split(result, ".");
+
+    // trim prefix zeroes
+    auto d1 = ds[0];
+    for (int i = 0; i < d1.length(); ++i) {
+        if (d1[i] != '0') {
+            d1 = d1.substr(i, d1.length() - i);
+            break;
+        }
+    }
+    result = d1;
+
+    // trim suffix zeroes
+    if (ds.size() > 1) {
+        auto d2 = ds[1];
+
+        if (d2.length()) {
+            for (size_t i = d2.length() - 1; i >= 0; --i) {
+                if (d2[i] != '0') {
+                    d2 = d2.substr(0, i + 1);
+                    break;
+                }
+            }
+        }
+
+        if (d2.length()) {
+            result += '.' + d2;
+        }
+    }
+
+    return result;
 }
 
-// TODO: fix formatting and rounding as in es
+// FIXME: Floating point mismatch
 string number_to_string(double value) {
-    int fp_precision = 15;
-    const char* fmt;
+    char _buff[40] = {0};
+    int _fmt_len;
+    string result;
 
-    // integer -> 1-7 bytes in memory
-    // double  -> 8 bytes in memory
-    if (is_double_type(value)) {
-        uint64_t val_u64 = to_integer(value);
+    // integer        -> 1-7 bytes in memory
+    // double         -> 8 bytes in memory
+    // 63rd bit       -> sign
+    if (is_number_negative(value)) {
+        result += '-';
+    }
 
-        switch (val_u64) {
+    if (is_number_integer(value)) {
+        // Integer
+        _fmt_len = snprintf(
+            _buff, sizeof(_buff),
+            "%llu", number_to_integer(value)
+        );
+    } else {
+        // Double
+        int precision = 15;
+        const char* fmt;
+
+        switch (raw_cast<uint64_t>(value)) {
             case 0x7FEFFFFFFFFFFFFF: return "1.7976931348623157e+308";
             case 0xFFEFFFFFFFFFFFFF: return "-1.7976931348623157e+308";
             default: {
@@ -288,14 +301,16 @@ string number_to_string(double value) {
                     if ((value < 1.0e21) && (value >= 0.000001)) {
                         int l10 = (int) log10(value);
                         int fpn = (l10 >= 0) ? l10 : 0;
-                        fp_precision = 15 - (value >= 1.0) - fpn;
-                        if (fp_precision > 15) {
-                            fp_precision = 15;
+
+                        precision = 15 - (value >= 1.0) - fpn;
+                        if (precision > 15) {
+                            precision = 15;
                         }
 
                         fmt = "%20.*f";
                     } else {
                         fmt = "%20.*e";
+                        precision -= 1;
                     }
                 } else if (value >= 1000000000.0) {
                     fmt = "%*.0f";
@@ -304,14 +319,17 @@ string number_to_string(double value) {
                 }
             }
         }
-    }  else {
-        fmt = "%*ld";
+
+        _fmt_len = snprintf(
+            _buff, sizeof(_buff),
+            fmt, precision, number_to_double(value)
+        );
     }
 
-    char _num_str_buff[32] = {0};
-    snprintf(_num_str_buff, sizeof(_num_str_buff), fmt, fp_precision, value);
+    _buff[_fmt_len] = '\0';
+    result += trim(_buff, ' ');
 
-    return simplify_number_literal(trim(_num_str_buff, ' '));
+    return simplify_number_literal(result);
 }
 
 bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
