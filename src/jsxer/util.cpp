@@ -228,29 +228,29 @@ string simplify_number_literal(const string& value) {
             char sign = e2[0];
             for (char i : e2.substr(1)) {
                 if (i != '0') {
-                    goto skip_e_sft;
+                    goto skip_e_sfy;
                 }
             }
             result = es[0];
         }
     }
 
-    skip_e_sft:
+skip_e_sfy:
+    auto ds = string_split(result, ".");
 
     // trim prefix zeroes
-    for (int i = 0; i < result.length(); ++i) {
-        if (result[i] != '0') {
-            result = result.substr(i, result.length() - i);
+    auto d1 = ds[0];
+    for (int i = 0; i < d1.length(); ++i) {
+        if (d1[i] != '0') {
+            d1 = d1.substr(i, d1.length() - i);
             break;
         }
     }
+    result = d1;
 
     // trim suffix zeroes
-    auto ds = string_split(result, ".");
     if (ds.size() > 1) {
-        auto d1 = ds[0], d2 = ds[1];
-
-        result = d1;
+        auto d2 = ds[1];
 
         if (d2.length()) {
             for (size_t i = d2.length() - 1; i >= 0; --i) {
