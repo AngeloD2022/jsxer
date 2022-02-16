@@ -175,9 +175,9 @@ string trim(const string& s, char target = ' ') {
     return rtrim(ltrim(s, target), target);
 }
 
-template<typename T, typename U>
-T raw_cast(U value) {
-    return (*(T*) &value);
+template<typename T, typename F>
+T raw_cast(F value) {
+    return *((T*) &value);
 }
 
 uint64_t to_integer(double value) {
@@ -217,11 +217,62 @@ string simplify_number_literal(const string& value) {
     // - stripping off excess suffix zeroes for doubles.
     // - stripping off excess prefix zeroes for integers.
     // - formatting scientific number literal (eg: 1e5, 1.72e+5, etc).
-    return value;
+
+    // 0001232.42903000
+    string result = value;
+
+    auto es = string_split(result, "e");
+    if (es.size() > 1) {
+        auto e2 = es[1];
+        if (e2.length()) {
+            char sign = e2[0];
+            for (char i : e2.substr(1)) {
+                if (i != '0') {
+                    goto skip_e_sft;
+                }
+            }
+            result = es[0];
+        }
+    }
+
+    skip_e_sft:
+
+    // trim prefix zeroes
+    for (int i = 0; i < result.length(); ++i) {
+        if (result[i] != '0') {
+            result = result.substr(i, result.length() - i);
+            break;
+        }
+    }
+
+    // trim suffix zeroes
+    auto ds = string_split(result, ".");
+    if (ds.size() > 1) {
+        auto d1 = ds[0], d2 = ds[1];
+
+        result = d1;
+
+        if (d2.length()) {
+            for (size_t i = d2.length() - 1; i >= 0; --i) {
+                if (d2[i] != '0') {
+                    d2 = d2.substr(0, i + 1);
+                    break;
+                }
+            }
+        }
+
+        if (d2.length()) {
+            result += '.' + d2;
+        }
+    }
+
+    return result;
 }
 
-// TODO: fix formatting and rounding as in es
+// FIXME: Floating point mismatch
 string number_to_string(double value) {
+    char _buff[40] = {0};
+    int _fmt_len;
     string result;
 
     // integer        -> 1-7 bytes in memory
@@ -233,21 +284,16 @@ string number_to_string(double value) {
 
     if (is_number_integer(value)) {
         // Integer
-        char _buff[32] = {0};
-        int _fmt_len = snprintf(
-                _buff, sizeof(_buff),
-                "%llu", number_to_integer(value)
+        _fmt_len = snprintf(
+            _buff, sizeof(_buff),
+            "%llu", number_to_integer(value)
         );
-        _buff[_fmt_len] = '\0';
-        result += _buff;
     } else {
         // Double
-        int fp_precision = 15;
+        int precision = 15;
         const char* fmt;
 
-        uint64_t val_u64 = to_integer(value);
-
-        switch (val_u64) {
+        switch (raw_cast<uint64_t>(value)) {
             case 0x7FEFFFFFFFFFFFFF: return "1.7976931348623157e+308";
             case 0xFFEFFFFFFFFFFFFF: return "-1.7976931348623157e+308";
             default: {
@@ -255,14 +301,16 @@ string number_to_string(double value) {
                     if ((value < 1.0e21) && (value >= 0.000001)) {
                         int l10 = (int) log10(value);
                         int fpn = (l10 >= 0) ? l10 : 0;
-                        fp_precision = 15 - (value >= 1.0) - fpn;
-                        if (fp_precision > 15) {
-                            fp_precision = 15;
+
+                        precision = 15 - (value >= 1.0) - fpn;
+                        if (precision > 15) {
+                            precision = 15;
                         }
 
                         fmt = "%20.*f";
                     } else {
                         fmt = "%20.*e";
+                        precision -= 1;
                     }
                 } else if (value >= 1000000000.0) {
                     fmt = "%*.0f";
@@ -272,14 +320,14 @@ string number_to_string(double value) {
             }
         }
 
-        char _buff[40] = {0};
-        int _fmt_len = snprintf(
+        _fmt_len = snprintf(
             _buff, sizeof(_buff),
-            fmt, fp_precision, number_to_double(value)
+            fmt, precision, number_to_double(value)
         );
-        _buff[_fmt_len] = '\0';
-        result += trim(_buff, ' ');
     }
+
+    _buff[_fmt_len] = '\0';
+    result += trim(_buff, ' ');
 
     return simplify_number_literal(result);
 }
