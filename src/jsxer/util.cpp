@@ -253,8 +253,36 @@ string trim(const string& s, char target = ' ') {
     return rtrim(ltrim(s, target), target);
 }
 
+template<typename T, typename U>
+T raw_cast(U value) {
+    return (*(T*) &value);
+}
+
 uint64_t to_integer(double value) {
     return *(uint64_t*) &value;
+}
+
+#define NUMBER_SIGN_BIT_MASK (1LL << 63)
+
+bool is_number_negative(double value) {
+    // is the sign(63rd) bit is set
+    return raw_cast<uint64_t>(value) & NUMBER_SIGN_BIT_MASK;
+}
+
+uint64_t number_to_integer(double value) {
+    // ignore the sign(63rd) bit
+    return raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK;
+}
+
+double number_to_double(double value) {
+    // ignore the sign(63rd) bit
+    return raw_cast<double>(
+        raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK
+    );
+}
+
+bool is_number_integer(double value) {
+    return byte_length(number_to_integer(value)) < 8;
 }
 
 bool is_double_type(double value) {
@@ -272,12 +300,29 @@ string simplify_number_literal(const string& value) {
 
 // TODO: fix formatting and rounding as in es
 string number_to_string(double value) {
-    int fp_precision = 15;
-    const char* fmt;
+    string result;
 
-    // integer -> 1-7 bytes in memory
-    // double  -> 8 bytes in memory
-    if (is_double_type(value)) {
+    // integer        -> 1-7 bytes in memory
+    // double         -> 8 bytes in memory
+    // 63rd bit       -> sign
+    if (is_number_negative(value)) {
+        result += '-';
+    }
+
+    if (is_number_integer(value)) {
+        // Integer
+        char _buff[32] = {0};
+        int _fmt_len = snprintf(
+                _buff, sizeof(_buff),
+                "%llu", number_to_integer(value)
+        );
+        _buff[_fmt_len] = '\0';
+        result += _buff;
+    } else {
+        // Double
+        int fp_precision = 15;
+        const char* fmt;
+
         uint64_t val_u64 = to_integer(value);
 
         switch (val_u64) {
@@ -304,14 +349,17 @@ string number_to_string(double value) {
                 }
             }
         }
-    }  else {
-        fmt = "%*ld";
+
+        char _buff[40] = {0};
+        int _fmt_len = snprintf(
+            _buff, sizeof(_buff),
+            fmt, fp_precision, number_to_double(value)
+        );
+        _buff[_fmt_len] = '\0';
+        result += trim(_buff, ' ');
     }
 
-    char _num_str_buff[32] = {0};
-    snprintf(_num_str_buff, sizeof(_num_str_buff), fmt, fp_precision, value);
-
-    return simplify_number_literal(trim(_num_str_buff, ' '));
+    return simplify_number_literal(result);
 }
 
 bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
