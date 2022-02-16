@@ -1,7 +1,7 @@
 #include "LogicalExpression.h"
 
 string get_expr(AstNode *node, const string& literal){
-    return node == nullptr ? literal : node->to_string();
+    return '(' + (node == nullptr ? literal : node->to_string()) + ')';
 }
 
 void LogicalExpression::parse() {
