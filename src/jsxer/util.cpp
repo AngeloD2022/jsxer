@@ -270,23 +270,25 @@ string simplify_number_literal(const string& value) {
 
     // 0001232.42903000
     string result = value;
-
-    if (result[0] == '0') {
-        for (int i = 0; i < result.length(); ++i) {
-            if (result[i] != '0') {
-                result = result.substr(i, result.length() - i);
-                break;
+    
+    if (result.length()) {
+        if (result[0] == '0') {
+            for (int i = 0; i < result.length(); ++i) {
+                if (result[i] != '0') {
+                    result = result.substr(i, result.length() - i);
+                    break;
+                }
             }
         }
-    }
 
-    // check if string represents double
-    if (result.find('.') != string::npos && result[result.length() - 1] == '0') {
-        // only circumstance where 0 at the end is meaningless.
-        for (int i = (int)result.length()-1; i >= 0; --i) {
-            if (result[i] != '0'){
-                result = result.substr(0, i + 1);
-                break;
+        // check if string represents double
+        if (result.find('.') != string::npos && result[result.length() - 1] == '0') {
+            // only circumstance where 0 at the end is meaningless.
+            for (int i = (int)result.length()-1; i >= 0; --i) {
+                if (result[i] != '0') {
+                    result = result.substr(0, i + 1);
+                    break;
+                }
             }
         }
     }
