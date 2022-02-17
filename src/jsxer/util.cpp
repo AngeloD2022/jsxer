@@ -175,50 +175,34 @@ string trim(const string& s, char target = ' ') {
     return rtrim(ltrim(s, target), target);
 }
 
-template<typename T, typename F>
-T raw_cast(F value) {
-    return *((T*) &value);
-}
-
-uint64_t to_integer(double value) {
-    return *(uint64_t*) &value;
-}
-
-#define NUMBER_SIGN_BIT_MASK (1LL << 63)
+#define NUMBER_SIGN_BIT_MASK (1LL << 63) // 0x8000_0000_0000_0000
 
 bool is_number_negative(double value) {
     // is the sign(63rd) bit is set
     return raw_cast<uint64_t>(value) & NUMBER_SIGN_BIT_MASK;
 }
 
+// Returns positive integer
 uint64_t number_to_integer(double value) {
     // ignore the sign(63rd) bit
     return raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK;
 }
 
+// Returns positive double
 double number_to_double(double value) {
     // ignore the sign(63rd) bit
-    return raw_cast<double>(
-        raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK
-    );
+    return raw_cast<double>(number_to_integer(value));
 }
 
 bool is_number_integer(double value) {
     return byte_length(number_to_integer(value)) < 8;
 }
 
-bool is_double_type(double value) {
-    return byte_length(*(uint64_t*) &value) == 8;
+bool is_number_double(double value) {
+    return !is_number_integer(value);
 }
 
 string simplify_number_literal(const string& value) {
-    // TODO: impl
-    // stuff like
-    // - stripping off excess suffix zeroes for doubles.
-    // - stripping off excess prefix zeroes for integers.
-    // - formatting scientific number literal (eg: 1e5, 1.72e+5, etc).
-
-    // 0001232.42903000
     string result = value;
 
     auto es = string_split(result, "e");

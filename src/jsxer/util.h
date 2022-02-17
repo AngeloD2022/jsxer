@@ -27,11 +27,27 @@ string to_string_literal(const string& value, bool capital = false);
 
 string to_string(const ByteString& value);
 
+template<typename T, typename F>
+T raw_cast(F value) {
+    return *((T*) &value);
+}
+
+// returns an int repr of the number
+// floating points are not expected here
+template<typename T, typename F>
+T as_int(F value) {
+    if (utils::is_number_double(value)) {
+        return static_cast<T>(value);
+    } else {
+        return raw_cast<T>(value);
+    }
+}
+
 int byte_length(uint64_t value);
 
-bool is_double_type(double value);
+bool is_number_integer(double value);
 
-uint64_t to_integer(double value);
+bool is_number_double(double value);
 
 string number_to_string(double value);
 

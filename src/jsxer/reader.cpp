@@ -155,7 +155,7 @@ Byte Reader::getByte() {
     return m - 0x41;
 
 error8:
-    _error = ParseError::Error8;
+    _error = ParseError::DecodeError;
     printf("[!]: %s\n", "Parse Error at getByte()");
     return 0;
 }
@@ -191,27 +191,12 @@ Number Reader::getNumber() {
 ByteString Reader::getString() {
     ByteString result;
 
-    int length;
-    double len = getNumber();
-
-    if (utils::is_double_type(len)) {
-        length = (int) len;
-    } else {
-        length = ((int *) &len)[0];
-    }
+    auto length = utils::as_int<size_t>(getNumber());
 
     for (int i = 0; i < length; ++i) {
         // Each char is a unicode (utf-16) codepoint.
-        auto ch = getNumber();
-
-        uint16_t u16Char;
-        if (utils::is_double_type(ch)) {
-            u16Char = (uint16_t) ch;
-        } else {
-            u16Char = ((uint16_t*) &ch)[0];
-        }
-
-        result.push_back(u16Char);
+        auto u16_ch = utils::as_int<uint16_t>(getNumber());
+        result.push_back(u16_ch);
     }
 
     return result;
@@ -225,7 +210,7 @@ bool Reader::getBoolean() {
     } else if (t == 'f') {
         return false;
     } else {
-        _error = ParseError::Error8;
+        _error = ParseError::DecodeError;
         printf("[!]: %s\n", "Parse Error at getBoolean()");
     }
 
@@ -292,7 +277,7 @@ Variant* Reader::getVariant() {
             break;
 
         default:
-            _error = ParseError::Error8;
+            _error = ParseError::DecodeError;
             printf("[!]: %s\n", "Parse Error at getVariant()");
             break;
     }
