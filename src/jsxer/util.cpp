@@ -179,19 +179,19 @@ string trim(const string& s, char target = ' ') {
 
 bool is_number_negative(double value) {
     // is the sign(63rd) bit is set
-    return raw_cast<uint64_t>(value) & NUMBER_SIGN_BIT_MASK;
+    return number_raw_cast<uint64_t>(value) & NUMBER_SIGN_BIT_MASK;
 }
 
 // Returns positive integer
 uint64_t number_to_integer(double value) {
     // ignore the sign(63rd) bit
-    return raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK;
+    return number_raw_cast<uint64_t>(value) & ~NUMBER_SIGN_BIT_MASK;
 }
 
 // Returns positive double
 double number_to_double(double value) {
     // ignore the sign(63rd) bit
-    return raw_cast<double>(number_to_integer(value));
+    return number_raw_cast<double>(number_to_integer(value));
 }
 
 bool is_number_integer(double value) {
@@ -277,7 +277,7 @@ string number_to_string(double value) {
         int precision = 15;
         const char* fmt;
 
-        switch (raw_cast<uint64_t>(value)) {
+        switch (number_raw_cast<uint64_t>(value)) {
             case 0x7FEFFFFFFFFFFFFF: return "1.7976931348623157e+308";
             case 0xFFEFFFFFFFFFFFFF: return "-1.7976931348623157e+308";
             default: {

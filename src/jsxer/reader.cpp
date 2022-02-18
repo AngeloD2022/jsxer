@@ -191,11 +191,11 @@ Number Reader::getNumber() {
 ByteString Reader::getString() {
     ByteString result;
 
-    auto length = utils::as_int<size_t>(getNumber());
+    auto length = utils::number_as_int<size_t>(getNumber());
 
     for (int i = 0; i < length; ++i) {
         // Each char is a unicode (utf-16) codepoint.
-        auto u16_ch = utils::as_int<uint16_t>(getNumber());
+        auto u16_ch = utils::number_as_int<uint16_t>(getNumber());
         result.push_back(u16_ch);
     }
 
