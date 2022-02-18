@@ -28,18 +28,18 @@ string to_string_literal(const string& value, bool capital = false);
 string to_string(const ByteString& value);
 
 template<typename T, typename F>
-T raw_cast(F value) {
+T number_raw_cast(F value) {
     return *((T*) &value);
 }
 
 // returns an int repr of the number
-// floating points are not expected here
+// floating points are not expected here (not 2.1436 but 2.0)
 template<typename T, typename F>
-T as_int(F value) {
+T number_as_int(F value) {
     if (utils::is_number_double(value)) {
         return static_cast<T>(value);
     } else {
-        return raw_cast<T>(value);
+        return number_raw_cast<T>(value);
     }
 }
 

@@ -3,8 +3,8 @@
 #include "jsxer.h"
 #include "common.h"
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
 using std::string;
