@@ -55,8 +55,8 @@ enum class NodeType : uint8_t {
     EmptyExpression = 'n',
 
     XMLConstantExpression = 'o',
-    XMLQualifiedNameExpression = 'q',
-    XMLDescendantsExpression = 'p',
+    XMLQualifiedNameExpression = 'p',
+    XMLDescendantsExpression = 'q',
     XMLPredicateExpression = 'r',
     XMLUnaryRefExpression = 's',
 };
