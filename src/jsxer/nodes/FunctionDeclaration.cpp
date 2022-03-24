@@ -9,7 +9,7 @@ void FunctionDeclaration::parse() {
 string FunctionDeclaration::to_string() {
     string body = bodyInfo.create_body();
 
-    if (signature.func_type == 1) {
+    if (signature.func_type == decoders::FunctionType::SCRIPT_CLOSURE) {
         // if it is a "script closure"...
         if (!signature.name.empty()) {
             if (decoders::valid_id(signature.name)) {
