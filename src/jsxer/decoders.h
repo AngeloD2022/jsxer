@@ -44,12 +44,17 @@ struct LineInfo {
     }
 };
 
+enum FunctionType {
+    NORMAL = 0,
+    SCRIPT_CLOSURE = 1
+};
+
 struct FunctionSignature {
     int flags;
     string name;
     int num_arguments;
     int num_local_const;
-    int func_type;
+    FunctionType func_type;
     map<string, int> parameters;
     map<string, int> local_vars;
 };
