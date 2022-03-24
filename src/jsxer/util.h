@@ -27,6 +27,19 @@ string to_string_literal(const string& value, bool capital = false);
 
 string to_string(const ByteString& value);
 
+
+int byte_length(uint64_t value);
+
+bool is_number_integer(double value);
+
+bool is_number_double(double value);
+
+string number_to_string(double value);
+
+bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size);
+
+void zero_mem(const void* buff, size_t size);
+
 template<typename T, typename F>
 T number_raw_cast(F value) {
     return *((T*) &value);
@@ -42,17 +55,5 @@ T number_as_int(F value) {
         return number_raw_cast<T>(value);
     }
 }
-
-int byte_length(uint64_t value);
-
-bool is_number_integer(double value);
-
-bool is_number_double(double value);
-
-string number_to_string(double value);
-
-bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size);
-
-void zero_mem(const void* buff, size_t size);
 
 END_NS(utils) END_NS(jsxbin)
