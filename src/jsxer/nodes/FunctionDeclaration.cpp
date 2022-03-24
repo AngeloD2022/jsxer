@@ -7,14 +7,23 @@ void FunctionDeclaration::parse() {
 }
 
 string FunctionDeclaration::to_string() {
-    string result = "function ";
     string body = bodyInfo.create_body();
-    if (signature.header_5 == 1) {
-        // if it is a "wrapper function"...
+
+    if (signature.func_type == 1) {
+        // if it is a "script closure"...
+        if (!signature.name.empty()) {
+            if (decoders::valid_id(signature.name)) {
+                body = "#script " + signature.name + "\n\n" + body;
+            } else {
+                body = "#script \"" + signature.name + "\"\n\n" + body;
+            }
+        }
+
         return body;
     }
 
-    result += signature.name + '(';
+    string result = "function " + signature.name + '(';
+
     int j = 0;
     for (auto & parameter : signature.parameters) {
         result += parameter.first + (j + 1 == signature.parameters.size() ? "" : ", ");
