@@ -171,25 +171,40 @@ LineInfo decoders::d_line_info(Reader& reader) {
 FunctionSignature decoders::d_fn_sig(Reader& reader) {
     FunctionSignature result;
 
-    int length = d_length(reader);
-    if (length > 0) {
-        for (int i = 0; i < length; ++i) {
-            string parameterName = d_sid(reader);
-            int paramLength = d_length(reader);
+    // identifiers/variables in func scope
+    int num_idents = d_length(reader);
+    for (int i = 0; i < num_idents; ++i) {
+        string id = d_sid(reader);
+        int id_seq = d_length(reader);
 
-            // separate local variables from parameter list...
-            if (paramLength > 0x1ffffc70 && paramLength < 0x202fbf00)
-                result.parameters[parameterName] = paramLength;
-            else
-                result.local_vars[parameterName] = paramLength;
-        }
+        // separate local variables from Arguments
+        if (id_seq > 0x1ffffc70 && id_seq < 0x202fbf00)
+            // 0x20000000 ... | sort it to get the sequence
+            result.parameters[id] = id_seq;
+        else
+            // 0x40000000 ...
+            result.local_vars[id] = id_seq;
     }
 
-    result.header_1 = d_length(reader);
-    result.type = d_length(reader);
-    result.header_3 = d_length(reader);
+    // num of normal func args
+    result.num_arguments = d_length(reader);
+
+    // 0 -> normal func or Script Closure with no func local vars
+    // 2 -> normal func with func local vars
+    // 3 -> Script Closure with func local vars
+    result.flags = d_length(reader);
+
+    // num of func local const variables
+    result.num_local_const = d_length(reader);
+
+    // name of the function or closure
+    // if type == 3,
+    //      Script name => #script name
     result.name = d_sid(reader);
-    result.header_5 = d_literal_num(reader);
+
+    // 0 - normal func
+    // 1 - Script Closure
+    result.func_type = d_literal_num(reader);
 
     return result;
 }

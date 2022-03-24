@@ -20,12 +20,13 @@ string StatementList::to_string() {
 
     for (int i = 0; i < statements.size(); ++i) {
         string expression = statements[i]->to_string();
-//        if(istype(statements[i], "ExprNode"))
+
+//        if (statements[i]->type() == NodeType::ExpressionStatement)
 //            expression += ';';
 
         result += expression;
 
-        if (i+1 < statements.size())
+        if ((i + 1) < statements.size())
             result += '\n';
     }
 
