@@ -204,7 +204,7 @@ FunctionSignature decoders::d_fn_sig(Reader& reader) {
 
     // 0 - normal func
     // 1 - Script Closure
-    result.func_type = d_literal_num(reader);
+    result.func_type = (FunctionType) d_literal_num(reader);
 
     return result;
 }
