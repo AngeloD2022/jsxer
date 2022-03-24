@@ -3,8 +3,8 @@
 #include "jsxer.h"
 #include "common.h"
 
-#include <string>
 #include <map>
+#include <string>
 #include <vector>
 
 using std::string;
@@ -30,9 +30,10 @@ BEGIN_NS(jsxer)
 
 enum class ParseError : int {
     None = 0,
+
     InvalidVersion,
-    ReachedEnd = 51,
-    Error8 = 8,
+    ReachedEnd,
+    DecodeError,
 };
 
 enum class VariantType : int {

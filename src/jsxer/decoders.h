@@ -45,11 +45,11 @@ struct LineInfo {
 };
 
 struct FunctionSignature {
-    int type;
+    int flags;
     string name;
-    int header_1;
-    int header_3;
-    int header_5;
+    int num_arguments;
+    int num_local_const;
+    int func_type;
     map<string, int> parameters;
     map<string, int> local_vars;
 };
