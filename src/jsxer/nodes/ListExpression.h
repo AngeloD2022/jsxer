@@ -16,11 +16,14 @@ public:
 
     void parse() override;
 
+    void set_for_loop(bool x);
+
     string to_string() override;
 
     vector<AstNode*> arguments;
 
 private:
+    bool for_loop = false;
     bool sequence_expr = false;
 };
 
