@@ -5,7 +5,7 @@ void ForStatement::parse() {
     bodyInfo = decoders::d_line_info(reader);
     initial = decoders::d_node(reader);
 
-    if (initial->type() == NodeType::ListExpression) {
+    if (initial && initial->type() == NodeType::ListExpression) {
         ((ListExpression*) initial)->set_for_loop(true);
     }
 
