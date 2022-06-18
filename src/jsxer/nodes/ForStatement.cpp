@@ -1,8 +1,14 @@
 #include "ForStatement.h"
+#include "ListExpression.h"
 
 void ForStatement::parse() {
     bodyInfo = decoders::d_line_info(reader);
     initial = decoders::d_node(reader);
+
+    if (initial->type() == NodeType::ListExpression) {
+        ((ListExpression*) initial)->set_for_loop(true);
+    }
+
     test = decoders::d_node(reader);
     update = decoders::d_node(reader);
 }
