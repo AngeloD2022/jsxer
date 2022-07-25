@@ -14,9 +14,10 @@ Open the Terminal app to run the following commands. If you are unfamiliar with 
 brew install cmake
 ```
 
-*Create a build folder:*
+*Create a build folder in the project root directory:*
 
 ```bash
+cd jsxbin_decompiler
 mkdir build
 cd build
 ```
