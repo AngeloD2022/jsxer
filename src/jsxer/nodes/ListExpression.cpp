@@ -12,7 +12,7 @@ void ListExpression::set_for_loop(bool x) {
 string ListExpression::to_string() {
     string result;
 
-    string delimiter = for_loop? "; " : ", ";
+    string delimiter = ", ";
 
     // TODO: fix declarations
     for (int i = 0; i < arguments.size(); ++i) {
