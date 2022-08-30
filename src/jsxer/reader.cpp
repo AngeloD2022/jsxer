@@ -312,6 +312,16 @@ ByteString Reader::getSymbol(Number id) {
 }
 
 void Reader::addSymbol(Number id, const ByteString& symbol) {
+
+    // test for Jsxblind variable name obfuscation...
+    for (uint16_t character : symbol) {
+        if (character > 0x7a || character < 0x41) {
+            string deobfuscated = "symbol_" + std::to_string(id);
+            _symbols[id] = utils::to_byte_string(deobfuscated);
+            return;
+        }
+    }
+
     _symbols[id] = symbol;
 }
 
