@@ -217,6 +217,51 @@ bool Reader::getBoolean() {
     return false;
 }
 
+/// Determines if renaming is appropriate with symbols in JSXBIN files that are obfuscated with Jsxblind...
+/// \param symbol the symbol name
+/// \return
+bool should_replace_name(const ByteString &symbol){
+
+    // if a symbol name is empty, return false.
+    if (symbol.empty()) {
+        return false;
+    }
+
+    static const std::vector<string> OPERATORS {
+            "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
+            "|=", "||=", "&&=", "&=", "^=", "??=",
+            "|", "||", "&", "&&", "^", "??", "!", "?", ":",
+            "instanceof", "typeof",
+            "+", "+=",
+            "-", "-=",
+            "*", "*=",
+            "%", "%=",
+            "/", "/=",
+            "**", "**=",
+            "<<", "<<=",
+            ">>", ">>=",
+            ">>>", ">>>="
+    };
+
+    // if a symbol name is equivalent to an operator in ECMAScript 3, return false.
+    string symstr = utils::to_string(symbol);
+    for (const auto &op: OPERATORS){
+        if (symstr == op){
+            return false;
+        }
+    }
+
+    // check for characters outside the acceptable range for variable names...
+    for (uint16_t character : symbol) {
+        if (character > 0x7a || character < 0x41) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 ByteString Reader::readSID() {
     ByteString symbol;
     Number id;
@@ -224,6 +269,13 @@ ByteString Reader::readSID() {
     if (get() == 'z') {
         symbol = getString();
         id = getNumber();
+
+        // if a symbol name is obfuscated, rename it to something more sensible...
+        if (should_replace_name(symbol)) {
+            string deobfuscated = "symbol_" + std::to_string((int)id);
+            symbol = utils::to_byte_string(deobfuscated);
+        }
+
         addSymbol(id, symbol);
 
 //        if (!utils::is_double_type(id)) {
@@ -311,27 +363,7 @@ ByteString Reader::getSymbol(Number id) {
     return _symbols[id];
 }
 
-
-bool is_symbol_obfuscated(const ByteString &symbol){
-
-    // test for Jsxblind variable name obfuscation...
-    for (uint16_t character : symbol) {
-        if (character > 0x7a || character < 0x41) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void Reader::addSymbol(Number id, const ByteString& symbol) {
-
-    if (is_symbol_obfuscated(symbol)){
-        string deobfuscated = "symbol_" + std::to_string((int)id);
-        _symbols[id] = utils::to_byte_string(deobfuscated);
-        return;
-    }
-
     _symbols[id] = symbol;
 }
 
