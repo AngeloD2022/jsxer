@@ -1,7 +1,7 @@
 import os
 import platform
 from ctypes import CDLL, POINTER, \
-    c_int, c_char_p, c_size_t, byref, create_string_buffer
+    c_int, c_char_p, c_size_t, c_bool, byref, create_string_buffer
 
 
 pf = platform.system()
@@ -30,11 +30,12 @@ _decompile.argtypes = [
     c_size_t,
     c_char_p,
     POINTER(c_size_t),
+    c_bool
 ]
 _decompile.restype = c_int
 
 
-def decompile(compiled: str):
+def decompile(compiled: str, jsxblind_deobfuscate=False):
     out_size = c_size_t(0)
 
     # determine the output buffer size
@@ -43,6 +44,7 @@ def decompile(compiled: str):
         len(compiled),
         c_char_p(0),
         byref(out_size),
+        c_bool(jsxblind_deobfuscate)
     )
 
     if ec == 0:
@@ -56,6 +58,7 @@ def decompile(compiled: str):
                 len(compiled),
                 out_str,
                 byref(out_size),
+                c_bool(jsxblind_deobfuscate)
             )
 
             if ec != 0:
