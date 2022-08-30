@@ -1,9 +1,9 @@
 # ExtendScript Decompiler
-A faster decompiler for Adobe's ExtendScript (Legacy) binary format (*.jsxbin).
+A faster decompiler for Adobe's (Legacy) ExtendScript binary format (*.jsxbin).
 
 ## Features
 * [x] Lifts JSXBIN back to JavaScript code.
-* [x] Jsxblind deobfuscation (Experimental).
+* [x] Jsxblind deobfuscation (experimental).
 * [x] Python bindings.
 * [x] Dynamic library.
 * [x] **Fast as hell.**
@@ -16,23 +16,13 @@ ExtendScript is a scripting language and an associated toolkit developed by Adob
 Open the Terminal app to run the following commands. If you are unfamiliar with Terminal, you can find it in /Applications/Utilities/Terminal.app.
 
 *Install CMake:*
-
 ```bash
 brew install cmake
 ```
 
-*Create a build folder in the project root directory:*
-
-```bash
-cd jsxbin_decompiler
-mkdir build
-cd build
-```
-
 *Configure and build the project:*
-
 ```bash
-cmake ..
+cmake .
 cmake --build . --config release 
 ```
 
