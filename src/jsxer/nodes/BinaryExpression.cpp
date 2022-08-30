@@ -35,21 +35,6 @@ void BinaryExpression::parse() {
 
     string leftExp = create_expr(literalLeft, left);
     string rightExp = create_expr(literalRight, right);
-//    if (right != nullptr){
-//        string type = "";
-//        switch (right->type()) {
-//            case NodeType::LocalAssignmentExpression:
-//                type = "LAE";
-//                break;
-//            case NodeType::AssignmentExpression:
-//                type = "AE";
-//                break;
-//            case NodeType::BinaryExpression:
-//                type = "BE";
-//        }
-//        string x = op_name + ", (" + type + ") " + rightExp + "\n";
-//        fprintf(stdout, "%s", x.c_str());
-//    }
 
     if ((!leftExp.empty() && rightExp.empty()) || (leftExp.empty() && !rightExp.empty())) {
         op = leftExp + rightExp;
