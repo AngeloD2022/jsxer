@@ -6,7 +6,7 @@ string BinaryExpression::create_expr(const string &literal, AstNode *exprNode) {
     bool parenthesis = false;
     string expression;
 
-    if (exprNode != nullptr && (exprNode->type() == NodeType::BinaryExpression)) {
+    if (exprNode != nullptr && exprNode->type() == NodeType::BinaryExpression) {
         auto* binExpr = (BinaryExpression *) exprNode;
         expression = binExpr->get_op();
 
@@ -16,6 +16,9 @@ string BinaryExpression::create_expr(const string &literal, AstNode *exprNode) {
                                     && strcmp(op_name.c_str(), "+") == 0);
 
         parenthesis = !associative;
+    }else if (exprNode != nullptr && (exprNode->type() == NodeType::LocalAssignmentExpression || exprNode->type() == NodeType::AssignmentExpression)){
+        parenthesis = true;
+        expression = exprNode->to_string();
     } else {
         expression = exprNode == nullptr ? literal : exprNode->to_string();
     }
@@ -32,6 +35,21 @@ void BinaryExpression::parse() {
 
     string leftExp = create_expr(literalLeft, left);
     string rightExp = create_expr(literalRight, right);
+//    if (right != nullptr){
+//        string type = "";
+//        switch (right->type()) {
+//            case NodeType::LocalAssignmentExpression:
+//                type = "LAE";
+//                break;
+//            case NodeType::AssignmentExpression:
+//                type = "AE";
+//                break;
+//            case NodeType::BinaryExpression:
+//                type = "BE";
+//        }
+//        string x = op_name + ", (" + type + ") " + rightExp + "\n";
+//        fprintf(stdout, "%s", x.c_str());
+//    }
 
     if ((!leftExp.empty() && rightExp.empty()) || (leftExp.empty() && !rightExp.empty())) {
         op = leftExp + rightExp;
