@@ -135,6 +135,16 @@ string to_string(const ByteString& value) {
     return res;
 }
 
+ByteString to_byte_string(const string& value) {
+    ByteString res;
+
+    for (auto &c: value) {
+        res.push_back((uint16_t) c);
+    }
+
+    return res;
+}
+
 vector<string> string_split(const string& str, const string& delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     string token;

@@ -44,16 +44,25 @@ bool verifySignature(const char* code, JsxbinVersion* version = nullptr, int* st
     return true;
 }
 
-void prepend_header(string& code) {
+void prepend_header(string& code, bool deobfuscation) {
     string header = "/*\n"
                     "* Decompiled with Jsxbin Decompiler\n"
                     "* Version: " CONFIG_VERSION "\n"
                     "*/\n\n";
+
+    if (deobfuscation){
+        header = "/*\n"
+                 "* Decompiled with Jsxbin Decompiler\n"
+                 "* Version: " CONFIG_VERSION "\n"
+                 "* Jsxblind Deobfuscation Enabled (EXPERIMENTAL)\n"
+                 "*/\n\n";
+    }
+
     code = header + code;
 }
 
-int jsxer::decompile(const string& input, string& output) {
-    Reader reader(input);
+int jsxer::decompile(const string& input, string& output, bool jsxblind_deobfuscate) {
+    Reader reader(input, jsxblind_deobfuscate);
 
     if (!reader.verifySignature()) {
         // TODO: Handle this properly
@@ -68,7 +77,7 @@ int jsxer::decompile(const string& input, string& output) {
 
     // Generate code from the ast
     output = ast.to_string();
-    prepend_header(output);
+    prepend_header(output, jsxblind_deobfuscate);
 
     return 0;
 }

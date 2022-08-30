@@ -1,5 +1,12 @@
 # ExtendScript Decompiler
-A faster decompiler for Adobe's ExtendScript (Legacy) binary format (*.jsxbin).
+A faster decompiler for Adobe's (Legacy) ExtendScript binary format (*.jsxbin).
+
+## Features
+* [x] Lifts JSXBIN back to JavaScript code.
+* [x] Jsxblind deobfuscation (experimental).
+* [x] Python bindings.
+* [x] Dynamic library.
+* [x] **Fast as hell.**
 
 ## What is ExtendScript?
 ExtendScript is a scripting language and an associated toolkit developed by Adobe Systems, intended for use with Creative Suite and Technical Communication Suite products. It is a dialect of the ECMAScript 3 standard and therefore similar to JavaScript and ActionScript. The toolkit comes bundled with Creative Suite and Technical Communication Suite editions and can access tools within applications like Photoshop, FrameMaker, InDesign or After Effects for batch-processing projects.
@@ -9,23 +16,13 @@ ExtendScript is a scripting language and an associated toolkit developed by Adob
 Open the Terminal app to run the following commands. If you are unfamiliar with Terminal, you can find it in /Applications/Utilities/Terminal.app.
 
 *Install CMake:*
-
 ```bash
 brew install cmake
 ```
 
-*Create a build folder in the project root directory:*
-
-```bash
-cd jsxbin_decompiler
-mkdir build
-cd build
-```
-
 *Configure and build the project:*
-
 ```bash
-cmake ..
+cmake .
 cmake --build . --config release 
 ```
 

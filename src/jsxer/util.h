@@ -27,6 +27,7 @@ string to_string_literal(const string& value, bool capital = false);
 
 string to_string(const ByteString& value);
 
+ByteString to_byte_string(const string& value);
 
 int byte_length(uint64_t value);
 

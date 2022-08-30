@@ -73,7 +73,7 @@ private:
 
 class Reader {
 public:
-    explicit Reader(const string& jsxbin);
+    explicit Reader(const string& jsxbin, bool jsxblind_deobfuscate);
 
     JsxbinVersion version() const;
     ParseError error() const;
@@ -106,6 +106,7 @@ private:
     size_t _depth;
     ParseError _error;
     JsxbinVersion _version;
+    bool _jsxblind_deobfuscate;
 
     map<Number, ByteString> _symbols;
 
