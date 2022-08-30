@@ -3,7 +3,7 @@
 
 using namespace jsxer;
 
-Reader::Reader(const string& jsxbin) {
+Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
     string _input = jsxbin;
 
     utils::string_strip_char(_input, ' ');
@@ -22,6 +22,7 @@ Reader::Reader(const string& jsxbin) {
 
     _error = ParseError::None;
     _version = JsxbinVersion::Invalid;
+    _jsxblind_deobfuscate = jsxblind_deobfuscate;
 }
 
 JsxbinVersion Reader::version() const {
@@ -271,7 +272,7 @@ ByteString Reader::readSID() {
         id = getNumber();
 
         // if a symbol name is obfuscated, rename it to something more sensible...
-        if (should_replace_name(symbol)) {
+        if (_jsxblind_deobfuscate && should_replace_name(symbol)) {
             string deobfuscated = "symbol_" + std::to_string((int)id);
             symbol = utils::to_byte_string(deobfuscated);
         }
