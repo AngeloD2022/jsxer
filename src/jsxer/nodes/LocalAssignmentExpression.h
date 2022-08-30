@@ -19,10 +19,13 @@ namespace jsxer { namespace nodes {
 
         string to_string() override;
 
+        void suppress_declarative_keyword(bool value);
+
     private:
         string var_name;
         string literal;
         AstNode* expression = nullptr;
+        bool declarative_suppress = false;
         bool shorthand = false;
         bool declaration = false;
     };

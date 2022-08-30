@@ -10,7 +10,7 @@ void LocalAssignmentExpression::parse() {
 }
 
 string LocalAssignmentExpression::to_string() {
-    string result = declaration ? "var " : "";
+    string result = (declaration && !declarative_suppress) ? "var " : "";
 
     if (shorthand) {
         auto* b = (BinaryExpression*) expression;
@@ -25,4 +25,8 @@ string LocalAssignmentExpression::to_string() {
     }
 
     return result;
+}
+
+void LocalAssignmentExpression::suppress_declarative_keyword(bool value) {
+    declarative_suppress = value;
 }

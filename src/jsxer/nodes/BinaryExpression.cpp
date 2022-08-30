@@ -6,7 +6,7 @@ string BinaryExpression::create_expr(const string &literal, AstNode *exprNode) {
     bool parenthesis = false;
     string expression;
 
-    if (exprNode != nullptr && (exprNode->type() == NodeType::BinaryExpression)) {
+    if (exprNode != nullptr && exprNode->type() == NodeType::BinaryExpression) {
         auto* binExpr = (BinaryExpression *) exprNode;
         expression = binExpr->get_op();
 
@@ -16,6 +16,9 @@ string BinaryExpression::create_expr(const string &literal, AstNode *exprNode) {
                                     && strcmp(op_name.c_str(), "+") == 0);
 
         parenthesis = !associative;
+    }else if (exprNode != nullptr && (exprNode->type() == NodeType::LocalAssignmentExpression || exprNode->type() == NodeType::AssignmentExpression)){
+        parenthesis = true;
+        expression = exprNode->to_string();
     } else {
         expression = exprNode == nullptr ? literal : exprNode->to_string();
     }

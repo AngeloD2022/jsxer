@@ -1,4 +1,5 @@
 #include "ListExpression.h"
+#include "LocalAssignmentExpression.h"
 
 void ListExpression::parse() {
     arguments = decoders::d_children(reader);
@@ -12,10 +13,14 @@ void ListExpression::set_for_loop(bool x) {
 string ListExpression::to_string() {
     string result;
 
-    string delimiter = for_loop? "; " : ", ";
+    string delimiter = ", ";
 
     // TODO: fix declarations
     for (int i = 0; i < arguments.size(); ++i) {
+        if (for_loop && i > 0){
+            ((LocalAssignmentExpression *) arguments[i])->suppress_declarative_keyword(true);
+        }
+
         result += arguments[i]->to_string() + (i + 1 == arguments.size() ? "" : delimiter);
     }
 
