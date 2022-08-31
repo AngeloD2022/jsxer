@@ -1,6 +1,6 @@
 #include "TernaryExpression.h"
 
-bool parenthesis(AstNode* node) {
+bool TernaryExpression::parenthesis(AstNode* node) {
     return (node->type() == NodeType::TernaryExpression) && (node->type() == NodeType::ListExpression);
 }
 

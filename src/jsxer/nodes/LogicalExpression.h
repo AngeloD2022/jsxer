@@ -24,5 +24,11 @@ namespace jsxer { namespace nodes {
         AstNode *rightExpr;
         string leftLiteral;
         string rightLiteral;
+
+        string get_expr(AstNode *node, const string &literal);
+
+        bool contains_or();
+
+        string parenthesis(AstNode *node);
     };
 } }
