@@ -21,38 +21,7 @@ void LogicalExpression::parse() {
 }
 
 string LogicalExpression::to_string() {
-
-//    fprintf(stdout, "L: %s  R: %s \n", leftExpr->to_string().c_str(), rightExpr->to_string().c_str());
-
-//    return get_expr(leftExpr, leftLiteral) + ' ' + opName + ' ' + get_expr(rightExpr, rightLiteral);
-
-//    if (opName == "&&") {
-//        if (rightExpr != nullptr && rightExpr->type() == NodeType::LogicalExpression){
-//            LogicalExpression* right = (LogicalExpression *) rightExpr;
-//            if (right->opName == "||")
-//                return get_expr(leftExpr, leftLiteral) + " " + opName + " (" + right->to_string() + ")";
-//        } else if (leftExpr != nullptr && leftExpr->type() == NodeType::LogicalExpression) {
-//            LogicalExpression* left = (LogicalExpression *) leftExpr;
-//            if (left->opName == "||")
-//                return "(" + left->to_string() + ") " + opName + " " + get_expr(rightExpr, rightLiteral);
-//        }
-//    }
     string result = " " + opName + " ";
-
-//    if (rightExpr != nullptr && rightExpr->type() == NodeType::LogicalExpression){
-//        LogicalExpression* right = (LogicalExpression *) rightExpr;
-//
-//        if (right->opName == "||")
-//            return get_expr(leftExpr, leftLiteral) + " " + opName + " (" + right->to_string() + ")";
-//
-//    } else if (leftExpr != nullptr && leftExpr->type() == NodeType::LogicalExpression && opName == "&&") {
-//        LogicalExpression* left = (LogicalExpression *) leftExpr;
-//
-//        if (left->opName == "||")
-//            return "(" + left->to_string() + ") " + opName + " " + get_expr(rightExpr, rightLiteral);
-//    } else {
-//        result = get_expr(leftExpr, leftLiteral) + result + get_expr(rightExpr, rightLiteral);
-//    }
 
     if (leftExpr != nullptr) {
         if (leftExpr->type() == NodeType::LogicalExpression) {
