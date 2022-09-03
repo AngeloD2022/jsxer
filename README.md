@@ -13,6 +13,8 @@ ExtendScript is a scripting language and an associated toolkit developed by Adob
 
 ## Build (MacOS)
 
+### [Video Tutorial](https://www.youtube.com/watch?v=939Bo5iTxo0)
+
 Open the Terminal app to run the following commands. If you are unfamiliar with Terminal, you can find it in /Applications/Utilities/Terminal.app.
 
 *Install CMake:*
