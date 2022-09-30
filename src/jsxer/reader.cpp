@@ -10,6 +10,7 @@ Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
     utils::string_strip_char(_input, '\t');
     utils::string_strip_char(_input, '\r');
     utils::string_strip_char(_input, '\n');
+    utils::string_strip_char(_input, '\\');
 
     size_t input_len = _input.length();
 

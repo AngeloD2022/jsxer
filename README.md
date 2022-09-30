@@ -13,6 +13,8 @@ ExtendScript is a scripting language and an associated toolkit developed by Adob
 
 ## Build (MacOS)
 
+### [Video Tutorial](https://www.youtube.com/watch?v=939Bo5iTxo0)
+
 Open the Terminal app to run the following commands. If you are unfamiliar with Terminal, you can find it in /Applications/Utilities/Terminal.app.
 
 *Install CMake:*
@@ -27,8 +29,8 @@ cmake --build . --config release
 ```
 
 ## Credits
-  - Thanks to `@autoboosh` for his project [jsxbin-to-jsx-converter](https://github.com/autoboosh/jsxbin-to-jsx-converter).
-  - Thanks to `@codecopy` for keeping a [fork](https://github.com/codecopy/jsxbin-to-jsx-converter) of `@autoboosh`'s project, where `@autoboosh` vanished from GitHub.
+  - Thanks to Andrin Meier ([@andrinmeier](https://github.com/andrinmeier), formerly `@autoboosh`) for his research on the format, and his project [jsxbin-to-jsx-converter](https://github.com/autoboosh/jsxbin-to-jsx-converter).
+  - Thanks to [@codecopy](https://github.com/codecopy) for keeping a [fork](https://github.com/codecopy/jsxbin-to-jsx-converter) of `@autoboosh`'s project, where the original vanished as a consequence of a DMCA takedown from Adobe.
 
 
 ## Contributions
