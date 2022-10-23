@@ -23,6 +23,12 @@ void LogicalExpression::parse() {
 string LogicalExpression::to_string() {
     string result = " " + opName + " ";
 
+    // Explanation of the below logic:
+    // ExtendScript does not honor traditional boolean order of operations with logical expressions.
+    // The decompiler now produces output that forces order of operations equivalent to ES with modern interpreters like V8,
+    // and it manages to do it such that it does not affect the order of operations if evaluated in the ES runtime.
+    // Awesome! :)
+
     if (leftExpr != nullptr) {
         if (leftExpr->type() == NodeType::LogicalExpression) {
             LogicalExpression* left = (LogicalExpression *) leftExpr;
