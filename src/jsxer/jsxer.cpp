@@ -62,9 +62,9 @@ void prepend_header(string& code, bool deobfuscation) {
 }
 
 int jsxer::decompile(const string& input, string& output, bool jsxblind_deobfuscate) {
-    Reader reader(input, jsxblind_deobfuscate);
+    Reader *reader = new Reader(input, jsxblind_deobfuscate);
 
-    if (!reader.verifySignature()) {
+    if (!reader->verifySignature()) {
         // TODO: Handle this properly
         fprintf(stderr, "JSXBIN signature verification failed!");
         output = "";
@@ -72,7 +72,7 @@ int jsxer::decompile(const string& input, string& output, bool jsxblind_deobfusc
     }
 
     // Parse into an Ast
-    Program ast(reader);
+    Program ast(*reader);
     ast.parse();
 
     // Generate code from the ast
