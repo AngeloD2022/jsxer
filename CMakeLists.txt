@@ -59,6 +59,16 @@ set(BIN_CLI_NAME "jsxer")
 set(BIN_DLL_NAME "lib-jsxer")
 set(BIN_LIB_NAME "libjsxer")
 
+# check if emscripten toolchain specified...
+if(CMAKE_TOOLCHAIN_FILE MATCHES "Emscripten.cmake$")
+    message("Emscripten build configuration enabled.")
+    set(EMSCRIPTEN_TOOLCHAIN "X")
+endif()
+
+# Emscripten source
+set(JSXER_EMS_SOURCES src/emscripten/main.cpp)
+
+
 # Static lib
 set(JSXER_CORE_TARGET jsxer-core)
 
@@ -70,23 +80,6 @@ file(GLOB_RECURSE JSXER_CORE_HEADERS
 file(GLOB_RECURSE JSXER_CORE_SOURCES
     ${JSXER_SOURCE_DIR}/jsxer/*.c
     ${JSXER_SOURCE_DIR}/jsxer/*.cpp
-)
-
-add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURCES})
-
-target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
-
-target_compile_definitions(${JSXER_CORE_TARGET} PUBLIC
-    CONFIG_VERSION="${JSXER_VERSION}"
-)
-
-set_target_properties(${JSXER_CORE_TARGET} PROPERTIES
-    PREFIX ""
-    SUFFIX "${BIN_LIB_EXT}"
-    OUTPUT_NAME "${BIN_LIB_NAME}"
-    LIBRARY_OUTPUT_DIRECTORY ${LIB_OUT_DIR}
-    ARCHIVE_OUTPUT_DIRECTORY ${LIB_OUT_DIR}
-    RUNTIME_OUTPUT_DIRECTORY ${LIB_OUT_DIR}
 )
 
 # Dynamic link library
@@ -102,76 +95,119 @@ file(GLOB_RECURSE JSXER_DLL_SOURCES
     ${JSXER_SOURCE_DIR}/dll/*.cpp
 )
 
-add_library(${JSXER_DLL_TARGET} SHARED ${JSXER_DLL_HEADERS} ${JSXER_DLL_SOURCES})
-
-target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET})
-
-target_compile_definitions(${JSXER_DLL_TARGET} PUBLIC
-    CONFIG_VERSION="${JSXER_VERSION}"
-)
-
-set_target_properties(${JSXER_DLL_TARGET} PROPERTIES
-    PREFIX ""
-    SUFFIX "${BIN_DLL_EXT}"
-    OUTPUT_NAME "${BIN_DLL_NAME}"
-    RUNTIME_OUTPUT_DIRECTORY ${DLL_OUT_DIR}
-    ARCHIVE_OUTPUT_DIRECTORY ${DLL_OUT_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${DLL_OUT_DIR}
-)
 
 # CLI
 set(JSXER_CLI_TARGET jsxer-cli)
 
 file(GLOB_RECURSE JSXER_CLI_HEADERS
-    ${JSXER_SOURCE_DIR}/cli/*.h
-    ${JSXER_SOURCE_DIR}/cli/*.hpp
+        ${JSXER_SOURCE_DIR}/cli/*.h
+        ${JSXER_SOURCE_DIR}/cli/*.hpp
 )
 
 file(GLOB_RECURSE JSXER_CLI_SOURCES
-    ${JSXER_SOURCE_DIR}/cli/*.c
-    ${JSXER_SOURCE_DIR}/cli/*.cpp
+        ${JSXER_SOURCE_DIR}/cli/*.c
+        ${JSXER_SOURCE_DIR}/cli/*.cpp
 )
 
-add_executable(${JSXER_CLI_TARGET} ${JSXER_CLI_HEADERS} ${JSXER_CLI_SOURCES})
+if(NOT DEFINED EMSCRIPTEN_TOOLCHAIN)
+    # Static lib
+    add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURCES})
 
-target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET})
+    target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
 
-target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
-    CONFIG_VERSION="${JSXER_VERSION}"
-)
+    target_compile_definitions(${JSXER_CORE_TARGET} PUBLIC
+            CONFIG_VERSION="${JSXER_VERSION}"
+            )
 
-set_target_properties(${JSXER_CLI_TARGET} PROPERTIES
-    PREFIX ""
-    SUFFIX "${BIN_CLI_EXT}"
-    OUTPUT_NAME "${BIN_CLI_NAME}"
-    RUNTIME_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
-    ARCHIVE_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
-)
+    set_target_properties(${JSXER_CORE_TARGET} PROPERTIES
+            PREFIX ""
+            SUFFIX "${BIN_LIB_EXT}"
+            OUTPUT_NAME "${BIN_LIB_NAME}"
+            LIBRARY_OUTPUT_DIRECTORY ${LIB_OUT_DIR}
+            ARCHIVE_OUTPUT_DIRECTORY ${LIB_OUT_DIR}
+            RUNTIME_OUTPUT_DIRECTORY ${LIB_OUT_DIR}
+            )
 
-enable_testing()
+    # Dynamic link library
+    add_library(${JSXER_DLL_TARGET} SHARED ${JSXER_DLL_HEADERS} ${JSXER_DLL_SOURCES})
 
-set(JSXER_TESTS_DIR ${CMAKE_CURRENT_LIST_DIR}/tests)
+    target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET})
 
-set(JSXER_TESTS_SRC_DIR ${JSXER_TESTS_DIR}/src)
-set(JSXER_TESTS_DATA_DIR ${JSXER_TESTS_DIR}/data)
+    target_compile_definitions(${JSXER_DLL_TARGET} PUBLIC
+        CONFIG_VERSION="${JSXER_VERSION}"
+    )
 
-add_executable(jsxer-test-array-expr ${JSXER_TESTS_SRC_DIR}/array-expr.cpp)
-target_link_libraries(jsxer-test-array-expr PRIVATE ${JSXER_CORE_TARGET})
+    set_target_properties(${JSXER_DLL_TARGET} PROPERTIES
+        PREFIX ""
+        SUFFIX "${BIN_DLL_EXT}"
+        OUTPUT_NAME "${BIN_DLL_NAME}"
+        RUNTIME_OUTPUT_DIRECTORY ${DLL_OUT_DIR}
+        ARCHIVE_OUTPUT_DIRECTORY ${DLL_OUT_DIR}
+        LIBRARY_OUTPUT_DIRECTORY ${DLL_OUT_DIR}
+    )
 
-add_test("ArrayExpression" jsxer-test-array-expr)
 
-add_executable(jsxer-test-obj-expr ${JSXER_TESTS_SRC_DIR}/obj-expr.cpp)
-target_link_libraries(jsxer-test-obj-expr PRIVATE ${JSXER_CORE_TARGET})
+    # CLI
+    add_executable(${JSXER_CLI_TARGET} ${JSXER_CLI_HEADERS} ${JSXER_CLI_SOURCES})
 
-add_test("ObjectExpression" jsxer-test-obj-expr)
+    target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET})
 
-add_executable(jsxer-test-member-expr ${JSXER_TESTS_SRC_DIR}/member-expr.cpp)
-target_link_libraries(jsxer-test-member-expr PRIVATE ${JSXER_CORE_TARGET})
+    target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
+        CONFIG_VERSION="${JSXER_VERSION}"
+    )
 
-add_test("MemberExpression" jsxer-test-member-expr)
+    set_target_properties(${JSXER_CLI_TARGET} PROPERTIES
+        PREFIX ""
+        SUFFIX "${BIN_CLI_EXT}"
+        OUTPUT_NAME "${BIN_CLI_NAME}"
+        RUNTIME_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
+        ARCHIVE_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
+        LIBRARY_OUTPUT_DIRECTORY ${BIN_OUT_DIR}
+    )
 
-add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
-target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
+    enable_testing()
 
-add_test("ForStatement" jsxer-test-for-stmt)
+    set(JSXER_TESTS_DIR ${CMAKE_CURRENT_LIST_DIR}/tests)
+
+    set(JSXER_TESTS_SRC_DIR ${JSXER_TESTS_DIR}/src)
+    set(JSXER_TESTS_DATA_DIR ${JSXER_TESTS_DIR}/data)
+
+    add_executable(jsxer-test-array-expr ${JSXER_TESTS_SRC_DIR}/array-expr.cpp)
+    target_link_libraries(jsxer-test-array-expr PRIVATE ${JSXER_CORE_TARGET})
+
+    add_test("ArrayExpression" jsxer-test-array-expr)
+
+    add_executable(jsxer-test-obj-expr ${JSXER_TESTS_SRC_DIR}/obj-expr.cpp)
+    target_link_libraries(jsxer-test-obj-expr PRIVATE ${JSXER_CORE_TARGET})
+
+    add_test("ObjectExpression" jsxer-test-obj-expr)
+
+    add_executable(jsxer-test-member-expr ${JSXER_TESTS_SRC_DIR}/member-expr.cpp)
+    target_link_libraries(jsxer-test-member-expr PRIVATE ${JSXER_CORE_TARGET})
+
+    add_test("MemberExpression" jsxer-test-member-expr)
+
+    add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
+    target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
+
+    add_test("ForStatement" jsxer-test-for-stmt)
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_OUT_DIR}/build.emscripten)
+    add_definitions("-std=c++11")
+
+    # Static lib
+    add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURCES})
+    target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
+    target_compile_definitions(${JSXER_CORE_TARGET} PUBLIC
+            CONFIG_VERSION="${JSXER_VERSION}"
+            )
+
+    add_executable(jsxer_emscripten ${JSXER_EMS_SOURCES})
+    target_link_libraries(jsxer_emscripten PRIVATE ${JSXER_CORE_TARGET})
+
+    set_target_properties(jsxer_emscripten PROPERTIES
+            LINK_FLAGS "-s EXPORTED_FUNCTIONS='[\"_jsxer_decompile\"]'"
+            )
+
+endif()
+
