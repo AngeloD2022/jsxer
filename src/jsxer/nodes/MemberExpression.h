@@ -22,6 +22,6 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::Reference memberInfo;
-        AstNode* objInfo;
+        shared_ptr<AstNode> objInfo;
     };
 } }

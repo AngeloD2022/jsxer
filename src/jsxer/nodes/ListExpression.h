@@ -20,7 +20,7 @@ public:
 
     string to_string() override;
 
-    vector<AstNode*> arguments;
+    vector<shared_ptr<AstNode>> arguments;
 
 private:
     bool for_loop = false;

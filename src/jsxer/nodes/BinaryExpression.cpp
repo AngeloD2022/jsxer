@@ -2,12 +2,12 @@
 
 using namespace jsxer::nodes;
 
-string BinaryExpression::create_expr(const string &literal, AstNode *exprNode) {
+string BinaryExpression::create_expr(const string &literal, const shared_ptr<AstNode>& exprNode) {
     bool parenthesis = false;
     string expression;
 
     if (exprNode != nullptr && exprNode->type() == NodeType::BinaryExpression) {
-        auto* binExpr = (BinaryExpression *) exprNode;
+        auto binExpr = static_pointer_cast<BinaryExpression>(exprNode);
         expression = binExpr->get_op();
 
         bool associative = (strcmp(binExpr->get_op_name().c_str(), "*") == 0

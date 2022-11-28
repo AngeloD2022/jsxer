@@ -19,6 +19,6 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        map<AstNode*, int> children;
+        map<shared_ptr<AstNode>, int> children;
     };
 } }

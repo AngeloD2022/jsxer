@@ -21,7 +21,7 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        ListExpression* argumentList = nullptr;
+        shared_ptr<ListExpression> argumentList = nullptr;
 
     };
 } }

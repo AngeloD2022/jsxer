@@ -20,7 +20,7 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::Reference reference;
-        AstNode *object;
-        AstNode *member;
+        shared_ptr<AstNode> object;
+        shared_ptr<AstNode> member;
     };
 } }

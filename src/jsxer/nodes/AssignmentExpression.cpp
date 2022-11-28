@@ -9,7 +9,7 @@ void AssignmentExpression::parse() {
 
 string AssignmentExpression::to_string() {
     if (shorthand) {
-        auto* expr = (BinaryExpression*) expression;
+        auto expr = static_pointer_cast<BinaryExpression>(expression);
         string value_assigned = literal.empty() ? expr->get_op() : literal;
         return variable->to_string() + ' ' + expr->get_op_name() + "= " + value_assigned;
     } else {

@@ -20,7 +20,7 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::Reference namespaceObject;
-        AstNode* object = nullptr;
+        shared_ptr<AstNode> object = nullptr;
         string xmlId;
     };
 } }

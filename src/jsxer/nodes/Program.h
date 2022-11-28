@@ -19,6 +19,6 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode *body = nullptr;
+        shared_ptr<AstNode> body = nullptr;
     };
 } }

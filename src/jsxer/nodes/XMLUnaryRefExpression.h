@@ -20,6 +20,6 @@ namespace jsxer { namespace nodes {
 
     private:
         string id;
-        AstNode *node;
+        shared_ptr<AstNode> node;
     };
 } }

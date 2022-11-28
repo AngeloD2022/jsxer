@@ -21,6 +21,6 @@ namespace jsxer { namespace nodes {
 
     private:
         string objectId;
-        map<string, AstNode*> properties;
+        map<string, shared_ptr<AstNode>> properties;
     };
 } }

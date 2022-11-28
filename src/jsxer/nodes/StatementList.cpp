@@ -8,7 +8,7 @@ void StatementList::parse() {
         statements.push_back(decoders::d_node(reader));
     }
 
-    vector<AstNode*> children = decoders::d_children(reader);
+    vector<shared_ptr<AstNode>> children = decoders::d_children(reader);
     statements.insert(statements.end(), children.begin(), children.end());
 }
 

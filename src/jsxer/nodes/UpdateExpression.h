@@ -19,7 +19,7 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode* variable = nullptr;
+        shared_ptr<AstNode> variable = nullptr;
         int operation = 0;
         bool postfix = false;
     };

@@ -20,6 +20,6 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo lineInfo;
-        AstNode *expression = nullptr;
+        shared_ptr<AstNode> expression = nullptr;
     };
 } }

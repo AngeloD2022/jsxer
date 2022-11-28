@@ -29,10 +29,10 @@ namespace jsxer { namespace nodes {
     private:
         string op_name;
         string op;
-        AstNode* left;
-        AstNode* right;
+        shared_ptr<AstNode> left;
+        shared_ptr<AstNode> right;
         string literalLeft;
         string literalRight;
-        string create_expr(const string &literal, AstNode *exprNode);
+        string create_expr(const string &literal, const shared_ptr<AstNode>& exprNode);
     };
 } }

@@ -1,6 +1,6 @@
 #include "LogicalExpression.h"
 
-string get_expr(AstNode *node, const string& literal){
+string get_expr(const shared_ptr<AstNode>& node, const string& literal){
     return '(' + (node == nullptr ? literal : node->to_string()) + ')';
 }
 

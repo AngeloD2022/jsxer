@@ -1,7 +1,7 @@
 #include "ArrayExpression.h"
 
 void ArrayExpression::parse() {
-    argumentList = (ListExpression *) decoders::d_node(reader);
+    argumentList = std::static_pointer_cast<ListExpression>(decoders::d_node(reader));
 }
 
 string ArrayExpression::to_string() {

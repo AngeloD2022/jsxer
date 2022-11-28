@@ -20,8 +20,8 @@ namespace jsxer { namespace nodes {
 
     private:
         string opName;
-        AstNode *leftExpr;
-        AstNode *rightExpr;
+        shared_ptr<AstNode> leftExpr;
+        shared_ptr<AstNode> rightExpr;
         string leftLiteral;
         string rightLiteral;
     };

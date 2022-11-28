@@ -20,8 +20,8 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode *function = nullptr;
-        AstNode *args = nullptr;
+        shared_ptr<AstNode> function = nullptr;
+        shared_ptr<AstNode> args = nullptr;
         bool constructorCall;
     };
 } }

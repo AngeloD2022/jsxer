@@ -8,7 +8,7 @@ void CallExpression::parse() {
 
 string CallExpression::to_string() {
     string result = constructorCall ? "new " : "";
-    auto* argList = (ListExpression*) args;
+    auto argList = static_pointer_cast<ListExpression>(args);
 
     // {new }{funcName}({args})
     result += function->to_string() + '(' + (argList == nullptr ? "" : argList->to_string()) + ")";

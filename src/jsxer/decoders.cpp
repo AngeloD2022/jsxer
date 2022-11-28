@@ -76,10 +76,10 @@ int decoders::d_literal_num(Reader& reader) {
 }
 
 
-AstNode* decoders::d_node(Reader& reader) {
+std::shared_ptr<AstNode> decoders::d_node(Reader& reader) {
     Token marker = reader.get();
 
-    AstNode* node = nodes::get((NodeType) marker, reader);
+    std::shared_ptr<AstNode> node = nodes::get((NodeType) marker, reader);
 
     if (node != nullptr) {
         node->parse();
@@ -139,12 +139,12 @@ string decoders::d_sid(Reader& reader) {
     return utils::to_string(reader.readSID());
 }
 
-vector<AstNode*> decoders::d_children(Reader& reader) {
+vector<shared_ptr<AstNode>> decoders::d_children(Reader& reader) {
     int length = d_length(reader);
 
-    vector<AstNode*> result;
+    vector<shared_ptr<AstNode>> result;
     for (int i = 0; i < length; ++i) {
-        AstNode* child = d_node(reader);
+        shared_ptr<AstNode> child = d_node(reader);
         if (child != nullptr) {
             result.push_back(child);
         }

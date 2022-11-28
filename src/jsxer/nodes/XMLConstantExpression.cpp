@@ -16,7 +16,7 @@ string XMLConstantExpression::to_string() {
 
     string result;
 
-    for (std::pair<AstNode*, int> child : children) {
+    for (std::pair<shared_ptr<AstNode>, int> child : children) {
         if (child.second == TYPE_NORMAL){
             result += child.first->to_string();
         } else {

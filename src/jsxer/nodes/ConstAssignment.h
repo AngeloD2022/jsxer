@@ -21,7 +21,7 @@ namespace jsxer { namespace nodes {
     private:
         string name;
         int length;
-        AstNode *expression;
+        shared_ptr<AstNode> expression;
         string literal;
         bool boolean_1;
         bool boolean_2;

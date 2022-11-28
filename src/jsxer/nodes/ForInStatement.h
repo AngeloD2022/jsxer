@@ -20,8 +20,8 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo bodyInfo;
-        AstNode *loopVariable = nullptr;
-        AstNode *objExpression = nullptr;
+        shared_ptr<AstNode> loopVariable = nullptr;
+        shared_ptr<AstNode> objExpression = nullptr;
         int length;
         string id;
         bool forEach = false;

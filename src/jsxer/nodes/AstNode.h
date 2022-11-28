@@ -1,9 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include "../reader.h"
 #include "node-types.h"
 
 using std::string;
+
+using std::shared_ptr;
+using std::make_shared;
+using std::static_pointer_cast;
 
 BEGIN_NS(jsxer) BEGIN_NS(nodes)
 

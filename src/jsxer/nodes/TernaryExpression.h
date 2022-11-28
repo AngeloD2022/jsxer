@@ -19,9 +19,9 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode* condition;
-        AstNode* node_true;
-        AstNode* node_false;
+        shared_ptr<AstNode> condition;
+        shared_ptr<AstNode> node_true;
+        shared_ptr<AstNode> node_false;
 
     };
 } }

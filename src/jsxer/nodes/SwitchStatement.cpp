@@ -6,7 +6,7 @@ void SwitchStatement::parse() {
 
     size_t len_cases = decoders::d_length(reader);
     for (int i = 0; i < len_cases; ++i){
-        AstNode *node = decoders::d_node(reader);
+        shared_ptr<AstNode> node = decoders::d_node(reader);
         if (node != nullptr){
             cases.push_back(node);
         }
@@ -14,7 +14,7 @@ void SwitchStatement::parse() {
 
     size_t len_implementations = decoders::d_length(reader);
     for (int i = 0; i < len_implementations; ++i){
-        AstNode *node = decoders::d_node(reader);
+        shared_ptr<AstNode> node = decoders::d_node(reader);
         if (node != nullptr){
             implementations.push_back(node);
         }
@@ -27,9 +27,9 @@ string SwitchStatement::to_string() {
 
     for (int i = 0; i < cases.size(); ++i){
 
-        vector<AstNode*> caseArgs = ((ListExpression*)cases[i])->arguments;
+        vector<shared_ptr<AstNode>> caseArgs = static_pointer_cast<ListExpression>(cases[i])->arguments;
         if (!caseArgs.empty()){
-            for (AstNode* arg : caseArgs){
+            for (const shared_ptr<AstNode>& arg : caseArgs){
                 result += "case " + arg->to_string() + ":\n";
             }
         } else {

@@ -21,12 +21,12 @@ namespace jsxer { namespace nodes {
     private:
         struct TryCatchLayer {
             string arg;
-            AstNode* exceptionFilter;
-            AstNode* catchBlock;
+            shared_ptr<AstNode> exceptionFilter;
+            shared_ptr<AstNode> catchBlock;
         };
 
         decoders::LineInfo tryBlock;
-        AstNode* finallyBlock;
+        shared_ptr<AstNode> finallyBlock;
         vector<TryCatchLayer> layers;
         int length;
     };

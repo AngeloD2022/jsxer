@@ -20,6 +20,6 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo bodyInfo;
-        AstNode *condition;
+        shared_ptr<AstNode> condition;
     };
 } }

@@ -14,10 +14,10 @@ string IfStatement::to_string() {
         return result;
     }
 
-    AstNode *current = otherwise;
+    shared_ptr<AstNode> current = otherwise;
 
-    while ((current->type() == NodeType::IfStatement) && ((IfStatement*) current)->otherwise != nullptr) {
-        auto* elif = (IfStatement *)current;
+    while ((current->type() == NodeType::IfStatement) && (static_pointer_cast<IfStatement>(current))->otherwise != nullptr) {
+        auto elif = static_pointer_cast<IfStatement>(current);
         result += '\n' + elif->bodyInfo.lbl_statement() + "else if (" + elif->test->to_string() + ") {\n"
                   + elif->bodyInfo.create_body() + "\n}";
 

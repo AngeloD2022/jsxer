@@ -24,7 +24,7 @@ namespace jsxer { namespace nodes {
     private:
         string var_name;
         string literal;
-        AstNode* expression = nullptr;
+        shared_ptr<AstNode> expression = nullptr;
         bool declarative_suppress = false;
         bool shorthand = false;
         bool declaration = false;

@@ -22,6 +22,6 @@ namespace jsxer { namespace nodes {
     private:
         size_t length;
         decoders::LineInfo body;
-        vector<AstNode*> statements;
+        vector<shared_ptr<AstNode>> statements;
     };
 } }

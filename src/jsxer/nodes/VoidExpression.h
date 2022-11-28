@@ -19,6 +19,6 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode *defaultNamespaceFxnCall;
+        shared_ptr<AstNode> defaultNamespaceFxnCall;
     };
 } }

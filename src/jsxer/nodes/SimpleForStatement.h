@@ -20,9 +20,9 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo bodyInfo;
-        AstNode* loopVar = nullptr;
+        shared_ptr<AstNode> loopVar = nullptr;
         string iteratorInitial;
-        AstNode* upperBound = nullptr;
+        shared_ptr<AstNode> upperBound = nullptr;
         string stepSize;
         int length;
         string comparisonOperator;

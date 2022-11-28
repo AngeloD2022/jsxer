@@ -10,7 +10,7 @@ void ObjectExpression::parse() {
 
     for (int i = 0; i < child_count; ++i) {
         string id = decoders::d_sid(reader);
-        AstNode* node = decoders::d_node(reader);
+        shared_ptr<AstNode> node = decoders::d_node(reader);
         properties[id] = node;
     }
 }
@@ -20,7 +20,7 @@ string ObjectExpression::to_string() {
 
     if (!properties.empty()) {
         int i = 0;
-        for(std::pair<string, AstNode*> entry : properties) {
+        for(std::pair<string, shared_ptr<AstNode>> entry : properties) {
             if (!decoders::valid_id(entry.first)) {
                 result += utils::to_string_literal(entry.first);
             } else {

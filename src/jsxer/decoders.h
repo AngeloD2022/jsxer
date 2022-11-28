@@ -25,7 +25,7 @@ struct Reference {
 
 struct LineInfo {
     int line_number;
-    AstNode* child;
+    shared_ptr<AstNode> child;
     vector<string> labels;
 
     string lbl_statement() {
@@ -59,7 +59,7 @@ struct FunctionSignature {
     map<string, int> local_vars;
 };
 
-AstNode* d_node(Reader& reader);
+std::shared_ptr<AstNode> d_node(Reader& reader);
 LineInfo d_line_info(Reader& reader);
 int d_literal_num(Reader& reader);
 string d_variant(Reader& reader);
@@ -68,7 +68,7 @@ string d_sid(Reader& reader);
 int d_length(Reader& reader);
 Reference d_ref(Reader& reader);
 byte d_byte(Reader& reader);
-vector<AstNode*> d_children(Reader& reader);
+vector<shared_ptr<AstNode>> d_children(Reader& reader);
 FunctionSignature d_fn_sig(Reader& reader);
 
 // decoding utilities...

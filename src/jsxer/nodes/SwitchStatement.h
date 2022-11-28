@@ -21,8 +21,8 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo lineInfo;
-        AstNode* switchValue;
-        vector<AstNode*> cases;
-        vector<AstNode*> implementations;
+        shared_ptr<AstNode> switchValue;
+        vector<shared_ptr<AstNode>> cases;
+        vector<shared_ptr<AstNode>> implementations;
     };
 } }

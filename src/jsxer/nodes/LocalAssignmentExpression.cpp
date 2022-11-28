@@ -13,7 +13,7 @@ string LocalAssignmentExpression::to_string() {
     string result = (declaration && !declarative_suppress) ? "var " : "";
 
     if (shorthand) {
-        auto* b = (BinaryExpression*) expression;
+        auto b = static_pointer_cast<BinaryExpression>(expression);
 
         // FIXME: i have a bad feeling about this one...
         string value_assigned = literal.empty() ? b->get_op() : literal;

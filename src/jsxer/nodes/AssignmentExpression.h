@@ -20,8 +20,8 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode *variable;
-        AstNode *expression;
+        shared_ptr<AstNode> variable;
+        shared_ptr<AstNode> expression;
         string literal;
         bool shorthand;
     };

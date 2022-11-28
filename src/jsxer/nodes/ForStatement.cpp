@@ -6,7 +6,7 @@ void ForStatement::parse() {
     initial = decoders::d_node(reader);
 
     if (initial && initial->type() == NodeType::ListExpression) {
-        ((ListExpression*) initial)->set_for_loop(true);
+        (static_pointer_cast<ListExpression>(initial))->set_for_loop(true);
     }
 
     test = decoders::d_node(reader);
