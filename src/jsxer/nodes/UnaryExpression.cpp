@@ -1,7 +1,7 @@
 #include "UnaryExpression.h"
 
 void UnaryExpression::parse() {
-    op = decoders::d_sid(reader);
+    op = decoders::d_operator(reader);
     expression = decoders::d_node(reader);
 }
 
@@ -12,5 +12,8 @@ string UnaryExpression::to_string() {
                        && expression->type() != NodeType::MemberExpression
                        && expression->type() != NodeType::IndexingExpression;
 
-    return op + (parenthesis ? '(' + expression->to_string() + ')' : expression->to_string());
+    if (op != "+")
+        return op + (parenthesis ? '(' + expression->to_string() + ')' : expression->to_string());
+    else
+        return (parenthesis ? '(' + expression->to_string() + ')' : expression->to_string());
 }

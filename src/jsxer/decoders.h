@@ -65,6 +65,7 @@ int d_literal_num(Reader& reader);
 string d_variant(Reader& reader);
 string d_number(Reader& reader);
 string d_sid(Reader& reader);
+string d_operator(Reader& reader);
 int d_length(Reader& reader);
 Reference d_ref(Reader& reader);
 byte d_byte(Reader& reader);

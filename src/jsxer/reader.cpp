@@ -2,6 +2,7 @@
 #include "util.h"
 
 using namespace jsxer;
+using namespace jsxer::deob;
 
 Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
     string _input = jsxbin;
@@ -24,6 +25,11 @@ Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
     _error = ParseError::None;
     _version = JsxbinVersion::Invalid;
     _jsxblind_deobfuscate = jsxblind_deobfuscate;
+
+//    if (jsxblind_deobfuscate) {
+//        deobfuscation = new Deobfuscation(&_reserved_ids);
+//    }
+
 }
 
 JsxbinVersion Reader::version() const {
@@ -219,52 +225,8 @@ bool Reader::getBoolean() {
     return false;
 }
 
-/// Determines if renaming is appropriate with symbols in JSXBIN files that are obfuscated with Jsxblind...
-/// \param symbol the symbol name
-/// \return
-bool should_replace_name(const ByteString &symbol){
 
-    // if a symbol name is empty, return false.
-    if (symbol.empty()) {
-        return false;
-    }
-
-    static const std::vector<string> OPERATORS {
-            "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
-            "|=", "||=", "&&=", "&=", "^=", "??=",
-            "|", "||", "&", "&&", "^", "??", "!", "?", ":",
-            "instanceof", "typeof",
-            "+", "+=",
-            "-", "-=",
-            "*", "*=",
-            "%", "%=",
-            "/", "/=",
-            "**", "**=",
-            "<<", "<<=",
-            ">>", ">>=",
-            ">>>", ">>>="
-    };
-
-    // if a symbol name is equivalent to an operator in ECMAScript 3, return false.
-    string symstr = utils::to_string(symbol);
-    for (const auto &op: OPERATORS){
-        if (symstr == op){
-            return false;
-        }
-    }
-
-    // check for characters outside the acceptable range for variable names...
-    for (uint16_t character : symbol) {
-        if (character > 0x7a || character < 0x41) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-ByteString Reader::readSID() {
+ByteString Reader::readSID(bool operator_context) {
     ByteString symbol;
     Number id;
 
@@ -272,20 +234,21 @@ ByteString Reader::readSID() {
         symbol = getString();
         id = getNumber();
 
+        int id_int = utils::number_as_int<int>(id);
+
+//        if (id_int == 99)
+//            __builtin_debugtrap();
+
         // if a symbol name is obfuscated, rename it to something more sensible...
-        if (_jsxblind_deobfuscate && should_replace_name(symbol)) {
+        if (_jsxblind_deobfuscate && jsxer::deob::should_substitute(symbol, operator_context) && !symbol.empty()) {
+            fprintf(stdout, "SUB: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
             string deobfuscated = "symbol_" + std::to_string((int)id);
             symbol = utils::to_byte_string(deobfuscated);
+        } else {
+            fprintf(stdout, "KEEP: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
         }
 
         addSymbol(id, symbol);
-
-//        if (!utils::is_double_type(id)) {
-//            id = (double) utils::to_integer(id);
-//        }
-//
-//         printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
-//         fflush(stdout);
     } else {
         step(-1);
         id = getNumber();

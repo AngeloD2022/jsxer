@@ -27,7 +27,7 @@ string BinaryExpression::create_expr(const string &literal, const shared_ptr<Ast
 }
 
 void BinaryExpression::parse() {
-    op_name = decoders::d_sid(reader);
+    op_name = decoders::d_operator(reader);
     left = decoders::d_node(reader);
     right = decoders::d_node(reader);
     literalLeft = decoders::d_variant(reader);

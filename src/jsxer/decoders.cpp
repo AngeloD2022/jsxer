@@ -139,6 +139,10 @@ string decoders::d_sid(Reader& reader) {
     return utils::to_string(reader.readSID());
 }
 
+string decoders::d_operator(Reader& reader) {
+    return utils::to_string(reader.readSID(true));
+}
+
 vector<shared_ptr<AstNode>> decoders::d_children(Reader& reader) {
     int length = d_length(reader);
 

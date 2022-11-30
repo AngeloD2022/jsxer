@@ -6,7 +6,7 @@ string get_expr(const shared_ptr<AstNode>& node, const string& literal){
 
 void LogicalExpression::parse() {
     // opName is either "&&" or "||"
-    opName = decoders::d_sid(reader);
+    opName = decoders::d_operator(reader);
     leftExpr = decoders::d_node(reader);
     rightExpr = decoders::d_node(reader);
     leftLiteral = decoders::d_variant(reader);
