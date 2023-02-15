@@ -1,5 +1,6 @@
 ## TODO
 
+- [ ] Fix memory leaks as each node's allocation is not tracked.
 - [ ] Implement an Utf-16 ES native String class (Currently it has a temporary u16 vector solution).
 - [ ] Fix function argument list sequence.
 - [ ] Fix declarations using comma expressions.

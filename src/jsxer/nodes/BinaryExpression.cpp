@@ -1,5 +1,7 @@
 #include "BinaryExpression.h"
 
+#include <cstring>
+
 using namespace jsxer::nodes;
 
 string BinaryExpression::create_expr(const string &literal, AstNode *exprNode) {
