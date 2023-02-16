@@ -23,5 +23,6 @@ namespace jsxer { namespace nodes {
         AstNode* node_true;
         AstNode* node_false;
 
+        bool parenthesis(AstNode *node);
     };
 } }
