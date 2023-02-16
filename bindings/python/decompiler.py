@@ -4,13 +4,13 @@ from ctypes import CDLL, POINTER, \
     c_int, c_char_p, c_size_t, c_bool, byref, create_string_buffer
 
 
-pf = platform.system()
+pf = platform.system().lower()
 
-if pf == 'Windows':
+if pf == 'windows':
     _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.dll'
-elif pf == 'Linux':
+elif pf == 'linux':
     _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.so'
-elif pf == 'Darwin':
+elif pf == 'darwin':
     _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.dylib'
 else:
     raise EnvironmentError(f'Unknown platform: {pf}')
@@ -21,7 +21,7 @@ if not os.path.isfile(_backend_binding_lib_path):
     raise FileNotFoundError(f'Backend lib not exists in place: {_backend_binding_lib_path}')
 
 """
-int decompile(const char* input, size_t in_len, char* output, size_t* out_len)
+int decompile(const char* input, size_t in_len, char* output, size_t* out_len, bool unblind = false)
 """
 _backend = CDLL(_backend_binding_lib_path)
 _decompile = _backend.decompile
@@ -35,7 +35,7 @@ _decompile.argtypes = [
 _decompile.restype = c_int
 
 
-def decompile(compiled: str, jsxblind_deobfuscate=False):
+def decompile(compiled: str, unblind=False):
     out_size = c_size_t(0)
 
     # determine the output buffer size
@@ -44,7 +44,7 @@ def decompile(compiled: str, jsxblind_deobfuscate=False):
         len(compiled),
         c_char_p(0),
         byref(out_size),
-        c_bool(jsxblind_deobfuscate)
+        c_bool(unblind)
     )
 
     if ec == 0:
@@ -58,7 +58,7 @@ def decompile(compiled: str, jsxblind_deobfuscate=False):
                 len(compiled),
                 out_str,
                 byref(out_size),
-                c_bool(jsxblind_deobfuscate)
+                c_bool(unblind)
             )
 
             if ec != 0:

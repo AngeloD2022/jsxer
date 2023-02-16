@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class TernaryExpression : public AstNode {
     public:
         explicit TernaryExpression(Reader& reader) : AstNode(reader) {}
@@ -19,9 +17,8 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode* condition;
-        AstNode* node_true;
-        AstNode* node_false;
-
+        AstOpNode condition;
+        AstOpNode node_true;
+        AstOpNode node_false;
     };
-} }
+}

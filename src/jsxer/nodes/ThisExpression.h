@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class ThisExpression : public AstNode {
     public:
         explicit ThisExpression(Reader& reader) : AstNode(reader) {}
@@ -21,4 +19,4 @@ namespace jsxer { namespace nodes {
     private:
         decoders::Reference reference;
     };
-} }
+}

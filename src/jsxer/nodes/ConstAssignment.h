@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class ConstAssignment : public AstNode {
     public:
         explicit ConstAssignment(Reader& reader) : AstNode(reader) {}
@@ -20,10 +18,10 @@ namespace jsxer { namespace nodes {
 
     private:
         string name;
-        int length;
-        AstNode *expression;
+        int length{};
+        AstOpNode expression;
         string literal;
-        bool boolean_1;
-        bool boolean_2;
+        bool boolean_1{};
+        bool boolean_2{};
     };
-} }
+}

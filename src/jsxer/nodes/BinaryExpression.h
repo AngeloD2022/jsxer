@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class BinaryExpression : public AstNode {
     public:
         explicit BinaryExpression(Reader& reader) : AstNode(reader) {}
@@ -29,10 +27,11 @@ namespace jsxer { namespace nodes {
     private:
         string op_name;
         string op;
-        AstNode* left;
-        AstNode* right;
+        AstOpNode left;
+        AstOpNode right;
         string literalLeft;
         string literalRight;
-        string create_expr(const string &literal, AstNode *exprNode);
+
+        string create_expr(const string &literal, const AstOpNode& exprNode);
     };
-} }
+}

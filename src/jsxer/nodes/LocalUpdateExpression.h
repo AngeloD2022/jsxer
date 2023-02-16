@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class LocalUpdateExpression : public AstNode {
     public:
         explicit LocalUpdateExpression(Reader& reader) : AstNode(reader) {}
@@ -24,4 +22,4 @@ namespace jsxer { namespace nodes {
         string operation;
         bool postfix = false;
     };
-} }
+}

@@ -5,9 +5,7 @@
 
 #include <cstdlib>
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class MemberExpression : public AstNode {
     public:
         explicit MemberExpression(Reader& reader) : AstNode(reader) {}
@@ -22,6 +20,6 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::Reference memberInfo;
-        AstNode* objInfo;
+        AstOpNode objInfo;
     };
-} }
+}

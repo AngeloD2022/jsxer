@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class RegExpLiteral : public AstNode {
     public:
         explicit RegExpLiteral(Reader& reader) : AstNode(reader) {}
@@ -22,4 +20,4 @@ namespace jsxer { namespace nodes {
         string regex;
         string flags;
     };
-} }
+}

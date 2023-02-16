@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class DoWhileStatement : public AstNode {
     public:
         explicit DoWhileStatement(Reader& reader) : AstNode(reader) {}
@@ -20,6 +18,6 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo body;
-        AstNode *condition = nullptr;
+        AstOpNode condition;
     };
-} }
+}

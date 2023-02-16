@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class ForStatement : public AstNode {
     public:
         explicit ForStatement(Reader& reader) : AstNode(reader) {}
@@ -20,8 +18,8 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo bodyInfo;
-        AstNode *initial = nullptr;
-        AstNode *test = nullptr;
-        AstNode *update = nullptr;
+        AstOpNode initial;
+        AstOpNode test;
+        AstOpNode update;
     };
-} }
+}

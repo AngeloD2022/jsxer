@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class LogicalExpression : public AstNode {
     public:
         explicit LogicalExpression(Reader& reader) : AstNode(reader) {}
@@ -20,9 +18,9 @@ namespace jsxer { namespace nodes {
 
     private:
         string opName;
-        AstNode *leftExpr;
-        AstNode *rightExpr;
+        AstOpNode leftExpr;
+        AstOpNode rightExpr;
         string leftLiteral;
         string rightLiteral;
     };
-} }
+}
