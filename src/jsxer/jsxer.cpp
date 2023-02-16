@@ -3,6 +3,7 @@
 #include "nodes/Program.h"
 
 #include <string>
+#include <cstring>
 
 using namespace std;
 

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "reader.h"
 #include "util.h"
 
@@ -223,44 +224,39 @@ bool Reader::getBoolean() {
 /// \param symbol the symbol name
 /// \return
 bool should_replace_name(const ByteString &symbol){
-
     // if a symbol name is empty, return false.
     if (symbol.empty()) {
         return false;
     }
 
     static const std::vector<string> OPERATORS {
-            "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
-            "|=", "||=", "&&=", "&=", "^=", "??=",
-            "|", "||", "&", "&&", "^", "??", "!", "?", ":",
-            "instanceof", "typeof",
-            "+", "+=",
-            "-", "-=",
-            "*", "*=",
-            "%", "%=",
-            "/", "/=",
-            "**", "**=",
-            "<<", "<<=",
-            ">>", ">>=",
-            ">>>", ">>>="
+        "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
+        "|=", "||=", "&&=", "&=", "^=", "\?\?=",
+        "|", "||", "&", "&&", "^", "??", "!", "?", ":",
+        "instanceof", "typeof",
+        "+", "+=",
+        "-", "-=",
+        "*", "*=",
+        "%", "%=",
+        "/", "/=",
+        "**", "**=",
+        "<<", "<<=",
+        ">>", ">>=",
+        ">>>", ">>>="
     };
 
     // if a symbol name is equivalent to an operator in ECMAScript 3, return false.
-    string symstr = utils::to_string(symbol);
+    string symStr = utils::to_string(symbol);
     for (const auto &op: OPERATORS){
-        if (symstr == op){
+        if (symStr == op){
             return false;
         }
     }
 
     // check for characters outside the acceptable range for variable names...
-    for (uint16_t character : symbol) {
-        if (character > 0x7a || character < 0x41) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of(symbol.begin(), symbol.end(), [](uint16_t character) {
+        return (character > 0x7a) || (character < 0x41);
+    });
 }
 
 
