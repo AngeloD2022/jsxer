@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(Jsxer)
 
-# C++ supported standards: 11-23
-set(CMAKE_CXX_STANDARD 17) # using c++17 to use some modern features of c++
+# using c++17 to use some modern features of c++
+set(CMAKE_CXX_STANDARD 17)
 
 file(STRINGS "VERSION" JSXER_VERSION)
 
