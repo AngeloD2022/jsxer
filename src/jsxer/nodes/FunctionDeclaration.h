@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class FunctionDeclaration : public AstNode {
     public:
         explicit FunctionDeclaration(Reader& reader) : AstNode(reader) {}
@@ -21,6 +19,6 @@ namespace jsxer { namespace nodes {
     private:
         decoders::LineInfo bodyInfo;
         decoders::FunctionSignature signature;
-        int _type;
+        int _type{};
     };
-} }
+}

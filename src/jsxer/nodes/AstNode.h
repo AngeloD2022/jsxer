@@ -2,19 +2,22 @@
 
 #include "../reader.h"
 #include "node-types.h"
+#include <memory>
 
-using std::string;
+namespace jsxer::nodes {
+    class AstNode {
+    public:
+        explicit AstNode(Reader &reader) : reader(reader) {};
 
-BEGIN_NS(jsxer) BEGIN_NS(nodes)
+        virtual NodeType type() = 0;
 
-class AstNode {
-public:
-    explicit AstNode(Reader& reader) : reader(reader) {};
-    virtual NodeType type() = 0;
-    virtual string to_string() = 0;
-    virtual void parse() = 0;
-protected:
-    Reader& reader;
-};
+        virtual string to_string() = 0;
 
-END_NS(nodes) END_NS(jsxbin)
+        virtual void parse() = 0;
+
+    protected:
+        Reader &reader;
+    };
+
+    using AstOpNode = std::shared_ptr<AstNode>;
+}

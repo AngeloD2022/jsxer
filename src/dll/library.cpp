@@ -2,10 +2,10 @@
 
 #include <cstring>
 
-int decompile(const char* input, size_t in_len, char* output, size_t* out_len, bool jsxblind_deobfuscate) {
+int decompile(const char* input, size_t in_len, char* output, size_t* out_len, bool unblind) {
     std::string compiled(input, in_len), decompiled;
 
-    int err = jsxer::decompile(compiled, decompiled, jsxblind_deobfuscate);
+    int err = jsxer::decompile(compiled, decompiled, unblind);
 
     if (err != 0) {
         if (output) {

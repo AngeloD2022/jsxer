@@ -4,27 +4,27 @@
 #include "../decoders.h"
 #include <vector>
 
-BEGIN_NS(jsxer) BEGIN_NS(nodes)
+namespace jsxer::nodes {
+    class ListExpression : public AstNode {
+    public:
+        explicit ListExpression(Reader &reader) : AstNode(reader) {}
 
-class ListExpression : public AstNode {
-public:
-    explicit ListExpression(Reader& reader) : AstNode(reader) {}
+        NodeType type() override {
+            return NodeType::ListExpression;
+        }
 
-    NodeType type() override {
-        return NodeType::ListExpression;
-    }
+        void parse() override;
 
-    void parse() override;
+        void set_for_loop(bool x);
 
-    void set_for_loop(bool x);
+        string to_string() override;
 
-    string to_string() override;
+        vector<AstOpNode> arguments;
 
-    vector<AstNode*> arguments;
+    private:
+        bool for_loop = false;
+        bool sequence_expr = false;
+    };
 
-private:
-    bool for_loop = false;
-    bool sequence_expr = false;
-};
-
-END_NS(nodes) END_NS(jsxbin)
+    using OpListExpression = std::shared_ptr<ListExpression>;
+}

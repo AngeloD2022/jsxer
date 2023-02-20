@@ -1,10 +1,11 @@
 #include <algorithm>
+#include <memory>
 #include "reader.h"
 #include "util.h"
 
 using namespace jsxer;
 
-Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
+Reader::Reader(const string& jsxbin, bool unblind) {
     string _input = jsxbin;
 
     utils::string_strip_char(_input, ' ');
@@ -24,7 +25,7 @@ Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
 
     _error = ParseError::None;
     _version = JsxbinVersion::Invalid;
-    _jsxblind_deobfuscate = jsxblind_deobfuscate;
+    _unblind = unblind;
 }
 
 JsxbinVersion Reader::version() const {
@@ -269,9 +270,9 @@ ByteString Reader::readSID() {
         id = getNumber();
 
         // if a symbol name is obfuscated, rename it to something more sensible...
-        if (_jsxblind_deobfuscate && should_replace_name(symbol)) {
-            string deobfuscated = "symbol_" + std::to_string((int)id);
-            symbol = utils::to_byte_string(deobfuscated);
+        if (_unblind && should_replace_name(symbol)) {
+            string deblindedSym = "symbol_" + std::to_string((int)id);
+            symbol = utils::to_byte_string(deblindedSym);
         }
 
         addSymbol(id, symbol);
@@ -291,7 +292,7 @@ ByteString Reader::readSID() {
     return symbol;
 }
 
-Variant* Reader::getVariant() {
+OpVariant Reader::getVariant() {
     if (get() == 'n') {
         return nullptr;
     } else {
@@ -300,7 +301,7 @@ Variant* Reader::getVariant() {
 
     uint8_t type = get() - 'a';
 
-    auto* result = new Variant();
+    OpVariant result = std::make_shared<Variant>();
     switch (type) {
         case 0: // 'a' - also recognized as a null at runtime.
             // looks like it's meant for undefined, but not utilized.

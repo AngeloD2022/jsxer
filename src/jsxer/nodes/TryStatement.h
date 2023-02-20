@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class TryStatement : public AstNode {
     public:
         explicit TryStatement(Reader& reader) : AstNode(reader) {}
@@ -21,13 +19,13 @@ namespace jsxer { namespace nodes {
     private:
         struct TryCatchLayer {
             string arg;
-            AstNode* exceptionFilter;
-            AstNode* catchBlock;
+            AstOpNode exceptionFilter;
+            AstOpNode catchBlock;
         };
 
         decoders::LineInfo tryBlock;
-        AstNode* finallyBlock;
+        AstOpNode finallyBlock;
         vector<TryCatchLayer> layers;
-        int length;
+        int length{};
     };
-} }
+}

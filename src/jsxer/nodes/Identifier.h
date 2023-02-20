@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class Identifier : public AstNode {
     public:
         explicit Identifier(Reader& reader) : AstNode(reader) {}
@@ -22,4 +20,4 @@ namespace jsxer { namespace nodes {
         string id;
         bool unknown = false;
     };
-} }
+}

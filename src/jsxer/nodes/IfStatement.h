@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class IfStatement : public AstNode {
     public:
         explicit IfStatement(Reader& reader) : AstNode(reader) {}
@@ -20,7 +18,7 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo bodyInfo;
-        AstNode* test = nullptr;
-        AstNode* otherwise = nullptr;
+        AstOpNode test;
+        AstOpNode otherwise;
     };
-} }
+}

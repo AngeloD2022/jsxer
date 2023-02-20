@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class UpdateExpression : public AstNode {
     public:
         explicit UpdateExpression(Reader& reader) : AstNode(reader) {}
@@ -19,8 +17,8 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        AstNode* variable = nullptr;
+        AstOpNode variable;
         int operation = 0;
         bool postfix = false;
     };
-} }
+}
