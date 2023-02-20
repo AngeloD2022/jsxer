@@ -42,7 +42,7 @@ cd ./bin/release/
 jsxer <jsxbin path> <output path> [--unblind]
 ```
 
-The `--jsxblind` flag enables the experimental deobfuscation.
+The `--unblind` flag enables the experimental deobfuscation.
 
 ## Credits
   - Thanks to Andrin Meier ([@andrinmeier](https://github.com/andrinmeier), formerly `@autoboosh`) for his research on the format, and his project [jsxbin-to-jsx-converter](https://github.com/autoboosh/jsxbin-to-jsx-converter).
