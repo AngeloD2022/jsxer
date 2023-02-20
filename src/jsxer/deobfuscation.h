@@ -3,7 +3,6 @@
 #include "common.h"
 #include "util.h"
 
-using namespace std;
 
 BEGIN_NS(jsxer)
 BEGIN_NS(deob)

@@ -4,7 +4,6 @@
 - [ ] Fix function argument list sequence.
 - [ ] Fix declarations using comma expressions.
 - [ ] Fix Number printer (double dumping as exactly in es/js).
-- [ ] Fix memory leaks.
 - [ ] Add test data and tests (ctest or google test).
 - [ ] Better error handling and cross-platform support.
 - [ ] Use operators for ast parsing.

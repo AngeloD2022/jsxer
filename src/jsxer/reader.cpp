@@ -1,10 +1,12 @@
+#include <algorithm>
+#include <memory>
 #include "reader.h"
 #include "util.h"
 
 using namespace jsxer;
 using namespace jsxer::deob;
 
-Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
+Reader::Reader(const string& jsxbin, bool unblind) {
     string _input = jsxbin;
 
     utils::string_strip_char(_input, ' ');
@@ -24,12 +26,7 @@ Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
 
     _error = ParseError::None;
     _version = JsxbinVersion::Invalid;
-    _jsxblind_deobfuscate = jsxblind_deobfuscate;
-
-//    if (jsxblind_deobfuscate) {
-//        deobfuscation = new Deobfuscation(&_reserved_ids);
-//    }
-
+    _unblind = unblind;
 }
 
 JsxbinVersion Reader::version() const {
@@ -225,7 +222,6 @@ bool Reader::getBoolean() {
     return false;
 }
 
-
 ByteString Reader::readSID(bool operator_context) {
     ByteString symbol;
     Number id;
@@ -236,11 +232,8 @@ ByteString Reader::readSID(bool operator_context) {
 
         int id_int = utils::number_as_int<int>(id);
 
-//        if (id_int == 99)
-//            __builtin_debugtrap();
-
         // if a symbol name is obfuscated, rename it to something more sensible...
-        if (_jsxblind_deobfuscate && jsxer::deob::should_substitute(symbol, operator_context) && !symbol.empty()) {
+        if (_unblind && jsxer::deob::should_substitute(symbol, operator_context) && !symbol.empty()) {
             fprintf(stdout, "SUB: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
             string deobfuscated = "symbol_" + std::to_string((int)id);
             symbol = utils::to_byte_string(deobfuscated);
@@ -258,7 +251,7 @@ ByteString Reader::readSID(bool operator_context) {
     return symbol;
 }
 
-Variant* Reader::getVariant() {
+OpVariant Reader::getVariant() {
     if (get() == 'n') {
         return nullptr;
     } else {
@@ -267,7 +260,7 @@ Variant* Reader::getVariant() {
 
     uint8_t type = get() - 'a';
 
-    auto* result = new Variant();
+    OpVariant result = std::make_shared<Variant>();
     switch (type) {
         case 0: // 'a' - also recognized as a null at runtime.
             // looks like it's meant for undefined, but not utilized.

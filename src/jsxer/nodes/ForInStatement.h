@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class ForInStatement : public AstNode {
     public:
         explicit ForInStatement(Reader& reader) : AstNode(reader) {}
@@ -20,10 +18,10 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo bodyInfo;
-        shared_ptr<AstNode> loopVariable = nullptr;
-        shared_ptr<AstNode> objExpression = nullptr;
-        int length;
+        AstOpNode loopVariable;
+        AstOpNode objExpression;
+        int length{};
         string id;
         bool forEach = false;
     };
-} }
+}

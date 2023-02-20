@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 using std::string;
 using std::vector;
@@ -65,13 +66,15 @@ private:
     } _value;
 };
 
+using OpVariant = std::shared_ptr<Variant>;
+
 class Reader {
 public:
-    explicit Reader(const string& jsxbin, bool jsxblind_deobfuscate);
+    explicit Reader(const string& jsxbin, bool unblind);
 
-    JsxbinVersion version() const;
-    ParseError error() const;
-    size_t depth() const;
+    [[nodiscard]] JsxbinVersion version() const;
+    [[nodiscard]] ParseError error() const;
+    [[nodiscard]] size_t depth() const;
 
     bool verifySignature();
 
@@ -83,7 +86,8 @@ public:
     Number getNumber();
     ByteString getString();
     bool getBoolean();
-    Variant* getVariant();
+
+    OpVariant getVariant();
     ByteString readSID(bool operator_context = false);
 
     void addSymbol(Number id, const ByteString& symbol);
@@ -100,10 +104,7 @@ private:
     size_t _depth;
     ParseError _error;
     JsxbinVersion _version;
-
-    bool _jsxblind_deobfuscate;
-//    vector<Number> _reserved_ids;
-//    Deobfuscation *deobfuscation;
+    bool _unblind;
 
     map<Number, ByteString> _symbols;
 

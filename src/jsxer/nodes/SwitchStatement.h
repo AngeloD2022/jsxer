@@ -4,9 +4,7 @@
 #include "../decoders.h"
 #include "ListExpression.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class SwitchStatement : public AstNode {
     public:
         explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
@@ -21,8 +19,8 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo lineInfo;
-        shared_ptr<AstNode> switchValue;
-        vector<shared_ptr<AstNode>> cases;
-        vector<shared_ptr<AstNode>> implementations;
+        AstOpNode switchValue;
+        vector<AstOpNode> cases;
+        vector<AstOpNode> implementations;
     };
-} }
+}

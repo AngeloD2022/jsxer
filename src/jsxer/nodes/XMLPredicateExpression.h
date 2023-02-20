@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class XMLPredicateExpression : public AstNode {
     public:
         explicit XMLPredicateExpression(Reader& reader) : AstNode(reader) {}
@@ -20,7 +18,7 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::Reference reference;
-        shared_ptr<AstNode> object;
-        shared_ptr<AstNode> member;
+        AstOpNode object;
+        AstOpNode member;
     };
-} }
+}
