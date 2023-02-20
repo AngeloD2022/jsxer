@@ -13,8 +13,6 @@ using std::string;
 using std::vector;
 using std::map;
 
-using namespace jsxer::deob;
-
 BEGIN_NS(jsxer)
 
 #define JSXBIN_SIGNATURE_V10 "@JSXBIN@ES@1.0@"

@@ -4,7 +4,6 @@
 #include "util.h"
 
 using namespace jsxer;
-using namespace jsxer::deob;
 
 Reader::Reader(const string& jsxbin, bool unblind) {
     string _input = jsxbin;
