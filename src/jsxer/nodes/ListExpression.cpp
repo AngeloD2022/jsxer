@@ -18,7 +18,7 @@ namespace jsxer::nodes {
 
         // TODO: fix declarations
         for (int i = 0; i < arguments.size(); ++i) {
-            if (for_loop && i > 0) {
+            if (for_loop && i > 0 && arguments[i]->type() == NodeType::LocalAssignmentExpression) {
                 std::dynamic_pointer_cast<LocalAssignmentExpression>(arguments[i])->suppress_declarative_keyword(true);
             }
 

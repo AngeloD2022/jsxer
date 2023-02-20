@@ -31,6 +31,7 @@ namespace jsxer::nodes {
         AstOpNode right;
         string literalLeft;
         string literalRight;
+
         string create_expr(const string &literal, const AstOpNode& exprNode);
     };
 }

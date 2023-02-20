@@ -7,10 +7,11 @@ using namespace jsxer::deob;
 BEGIN_NS(jsxer)
 BEGIN_NS(deob)
 
+#define JSXBLIND_COMMON_VNAME 0xD1
 
 static const std::vector<string> OPERATORS {
         "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
-        "|=", "||=", "&&=", "&=", "^=", "??=",
+        "|=", "||=", "&&=", "&=", "^=", "\?\?=",
         "|", "||", "&", "&&", "^", "??", "!", "?", ":",
         "instanceof", "typeof",
         "+", "+=",
@@ -81,8 +82,8 @@ bool should_substitute(const ByteString &symbol, bool operator_ctx) {
     if (symbol.empty())
         return true;
 
-//    if (is_ECMA3_operator(symbol) && operator_ctx)
-//        return false;
+    if (is_ECMA3_operator(symbol) && !operator_ctx)
+        return false;
 
     if (is_ECMA3_operator(symbol))
         return false;
@@ -90,6 +91,9 @@ bool should_substitute(const ByteString &symbol, bool operator_ctx) {
     if (!is_compliant_name(symbol))
         return true;
 
+    // this is not a good solution and probably satisfies a ton of unintended edge cases.
+    if (symbol[0] > 180)
+        return true;
 
     return false;
 }
