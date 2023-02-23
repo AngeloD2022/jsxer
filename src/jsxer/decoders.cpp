@@ -145,7 +145,15 @@ jsxer::decoders::Reference jsxer::decoders::d_literal_ref(Reader& reader) {
 
 size_t jsxer::decoders::d_length(Reader& reader) {
     string value = d_literal_primitive(reader, LiteralType::NUMBER);
-    return value.empty() ? 0 : stoul(value);
+
+    if (!value.empty()) {
+        if (value[0] == '-') {
+            value.erase(0,1);
+        }
+        return stoul(value);
+    }
+
+    return 0;
 }
 
 string jsxer::decoders::d_sid(Reader& reader) {
