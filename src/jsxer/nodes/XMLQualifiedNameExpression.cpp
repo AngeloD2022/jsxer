@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void XMLQualifiedNameExpression::parse() {
-        namespaceObject = decoders::d_ref(reader);
+        namespaceObject = decoders::d_literal_ref(reader);
         object = decoders::d_node(reader);
         decoders::d_node(reader);
         decoders::d_node(reader);

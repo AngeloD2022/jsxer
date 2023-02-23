@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void IndexingExpression::parse() {
-        auto ref = decoders::d_ref(reader); // <str, bool>
+        auto ref = decoders::d_literal_ref(reader); // <str, bool>
         auto name = decoders::d_node(reader);
         auto expr = decoders::d_node(reader);
 

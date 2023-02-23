@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void MemberExpression::parse() {
-        memberInfo = decoders::d_ref(reader);
+        memberInfo = decoders::d_literal_ref(reader);
         objInfo = decoders::d_node(reader);
     }
 

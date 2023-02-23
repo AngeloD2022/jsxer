@@ -63,7 +63,8 @@ namespace jsxer::decoders {
     string d_sid(Reader& reader);
     string d_operator(Reader& reader);
     int d_length(Reader& reader);
-    Reference d_ref(Reader& reader);
+    Reference d_id_ref(Reader& reader);
+    Reference d_literal_ref(Reader& reader);
     byte d_byte(Reader& reader);
     vector<AstOpNode> d_children(Reader& reader);
     FunctionSignature d_fn_sig(Reader& reader);

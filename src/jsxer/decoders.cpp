@@ -121,7 +121,18 @@ string jsxer::decoders::d_variant(Reader& reader) {
     return "";
 }
 
-jsxer::decoders::Reference jsxer::decoders::d_ref(Reader& reader) {
+jsxer::decoders::Reference jsxer::decoders::d_id_ref(Reader& reader) {
+    auto id = reader.readSID();
+    bool flag = false;
+
+    if (reader.version() >= JsxbinVersion::v20) {
+        flag = reader.getBoolean();
+    }
+
+    return Reference{ id, flag };
+}
+
+jsxer::decoders::Reference jsxer::decoders::d_literal_ref(Reader& reader) {
     auto id = reader.readLiteral();
     bool flag = false;
 
@@ -265,6 +276,7 @@ bool jsxer::decoders::valid_id(const string& value) {
 
     return true;
 }
+
 bool jsxer::decoders::valid_id(const ByteString& value) {
     // ^[a-zA-Z_$][0-9a-zA-Z_$]*$
     size_t len = value.size();

@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void ThisExpression::parse() {
-        reference = decoders::d_ref(reader);
+        reference = decoders::d_literal_ref(reader);
     }
 
     string ThisExpression::to_string() {
