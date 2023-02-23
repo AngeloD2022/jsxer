@@ -7,13 +7,11 @@ using namespace jsxer::deob;
 BEGIN_NS(jsxer)
 BEGIN_NS(deob)
 
-#define JSXBLIND_COMMON_VNAME 0xD1
-
 static const std::vector<string> OPERATORS {
         "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
         "|=", "||=", "&&=", "&=", "^=", "\?\?=",
         "|", "||", "&", "&&", "^", "??", "!", "?", ":",
-        "instanceof", "typeof",
+        "instanceof", "typeof", "delete",
         "+", "+=",
         "-", "-=",
         "*", "*=",
@@ -51,7 +49,7 @@ bool is_ECMA3_operator(const ByteString &symbol) {
     return result;
 }
 
-bool is_compliant_name(const ByteString &symbol) {
+bool is_ecma3_compliant_name(const ByteString &symbol) {
     // check for anomalies in symbol naming that should only be possible with post-compilation binary changes.
     // see https://www-archive.mozilla.org/js/language/e262-3.pdf, section 7.6 (page 30)
 
@@ -76,23 +74,32 @@ bool is_compliant_name(const ByteString &symbol) {
     return !ok_chars;
 }
 
-bool should_substitute(const ByteString &symbol, bool operator_ctx) {
+bool jsxblind_should_substitute(DeobfuscationContext& context, const ByteString &symbol, bool operator_ctx) {
 
     // if a symbol name is empty, return false.
-    if (symbol.empty())
+    if (symbol.empty()) {
+        if (context.empty_id_reserved)
+            return true;
+
+        context.empty_id_reserved = true;
+        return false;
+    }
+
+    bool ecma_operator = is_ECMA3_operator(symbol);
+
+    // Check whether the symbol is an operator being used in the appropriate context...
+    if (ecma_operator) {
+        if (!operator_ctx)
+            return true;
+        return false;
+    }
+
+    // if it's not ECMA3 compliant, trash it.
+    if (!is_ecma3_compliant_name(symbol))
         return true;
 
-    if (is_ECMA3_operator(symbol) && !operator_ctx)
-        return false;
-
-    if (is_ECMA3_operator(symbol))
-        return false;
-
-    if (!is_compliant_name(symbol))
-        return true;
-
-    // this is not a good solution and probably satisfies a ton of unintended edge cases.
-    if (symbol[0] > 180)
+    // this seems like a bad solution, but it appears to work for JsxBlind.
+    if (std::any_of(symbol.begin(), symbol.end(), [](uint16_t character){return character > 126;}))
         return true;
 
     return false;

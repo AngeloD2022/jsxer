@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <memory>
 #include "reader.h"
 #include "util.h"
@@ -232,14 +231,33 @@ ByteString Reader::readSID(bool operator_context) {
         int id_int = utils::number_as_int<int>(id);
 
         // if a symbol name is obfuscated, rename it to something more sensible...
-        if (_unblind && jsxer::deob::should_substitute(symbol, operator_context) && !symbol.empty()) {
+        if (_unblind && jsxer::deob::jsxblind_should_substitute(deobfuscationContext, symbol, operator_context)) {
             fprintf(stdout, "SUB: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
+
             string deobfuscated = "symbol_" + std::to_string((int)id);
             symbol = utils::to_byte_string(deobfuscated);
-        } else {
+        }
+        else {
             fprintf(stdout, "KEEP: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
         }
 
+        addSymbol(id, symbol);
+    } else {
+        step(-1);
+        id = getNumber();
+        symbol = getSymbol(id);
+    }
+
+    return symbol;
+}
+
+ByteString Reader::readLiteral() {
+    ByteString symbol;
+    Number id;
+
+    if (get() == 'z') {
+        symbol = getString();
+        id = getNumber();
         addSymbol(id, symbol);
     } else {
         step(-1);

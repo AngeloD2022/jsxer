@@ -87,6 +87,7 @@ public:
 
     OpVariant getVariant();
     ByteString readSID(bool operator_context = false);
+    ByteString readLiteral();
 
     void addSymbol(Number id, const ByteString& symbol);
     ByteString getSymbol(Number id);
@@ -102,7 +103,9 @@ private:
     size_t _depth;
     ParseError _error;
     JsxbinVersion _version;
+
     bool _unblind;
+    deob::DeobfuscationContext deobfuscationContext;
 
     map<Number, ByteString> _symbols;
 
@@ -111,6 +114,7 @@ private:
 
     Token _next();
     static bool _ignorable(Token value);
+
 };
 
 END_NS(jsxbin)

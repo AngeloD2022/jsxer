@@ -1,3 +1,7 @@
+///
+/// High-Level Decoding Procedures
+///
+
 #include "util.h"
 #include "decoders.h"
 #include "nodes/nodes.h"
@@ -118,7 +122,7 @@ string jsxer::decoders::d_variant(Reader& reader) {
 }
 
 jsxer::decoders::Reference jsxer::decoders::d_ref(Reader& reader) {
-    auto id = reader.readSID();
+    auto id = reader.readLiteral();
     bool flag = false;
 
     if (reader.version() >= JsxbinVersion::v20) {
