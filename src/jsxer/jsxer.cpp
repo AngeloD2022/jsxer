@@ -45,7 +45,7 @@ bool verifySignature(const char* code, JsxbinVersion* version = nullptr, int* st
 
 void prepend_header(string& code, bool unblind) {
     string header = "/*\n"
-                    "* Decompiled with Jsxbin Decompiler\n"
+                    "* Decompiled with Jsxer\n"
                     "* Version: " CONFIG_VERSION "\n";
 
     if (unblind) {
