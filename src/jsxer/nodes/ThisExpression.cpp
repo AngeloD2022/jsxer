@@ -7,6 +7,7 @@ namespace jsxer::nodes {
     }
 
     string ThisExpression::to_string() {
-        return utils::to_string(reference.id);
+        // return utils::to_string(reference.id);
+        return "this";
     }
 }

@@ -14,6 +14,9 @@ namespace jsxer::nodes {
             result = '(' + result + ')';
         }
 
+        if (objInfo->type() == NodeType::AssignmentExpression || objInfo->type() == NodeType::LocalAssignmentExpression)
+            result = '(' + result + ')';
+
         // Check member validity...
         if (decoders::valid_id(memberInfo.id)) {
             result += '.' + utils::to_string(memberInfo.id);

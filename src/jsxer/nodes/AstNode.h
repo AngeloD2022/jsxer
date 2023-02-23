@@ -4,7 +4,6 @@
 
 #include "../reader.h"
 #include "node-types.h"
-#include <memory>
 
 namespace jsxer::nodes {
     class AstNode {
