@@ -18,7 +18,7 @@ namespace jsxer::nodes {
 
     private:
         string name;
-        int length{};
+        size_t length{};
         AstOpNode expression;
         string literal;
         bool boolean_1{};

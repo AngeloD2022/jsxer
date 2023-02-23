@@ -20,7 +20,7 @@ namespace jsxer::decoders {
     };
 
     struct LineInfo {
-        int line_number;
+        size_t line_number;
         AstOpNode child;
         vector<string> labels;
 
@@ -46,13 +46,13 @@ namespace jsxer::decoders {
     };
 
     struct FunctionSignature {
-        int flags;
+        unsigned int flags;
         string name;
-        int num_arguments;
-        int num_local_const;
+        size_t num_arguments;
+        size_t num_local_const;
         FunctionType func_type;
-        map<string, int> parameters;
-        map<string, int> local_vars;
+        map<string, size_t> parameters;
+        map<string, size_t> local_vars;
     };
 
     AstOpNode d_node(Reader& reader);
@@ -62,7 +62,7 @@ namespace jsxer::decoders {
     string d_number(Reader& reader);
     string d_sid(Reader& reader);
     string d_operator(Reader& reader);
-    int d_length(Reader& reader);
+    size_t d_length(Reader& reader);
     Reference d_id_ref(Reader& reader);
     Reference d_literal_ref(Reader& reader);
     byte d_byte(Reader& reader);

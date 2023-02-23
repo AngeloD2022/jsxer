@@ -18,7 +18,7 @@ namespace jsxer::nodes {
 
     private:
         string id;
-        int length = 0;
+        size_t length = 0;
         string operation;
         bool postfix = false;
     };
