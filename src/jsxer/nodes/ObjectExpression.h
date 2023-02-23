@@ -4,9 +4,7 @@
 #include "../decoders.h"
 #include <algorithm>
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class ObjectExpression : public AstNode {
     public:
         explicit ObjectExpression(Reader& reader) : AstNode(reader) {}
@@ -21,6 +19,6 @@ namespace jsxer { namespace nodes {
 
     private:
         string objectId;
-        map<string, shared_ptr<AstNode>> properties;
+        map<string, AstOpNode> properties;
     };
-} }
+}

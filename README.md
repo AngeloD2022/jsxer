@@ -28,6 +28,22 @@ cmake .
 cmake --build . --config release 
 ```
 
+*After a successful build, navigate to the folder with the executable:*
+```bash
+cd ./bin/release/
+```
+
+## Usage
+
+> **Note**
+> Make sure that the input file only contains the JSXBIN literal itself.<sup><a href="https://youtu.be/939Bo5iTxo0?lc=UgyPDxgsuRmbfd8MI-F4AaABAg.9gIEl4rxFVa9gIFW1EPzqO">\[1\]</a></sup>&ensp;(Usually starting with `@JSXBIN@`)
+
+```bash
+jsxer <jsxbin path> <output path> [--unblind]
+```
+
+The `--unblind` flag enables the experimental deobfuscation.
+
 ## Credits
   - Thanks to Andrin Meier ([@andrinmeier](https://github.com/andrinmeier), formerly `@autoboosh`) for his research on the format, and his project [jsxbin-to-jsx-converter](https://github.com/autoboosh/jsxbin-to-jsx-converter).
   - Thanks to [@codecopy](https://github.com/codecopy) for keeping a [fork](https://github.com/codecopy/jsxbin-to-jsx-converter) of `@autoboosh`'s project, where the original vanished as a consequence of a DMCA takedown from Adobe.

@@ -1,9 +1,10 @@
+#include <memory>
 #include "reader.h"
 #include "util.h"
 
 using namespace jsxer;
 
-Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
+Reader::Reader(const string& jsxbin, bool unblind) {
     string _input = jsxbin;
 
     utils::string_strip_char(_input, ' ');
@@ -23,7 +24,7 @@ Reader::Reader(const string& jsxbin, bool jsxblind_deobfuscate) {
 
     _error = ParseError::None;
     _version = JsxbinVersion::Invalid;
-    _jsxblind_deobfuscate = jsxblind_deobfuscate;
+    _unblind = unblind;
 }
 
 JsxbinVersion Reader::version() const {
@@ -219,52 +220,7 @@ bool Reader::getBoolean() {
     return false;
 }
 
-/// Determines if renaming is appropriate with symbols in JSXBIN files that are obfuscated with Jsxblind...
-/// \param symbol the symbol name
-/// \return
-bool should_replace_name(const ByteString &symbol){
-
-    // if a symbol name is empty, return false.
-    if (symbol.empty()) {
-        return false;
-    }
-
-    static const std::vector<string> OPERATORS {
-            "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
-            "|=", "||=", "&&=", "&=", "^=", "??=",
-            "|", "||", "&", "&&", "^", "??", "!", "?", ":",
-            "instanceof", "typeof",
-            "+", "+=",
-            "-", "-=",
-            "*", "*=",
-            "%", "%=",
-            "/", "/=",
-            "**", "**=",
-            "<<", "<<=",
-            ">>", ">>=",
-            ">>>", ">>>="
-    };
-
-    // if a symbol name is equivalent to an operator in ECMAScript 3, return false.
-    string symstr = utils::to_string(symbol);
-    for (const auto &op: OPERATORS){
-        if (symstr == op){
-            return false;
-        }
-    }
-
-    // check for characters outside the acceptable range for variable names...
-    for (uint16_t character : symbol) {
-        if (character > 0x7a || character < 0x41) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-ByteString Reader::readSID() {
+ByteString Reader::readSID(bool operator_context) {
     ByteString symbol;
     Number id;
 
@@ -272,20 +228,15 @@ ByteString Reader::readSID() {
         symbol = getString();
         id = getNumber();
 
+        int id_int = utils::number_as_int<int>(id);
+
         // if a symbol name is obfuscated, rename it to something more sensible...
-        if (_jsxblind_deobfuscate && should_replace_name(symbol)) {
+        if (_unblind && jsxer::deob::jsxblind_should_substitute(deobfuscationContext, symbol, operator_context)) {
             string deobfuscated = "symbol_" + std::to_string((int)id);
             symbol = utils::to_byte_string(deobfuscated);
         }
 
         addSymbol(id, symbol);
-
-//        if (!utils::is_double_type(id)) {
-//            id = (double) utils::to_integer(id);
-//        }
-//
-//         printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
-//         fflush(stdout);
     } else {
         step(-1);
         id = getNumber();
@@ -295,7 +246,24 @@ ByteString Reader::readSID() {
     return symbol;
 }
 
-Variant* Reader::getVariant() {
+ByteString Reader::readLiteral() {
+    ByteString symbol;
+    Number id;
+
+    if (get() == 'z') {
+        symbol = getString();
+        id = getNumber();
+        addSymbol(id, symbol);
+    } else {
+        step(-1);
+        id = getNumber();
+        symbol = getSymbol(id);
+    }
+
+    return symbol;
+}
+
+OpVariant Reader::getVariant() {
     if (get() == 'n') {
         return nullptr;
     } else {
@@ -304,7 +272,7 @@ Variant* Reader::getVariant() {
 
     uint8_t type = get() - 'a';
 
-    auto* result = new Variant();
+    OpVariant result = std::make_shared<Variant>();
     switch (type) {
         case 0: // 'a' - also recognized as a null at runtime.
             // looks like it's meant for undefined, but not utilized.

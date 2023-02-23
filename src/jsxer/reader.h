@@ -2,23 +2,16 @@
 
 #include "jsxer.h"
 #include "common.h"
+#include "deobfuscation.h"
 
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 using std::string;
 using std::vector;
 using std::map;
-
-typedef uint8_t Token;
-
-typedef uint8_t Byte;
-typedef double Number;
-
-using String = std::string;
-using Bytes = std::vector<uint8_t>;
-using ByteString = std::vector<uint16_t>;
 
 BEGIN_NS(jsxer)
 
@@ -71,13 +64,15 @@ private:
     } _value;
 };
 
+using OpVariant = std::shared_ptr<Variant>;
+
 class Reader {
 public:
-    explicit Reader(const string& jsxbin, bool jsxblind_deobfuscate);
+    explicit Reader(const string& jsxbin, bool unblind);
 
-    JsxbinVersion version() const;
-    ParseError error() const;
-    size_t depth() const;
+    [[nodiscard]] JsxbinVersion version() const;
+    [[nodiscard]] ParseError error() const;
+    [[nodiscard]] size_t depth() const;
 
     bool verifySignature();
 
@@ -89,8 +84,10 @@ public:
     Number getNumber();
     ByteString getString();
     bool getBoolean();
-    Variant* getVariant();
-    ByteString readSID();
+
+    OpVariant getVariant();
+    ByteString readSID(bool operator_context = false);
+    ByteString readLiteral();
 
     void addSymbol(Number id, const ByteString& symbol);
     ByteString getSymbol(Number id);
@@ -106,7 +103,9 @@ private:
     size_t _depth;
     ParseError _error;
     JsxbinVersion _version;
-    bool _jsxblind_deobfuscate;
+
+    bool _unblind;
+    deob::DeobfuscationContext deobfuscationContext;
 
     map<Number, ByteString> _symbols;
 
@@ -115,6 +114,7 @@ private:
 
     Token _next();
     static bool _ignorable(Token value);
+
 };
 
 END_NS(jsxbin)

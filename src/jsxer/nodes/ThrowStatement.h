@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class ThrowStatement : public AstNode {
     public:
         explicit ThrowStatement(Reader& reader) : AstNode(reader) {}
@@ -20,6 +18,6 @@ namespace jsxer { namespace nodes {
 
     private:
         decoders::LineInfo lineInfo;
-        shared_ptr<AstNode> expression;
+        AstOpNode expression;
     };
-} }
+}

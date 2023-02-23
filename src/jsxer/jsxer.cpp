@@ -3,8 +3,7 @@
 #include "nodes/Program.h"
 
 #include <string>
-
-using namespace std;
+#include <cstring>
 
 #define JSXBIN_SIGNATURE_V10 "@JSXBIN@ES@1.0@"
 #define JSXBIN_SIGNATURE_V20 "@JSXBIN@ES@2.0@"
@@ -44,27 +43,24 @@ bool verifySignature(const char* code, JsxbinVersion* version = nullptr, int* st
     return true;
 }
 
-void prepend_header(string& code, bool deobfuscation) {
+void prepend_header(string& code, bool unblind) {
     string header = "/*\n"
                     "* Decompiled with Jsxbin Decompiler\n"
-                    "* Version: " CONFIG_VERSION "\n"
-                    "*/\n\n";
+                    "* Version: " CONFIG_VERSION "\n";
 
-    if (deobfuscation){
-        header = "/*\n"
-                 "* Decompiled with Jsxbin Decompiler\n"
-                 "* Version: " CONFIG_VERSION "\n"
-                 "* Jsxblind Deobfuscation Enabled (EXPERIMENTAL)\n"
-                 "*/\n\n";
+    if (unblind) {
+        header += "* Jsxblind Deobfuscation Enabled (EXPERIMENTAL)\n";
     }
+
+    header += "*/\n\n";
 
     code = header + code;
 }
 
-int jsxer::decompile(const string& input, string& output, bool jsxblind_deobfuscate) {
-    Reader reader(input, jsxblind_deobfuscate);
+int jsxer::decompile(const string& input, string& output, bool unblind) {
+    auto reader = std::make_unique<Reader>(input, unblind);
 
-    if (!reader.verifySignature()) {
+    if (!reader->verifySignature()) {
         // TODO: Handle this properly
         fprintf(stderr, "JSXBIN signature verification failed!");
         output = "";
@@ -72,12 +68,12 @@ int jsxer::decompile(const string& input, string& output, bool jsxblind_deobfusc
     }
 
     // Parse into an Ast
-    Program ast(reader);
-    ast.parse();
+    auto ast = std::make_unique<jsxer::nodes::Program>(*reader);
+    ast->parse();
 
     // Generate code from the ast
-    output = ast.to_string();
-    prepend_header(output, jsxblind_deobfuscate);
+    output = ast->to_string();
+    prepend_header(output, unblind);
 
     return 0;
 }

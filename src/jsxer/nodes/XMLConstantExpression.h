@@ -3,9 +3,7 @@
 #include "AstNode.h"
 #include "../decoders.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class XMLConstantExpression : public AstNode {
     public:
         explicit XMLConstantExpression(Reader& reader) : AstNode(reader) {}
@@ -19,6 +17,6 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        map<shared_ptr<AstNode>, int> children;
+        map<AstOpNode, int> children;
     };
-} }
+}

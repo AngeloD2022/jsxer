@@ -5,9 +5,7 @@
 #include "../decoders.h"
 #include <vector>
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class ArrayExpression : public AstNode {
     public:
         explicit ArrayExpression(Reader& reader) : AstNode(reader) {}
@@ -21,7 +19,6 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        shared_ptr<ListExpression> argumentList = nullptr;
-
+        OpListExpression argumentList;
     };
-} }
+}

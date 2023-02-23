@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-ESD_PUBLIC_API int decompile(const char* input, size_t in_len, char* output, size_t* out_len, bool jsxblind_deobfuscate = false);
+ESD_PUBLIC_API int decompile(const char* input, size_t in_len, char* output, size_t* out_len, bool unblind = false);
 
 #ifdef __cplusplus
 };

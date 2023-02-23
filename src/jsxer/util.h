@@ -3,9 +3,9 @@
 #include <string>
 
 #include "common.h"
-#include "reader.h"
 
 using std::string;
+using std::vector;
 
 BEGIN_NS(jsxer) BEGIN_NS(utils)
 

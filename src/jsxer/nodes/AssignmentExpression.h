@@ -4,9 +4,7 @@
 #include "../decoders.h"
 #include "BinaryExpression.h"
 
-using namespace jsxer;
-
-namespace jsxer { namespace nodes {
+namespace jsxer::nodes {
     class AssignmentExpression : public AstNode {
     public:
         explicit AssignmentExpression(Reader& reader) : AstNode(reader) {}
@@ -20,9 +18,9 @@ namespace jsxer { namespace nodes {
         string to_string() override;
 
     private:
-        shared_ptr<AstNode> variable;
-        shared_ptr<AstNode> expression;
+        AstOpNode variable;
+        AstOpNode expression;
         string literal;
-        bool shorthand;
+        bool shorthand{};
     };
-} }
+}
