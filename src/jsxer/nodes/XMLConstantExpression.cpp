@@ -5,7 +5,9 @@ namespace jsxer::nodes {
         size_t length = decoders::d_length(reader);
 
         for (int i = 0; i < length; ++i) {
-            children[decoders::d_node(reader)] = decoders::d_length(reader);
+            AstOpNode child_node = decoders::d_node(reader);
+            size_t child_length = decoders::d_length(reader);
+            children[child_node] = child_length;
         }
     }
 
