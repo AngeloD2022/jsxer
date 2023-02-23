@@ -26,6 +26,6 @@ namespace jsxer::nodes {
         decoders::LineInfo tryBlock;
         AstOpNode finallyBlock;
         vector<TryCatchLayer> layers;
-        int length{};
+        size_t length{};
     };
 }

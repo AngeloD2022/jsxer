@@ -19,6 +19,6 @@ namespace jsxer::nodes {
     private:
         decoders::LineInfo bodyInfo;
         decoders::FunctionSignature signature;
-        int _type{};
+        unsigned int _type{};
     };
 }

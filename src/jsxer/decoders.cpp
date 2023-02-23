@@ -143,9 +143,9 @@ jsxer::decoders::Reference jsxer::decoders::d_literal_ref(Reader& reader) {
     return Reference{ id, flag };
 }
 
-int jsxer::decoders::d_length(Reader& reader) {
+size_t jsxer::decoders::d_length(Reader& reader) {
     string value = d_literal_primitive(reader, LiteralType::NUMBER);
-    return value.empty() ? 0 : abs(stoi(value));
+    return value.empty() ? 0 : stoul(value);
 }
 
 string jsxer::decoders::d_sid(Reader& reader) {
@@ -157,7 +157,7 @@ string jsxer::decoders::d_operator(Reader& reader) {
 }
 
 vector<jsxer::nodes::AstOpNode> jsxer::decoders::d_children(Reader& reader) {
-    int length = d_length(reader);
+    size_t length = d_length(reader);
 
     vector<AstOpNode> result;
     for (int i = 0; i < length; ++i) {
@@ -176,7 +176,7 @@ jsxer::decoders::LineInfo jsxer::decoders::d_line_info(Reader& reader) {
     result.line_number = d_length(reader);
     result.child = d_node(reader);
 
-    int length = d_length(reader);
+    size_t length = d_length(reader);
 
     for (int i = 0; i < length; ++i) {
         result.labels.push_back(d_sid(reader));
@@ -189,10 +189,10 @@ jsxer::decoders::FunctionSignature jsxer::decoders::d_fn_sig(Reader& reader) {
     FunctionSignature result;
 
     // identifiers/variables in func scope
-    int num_idents = d_length(reader);
+    size_t num_idents = d_length(reader);
     for (int i = 0; i < num_idents; ++i) {
         string id = d_sid(reader);
-        int id_seq = d_length(reader);
+        size_t id_seq = d_length(reader);
 
         // separate local variables from Arguments
         if (id_seq > 0x1ffffc70 && id_seq < 0x202fbf00)
@@ -209,7 +209,7 @@ jsxer::decoders::FunctionSignature jsxer::decoders::d_fn_sig(Reader& reader) {
     // 0 -> normal func or Script Closure with no func local vars
     // 2 -> normal func with func local vars
     // 3 -> Script Closure with func local vars
-    result.flags = d_length(reader);
+    result.flags = (unsigned int) d_length(reader);
 
     // num of func local const variables
     result.num_local_const = d_length(reader);

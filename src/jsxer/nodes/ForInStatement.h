@@ -20,7 +20,7 @@ namespace jsxer::nodes {
         decoders::LineInfo bodyInfo;
         AstOpNode loopVariable;
         AstOpNode objExpression;
-        int length{};
+        unsigned long length{};
         string id;
         bool forEach = false;
     };

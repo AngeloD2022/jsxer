@@ -22,7 +22,7 @@ namespace jsxer::nodes {
         string iteratorInitial;
         AstOpNode upperBound;
         string stepSize;
-        int length{};
+        size_t length{};
         string comparisonOperator;
     };
 }
