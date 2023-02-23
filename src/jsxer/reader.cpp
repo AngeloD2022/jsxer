@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <memory>
 #include "reader.h"
 #include "util.h"
@@ -221,47 +220,7 @@ bool Reader::getBoolean() {
     return false;
 }
 
-/// Determines if renaming is appropriate with symbols in JSXBIN files that are obfuscated with Jsxblind...
-/// \param symbol the symbol name
-/// \return
-bool should_replace_name(const ByteString &symbol){
-    // if a symbol name is empty, return false.
-    if (symbol.empty()) {
-        return false;
-    }
-
-    static const std::vector<string> OPERATORS {
-        "=", "==", "!=", "!==", "===", "<=", ">=", ">", "<",
-        "|=", "||=", "&&=", "&=", "^=", "\?\?=",
-        "|", "||", "&", "&&", "^", "??", "!", "?", ":",
-        "instanceof", "typeof",
-        "+", "+=",
-        "-", "-=",
-        "*", "*=",
-        "%", "%=",
-        "/", "/=",
-        "**", "**=",
-        "<<", "<<=",
-        ">>", ">>=",
-        ">>>", ">>>="
-    };
-
-    // if a symbol name is equivalent to an operator in ECMAScript 3, return false.
-    string symStr = utils::to_string(symbol);
-    for (const auto &op: OPERATORS){
-        if (symStr == op){
-            return false;
-        }
-    }
-
-    // check for characters outside the acceptable range for variable names...
-    return std::any_of(symbol.begin(), symbol.end(), [](uint16_t character) {
-        return (character > 0x7a) || (character < 0x41);
-    });
-}
-
-
-ByteString Reader::readSID() {
+ByteString Reader::readSID(bool operator_context) {
     ByteString symbol;
     Number id;
 
@@ -269,20 +228,37 @@ ByteString Reader::readSID() {
         symbol = getString();
         id = getNumber();
 
+        int id_int = utils::number_as_int<int>(id);
+
         // if a symbol name is obfuscated, rename it to something more sensible...
-        if (_unblind && should_replace_name(symbol)) {
-            string deblindedSym = "symbol_" + std::to_string((int)id);
-            symbol = utils::to_byte_string(deblindedSym);
+        if (_unblind && jsxer::deob::jsxblind_should_substitute(deobfuscationContext, symbol, operator_context)) {
+            fprintf(stdout, "SUB: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
+
+            string deobfuscated = "symbol_" + std::to_string((int)id);
+            symbol = utils::to_byte_string(deobfuscated);
+        }
+        else {
+            fprintf(stdout, "KEEP: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
         }
 
         addSymbol(id, symbol);
+    } else {
+        step(-1);
+        id = getNumber();
+        symbol = getSymbol(id);
+    }
 
-//        if (!utils::is_double_type(id)) {
-//            id = (double) utils::to_integer(id);
-//        }
-//
-//         printf("%04llX => %s\n", (uint64_t) id, utils::to_string_literal(symbol).c_str());
-//         fflush(stdout);
+    return symbol;
+}
+
+ByteString Reader::readLiteral() {
+    ByteString symbol;
+    Number id;
+
+    if (get() == 'z') {
+        symbol = getString();
+        id = getNumber();
+        addSymbol(id, symbol);
     } else {
         step(-1);
         id = getNumber();

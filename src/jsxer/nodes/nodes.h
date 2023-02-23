@@ -144,7 +144,6 @@ namespace jsxer::nodes {
                 return std::make_shared<XMLPredicateExpression>(reader);
             case NodeType::XMLUnaryRefExpression:
                 return std::make_shared<XMLUnaryRefExpression>(reader);
-
             default:
                 return nullptr;
         }

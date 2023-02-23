@@ -2,6 +2,7 @@
 
 #include "jsxer.h"
 #include "common.h"
+#include "deobfuscation.h"
 
 #include <map>
 #include <string>
@@ -11,15 +12,6 @@
 using std::string;
 using std::vector;
 using std::map;
-
-typedef uint8_t Token;
-
-typedef uint8_t Byte;
-typedef double Number;
-
-using String = std::string;
-using Bytes = std::vector<uint8_t>;
-using ByteString = std::vector<uint16_t>;
 
 BEGIN_NS(jsxer)
 
@@ -92,8 +84,10 @@ public:
     Number getNumber();
     ByteString getString();
     bool getBoolean();
+
     OpVariant getVariant();
-    ByteString readSID();
+    ByteString readSID(bool operator_context = false);
+    ByteString readLiteral();
 
     void addSymbol(Number id, const ByteString& symbol);
     ByteString getSymbol(Number id);
@@ -109,7 +103,9 @@ private:
     size_t _depth;
     ParseError _error;
     JsxbinVersion _version;
+
     bool _unblind;
+    deob::DeobfuscationContext deobfuscationContext;
 
     map<Number, ByteString> _symbols;
 
@@ -118,6 +114,7 @@ private:
 
     Token _next();
     static bool _ignorable(Token value);
+
 };
 
 END_NS(jsxbin)

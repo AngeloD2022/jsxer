@@ -5,8 +5,6 @@
 #include <string>
 #include <cstring>
 
-using namespace std;
-
 #define JSXBIN_SIGNATURE_V10 "@JSXBIN@ES@1.0@"
 #define JSXBIN_SIGNATURE_V20 "@JSXBIN@ES@2.0@"
 #define JSXBIN_SIGNATURE_V21 "@JSXBIN@ES@2.1@"

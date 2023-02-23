@@ -9,6 +9,7 @@ namespace jsxer::nodes {
         id = decoders::d_sid(reader);
 
         if (reader.version() >= JsxbinVersion::v20)
+            // strange, because a "for-each" statement is not described in the ECMAScript3 standard.
             forEach = reader.getBoolean();
     }
 
@@ -20,7 +21,7 @@ namespace jsxer::nodes {
         result += loopVariable->to_string();
         result += " in ";
         result += objExpression->to_string();
-        result += ") { \n" + bodyInfo.create_body() + '}';
+        result += ") { \n" + bodyInfo.create_body() + "\n}";
 
         return result;
     }

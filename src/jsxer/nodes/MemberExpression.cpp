@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void MemberExpression::parse() {
-        memberInfo = decoders::d_ref(reader);
+        memberInfo = decoders::d_literal_ref(reader);
         objInfo = decoders::d_node(reader);
     }
 
@@ -13,6 +13,9 @@ namespace jsxer::nodes {
         if (decoders::is_integer(result) || (objInfo->type() == NodeType::BinaryExpression)) {
             result = '(' + result + ')';
         }
+
+        if (objInfo->type() == NodeType::AssignmentExpression || objInfo->type() == NodeType::LocalAssignmentExpression)
+            result = '(' + result + ')';
 
         // Check member validity...
         if (decoders::valid_id(memberInfo.id)) {

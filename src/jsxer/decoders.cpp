@@ -1,3 +1,7 @@
+///
+/// High-Level Decoding Procedures
+///
+
 #include "util.h"
 #include "decoders.h"
 #include "nodes/nodes.h"
@@ -73,7 +77,6 @@ int jsxer::decoders::d_literal_num(Reader& reader) {
     return value.empty() ? 0 : stoi(value);
 }
 
-
 jsxer::nodes::AstOpNode jsxer::decoders::d_node(Reader& reader) {
     Token marker = reader.get();
 
@@ -118,8 +121,19 @@ string jsxer::decoders::d_variant(Reader& reader) {
     return "";
 }
 
-jsxer::decoders::Reference jsxer::decoders::d_ref(Reader& reader) {
+jsxer::decoders::Reference jsxer::decoders::d_id_ref(Reader& reader) {
     auto id = reader.readSID();
+    bool flag = false;
+
+    if (reader.version() >= JsxbinVersion::v20) {
+        flag = reader.getBoolean();
+    }
+
+    return Reference{ id, flag };
+}
+
+jsxer::decoders::Reference jsxer::decoders::d_literal_ref(Reader& reader) {
+    auto id = reader.readLiteral();
     bool flag = false;
 
     if (reader.version() >= JsxbinVersion::v20) {
@@ -136,6 +150,10 @@ int jsxer::decoders::d_length(Reader& reader) {
 
 string jsxer::decoders::d_sid(Reader& reader) {
     return utils::to_string(reader.readSID());
+}
+
+string jsxer::decoders::d_operator(Reader& reader) {
+    return utils::to_string(reader.readSID(true));
 }
 
 vector<jsxer::nodes::AstOpNode> jsxer::decoders::d_children(Reader& reader) {
@@ -258,6 +276,7 @@ bool jsxer::decoders::valid_id(const string& value) {
 
     return true;
 }
+
 bool jsxer::decoders::valid_id(const ByteString& value) {
     // ^[a-zA-Z_$][0-9a-zA-Z_$]*$
     size_t len = value.size();

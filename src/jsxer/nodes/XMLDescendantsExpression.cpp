@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void XMLDescendantsExpression::parse() {
-        descendants = decoders::d_ref(reader);
+        descendants = decoders::d_literal_ref(reader);
         object = decoders::d_node(reader);
 
         decoders::d_node(reader);
