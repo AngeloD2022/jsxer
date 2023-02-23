@@ -232,13 +232,8 @@ ByteString Reader::readSID(bool operator_context) {
 
         // if a symbol name is obfuscated, rename it to something more sensible...
         if (_unblind && jsxer::deob::jsxblind_should_substitute(deobfuscationContext, symbol, operator_context)) {
-            fprintf(stdout, "SUB: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
-
             string deobfuscated = "symbol_" + std::to_string((int)id);
             symbol = utils::to_byte_string(deobfuscated);
-        }
-        else {
-            fprintf(stdout, "KEEP: %s, ID: %d\n", utils::to_string(symbol).c_str(), id_int);
         }
 
         addSymbol(id, symbol);
