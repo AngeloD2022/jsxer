@@ -25,6 +25,8 @@ string to_string_literal(const ByteString& value, bool capital = false);
 
 string to_string_literal(const string& value, bool capital = false);
 
+string from_string_literal(const string &value);
+
 string to_string(const ByteString& value);
 
 ByteString to_byte_string(const string& value);

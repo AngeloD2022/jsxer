@@ -6,19 +6,19 @@
 
 BEGIN_NS(jsxer) BEGIN_NS(utils)
 
-bool string_equal(const string& str1, const string& str2) {
+bool string_equal(const string &str1, const string &str2) {
     return strncmp(str1.c_str(), str2.c_str(), MIN(str1.length(), str2.length())) == 0;
 }
 
-void string_replace_char(string& str, char search, char replace) {
+void string_replace_char(string &str, char search, char replace) {
     std::replace(str.begin(), str.end(), search, replace);
 }
 
-void string_strip_char(string& str, char search) {
+void string_strip_char(string &str, char search) {
     str.erase(remove(str.begin(), str.end(), search), str.end());
 }
 
-void replace_str_inplace(string& subject, const string& search, const string& replace) {
+void replace_str_inplace(string &subject, const string &search, const string &replace) {
     size_t pos = 0;
 
     while ((pos = subject.find(search, pos)) != string::npos) {
@@ -31,8 +31,8 @@ void replace_str_inplace(string& subject, const string& search, const string& re
 #define HEX_CHARSET_SMALL   ("0123456789" "abcdef")
 
 string unicode_escape(uint16_t value, bool capital = false) {
-    auto* cs = capital ? HEX_CHARSET_CAPITAL : HEX_CHARSET_SMALL;
-    char result[] = { '\\', 'u', '0', '0', '0', '0', '\0' };
+    auto *cs = capital ? HEX_CHARSET_CAPITAL : HEX_CHARSET_SMALL;
+    char result[] = {'\\', 'u', '0', '0', '0', '0', '\0'};
 
     for (int i = 0; i < 4; ++i) {
         auto hc = cs[(value >> (4 * i)) & 0xF];
@@ -43,8 +43,8 @@ string unicode_escape(uint16_t value, bool capital = false) {
 }
 
 string hex_escape(uint8_t value, bool capital = false) {
-    auto* cs = capital ? HEX_CHARSET_CAPITAL : HEX_CHARSET_SMALL;
-    char result[] = { '\\', 'x', '0', '0', '\0' };
+    auto *cs = capital ? HEX_CHARSET_CAPITAL : HEX_CHARSET_SMALL;
+    char result[] = {'\\', 'x', '0', '0', '\0'};
 
     for (int i = 0; i < 2; ++i) {
         auto hc = cs[(value >> (4 * i)) & 0xF];
@@ -79,63 +79,128 @@ string escape_hex_or_unicode(uint16_t value, bool capital = false) {
 
 string string_literal_escape(uint16_t value, bool capital) {
     switch (value) {
-        case '\b': return "\\b";
-        case '\f': return "\\f";
-        case '\n': return "\\n";
-        case '\r': return "\\r";
-        case '\v': return "\\v";
-        case '\t': return "\\t";
-        case '\"': return "\\\"";
-        case '\'': return "\\\'";
-        case '\\': return "\\\\";
+        case '\b':
+            return "\\b";
+        case '\f':
+            return "\\f";
+        case '\n':
+            return "\\n";
+        case '\r':
+            return "\\r";
+        case '\v':
+            return "\\v";
+        case '\t':
+            return "\\t";
+        case '\"':
+            return "\\\"";
+        case '\'':
+            return "\\\'";
+        case '\\':
+            return "\\\\";
         default:
             return is_non_printable_utf16(value)
-                ? escape_hex_or_unicode(value, capital)
-                : string(1, (char) value);
+                   ? escape_hex_or_unicode(value, capital)
+                   : string(1, (char) value);
     }
 }
 
-string string_literal_escape(const ByteString& value, bool capital) {
+string string_literal_escape(const ByteString &value, bool capital) {
     string res;
 
-    for (const auto& c : value) {
+    for (const auto &c: value) {
         res += string_literal_escape(c, capital);
     }
 
     return res;
 }
 
-string to_string_literal(const ByteString& value, bool capital) {
+string string_literal_unescape(const string& value) {
+
+    string result;
+
+    for (int i = 0; i < value.size(); ++i) {
+        if (value[i] != '\\' || i + 1 == value.size()) {
+            result += value[i];
+            continue;
+        }
+
+        i++;
+        switch(value[i]) {
+            case 'b':
+                result += "\b";
+                break;
+            case 'f':
+                result += "\f";
+                break;
+            case 'n':
+                result += "\n";
+                break;
+            case 'r':
+                result += "\r";
+                break;
+            case 'v':
+                result += "\v";
+                break;
+            case 't':
+                result += "\t";
+                break;
+            case '"':
+                result += "\"";
+                break;
+            case '\'':
+                result += "\'";
+                break;
+            default:
+                result += '\\';
+                result += value[i];
+                break;
+        }
+    }
+
+    return result;
+}
+
+string from_string_literal(const string &value) {
+
+    string x = value;
+    x.erase(0, 1);
+    x.erase(x.size() - 1, 1);
+    x = string_literal_unescape(x);
+
+    return x;
+}
+
+string to_string_literal(const ByteString &value, bool capital) {
     string res = "\"";
 
-    for (auto& c : value) {
+    for (auto &c: value) {
         res += string_literal_escape(c, capital);
     }
 
     return res + "\"";
 }
 
-string to_string_literal(const string& value, bool capital) {
+string to_string_literal(const string &value, bool capital) {
     string res = "\"";
 
-    for (auto& c : value) {
+    for (auto &c: value) {
         res += string_literal_escape(c, capital);
     }
 
     return res + "\"";
 }
 
-string to_string(const ByteString& value) {
+string to_string(const ByteString &value) {
     string res;
 
-    for (auto& c : value) {
+    for (auto &c: value) {
         res += (char) c;
     }
 
     return res;
 }
 
-ByteString to_byte_string(const string& value) {
+ByteString to_byte_string(const string &value) {
     ByteString res;
 
     for (auto &c: value) {
@@ -145,7 +210,7 @@ ByteString to_byte_string(const string& value) {
     return res;
 }
 
-vector<string> string_split(const string& str, const string& delimiter) {
+vector<string> string_split(const string &str, const string &delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     string token;
     vector<string> res;
@@ -162,7 +227,7 @@ vector<string> string_split(const string& str, const string& delimiter) {
 
 int byte_length(uint64_t value) {
     int len = sizeof(uint64_t);
-    auto* p = (uint8_t*) &value;
+    auto *p = (uint8_t *) &value;
 
     while ((p[len - 1] == 0) && len) {
         len--;
@@ -171,17 +236,17 @@ int byte_length(uint64_t value) {
     return len;
 }
 
-string ltrim(const string& s, char target = ' ') {
+string ltrim(const string &s, char target = ' ') {
     size_t start = s.find_first_not_of(target);
     return (start == string::npos) ? "" : s.substr(start);
 }
 
-string rtrim(const string& s, char target = ' ') {
+string rtrim(const string &s, char target = ' ') {
     size_t end = s.find_last_not_of(target);
     return (end == string::npos) ? "" : s.substr(0, end + 1);
 }
 
-string trim(const string& s, char target = ' ') {
+string trim(const string &s, char target = ' ') {
     return rtrim(ltrim(s, target), target);
 }
 
@@ -212,7 +277,7 @@ bool is_number_double(double value) {
     return !is_number_integer(value);
 }
 
-string simplify_number_literal(const string& value) {
+string simplify_number_literal(const string &value) {
     string result = value;
 
     auto es = string_split(result, "e");
@@ -220,7 +285,7 @@ string simplify_number_literal(const string& value) {
         auto e2 = es[1];
         if (e2.length()) {
             char sign = e2[0];
-            for (char i : e2.substr(1)) {
+            for (char i: e2.substr(1)) {
                 if (i != '0') {
                     goto skip_e_sfy;
                 }
@@ -229,7 +294,7 @@ string simplify_number_literal(const string& value) {
         }
     }
 
-skip_e_sfy:
+    skip_e_sfy:
     auto ds = string_split(result, ".");
 
     // trim prefix zeroes
@@ -279,17 +344,19 @@ string number_to_string(double value) {
     if (is_number_integer(value)) {
         // Integer
         _fmt_len = snprintf(
-            _buff, sizeof(_buff),
-            "%llu", number_to_integer(value)
+                _buff, sizeof(_buff),
+                "%llu", number_to_integer(value)
         );
     } else {
         // Double
         int precision = 15;
-        const char* fmt;
+        const char *fmt;
 
         switch (number_raw_cast<uint64_t>(value)) {
-            case 0x7FEFFFFFFFFFFFFF: return "1.7976931348623157e+308";
-            case 0xFFEFFFFFFFFFFFFF: return "-1.7976931348623157e+308";
+            case 0x7FEFFFFFFFFFFFFF:
+                return "1.7976931348623157e+308";
+            case 0xFFEFFFFFFFFFFFFF:
+                return "-1.7976931348623157e+308";
             default: {
                 if ((value >= 1.0e21) || (floor(value) != value)) {
                     if ((value < 1.0e21) && (value >= 0.000001)) {
@@ -315,8 +382,8 @@ string number_to_string(double value) {
         }
 
         _fmt_len = snprintf(
-            _buff, sizeof(_buff),
-            fmt, precision, number_to_double(value)
+                _buff, sizeof(_buff),
+                fmt, precision, number_to_double(value)
         );
     }
 
@@ -326,7 +393,7 @@ string number_to_string(double value) {
     return simplify_number_literal(result);
 }
 
-bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
+bool bytes_eq(const uint8_t *b1, const uint8_t *b2, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         if (b1[i] != b2[i]) {
             return false;
@@ -336,9 +403,9 @@ bool bytes_eq(const uint8_t* b1, const uint8_t* b2, size_t size) {
     return true;
 }
 
-void zero_mem(const void* buff, size_t size) {
+void zero_mem(const void *buff, size_t size) {
     for (int i = 0; i < size; ++i) {
-        ((uint8_t*) buff)[i] = '\0';
+        ((uint8_t *) buff)[i] = '\0';
     }
 }
 

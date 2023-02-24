@@ -306,6 +306,19 @@ bool jsxer::decoders::valid_id(const ByteString& value) {
     return true;
 }
 
+bool jsxer::decoders::valid_xml_attribute(const ByteString& value) {
+
+    if (value.size() <= 1 && value[0] != '@')
+        return false;
+
+    ByteString id(&value[1], &value[value.size() - 1]);
+
+    if (!valid_id(id))
+        return false;
+
+    return true;
+}
+
 bool jsxer::decoders::is_integer(const string& value) {
     size_t len = value.length();
 
