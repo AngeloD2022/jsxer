@@ -72,6 +72,8 @@ namespace jsxer::decoders {
     // decoding utilities...
     bool valid_id(const string& value);
     bool valid_id(const ByteString& value);
+    bool valid_xml_attribute(const ByteString &value);
     bool is_integer(const string& value);
     bool is_integer(const ByteString& value);
+
 }

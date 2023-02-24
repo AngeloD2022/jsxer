@@ -10,3 +10,4 @@
 - [ ] CodeGen with proper syntax and formatting.
 - [ ] Add code documentation and setup wiki page.
 - [ ] Add GitHub actions for building, testing and releases (CI/CD).
+- [ ] Research the XML nodes a bit more, as some of them are producing improper code.

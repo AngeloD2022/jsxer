@@ -20,16 +20,23 @@ namespace jsxer::nodes {
         // Check member validity...
         if (decoders::valid_id(memberInfo.id)) {
             result += '.' + utils::to_string(memberInfo.id);
-        } else {
-            result += '[';
-            // check if ID can be converted to an integer...
-            if (decoders::is_integer(memberInfo.id)) {
-                result += utils::to_string(memberInfo.id);
-            } else {
-                result += utils::to_string_literal(memberInfo.id);
-            }
-            result += ']';
+            return result;
         }
+
+        if (decoders::valid_xml_attribute(memberInfo.id)) {
+            result += '.' + utils::to_string(memberInfo.id);
+            return result;
+        }
+
+        result += '[';
+        // check if ID can be converted to an integer...
+        if (decoders::is_integer(memberInfo.id)) {
+            result += utils::to_string(memberInfo.id);
+        } else {
+            result += utils::to_string_literal(memberInfo.id);
+        }
+        result += ']';
+
 
         return result;
     }

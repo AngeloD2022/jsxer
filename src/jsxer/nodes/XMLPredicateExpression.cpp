@@ -8,6 +8,12 @@ namespace jsxer::nodes {
     }
 
     string XMLPredicateExpression::to_string() {
-        return object->to_string() + '.' + member->to_string();
+
+        bool parenthesis = member->type() == NodeType::BinaryExpression
+                           || member->type() == NodeType::LogicalExpression
+                           || member->type() == NodeType::UnaryExpression;
+
+        return object->to_string() + '.'
+               + (parenthesis ? '(' + member->to_string() + ')' : member->to_string());
     }
 }
