@@ -1,4 +1,4 @@
-# ExtendScript Decompiler
+# Jsxer
 A faster decompiler for Adobe's (Legacy) ExtendScript binary format (*.jsxbin).
 
 ## Features
