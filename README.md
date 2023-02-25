@@ -1,4 +1,4 @@
-# ExtendScript Decompiler
+# Jsxer
 A faster decompiler for Adobe's (Legacy) ExtendScript binary format (*.jsxbin).
 
 ## Features
@@ -10,6 +10,20 @@ A faster decompiler for Adobe's (Legacy) ExtendScript binary format (*.jsxbin).
 
 ## What is ExtendScript?
 ExtendScript is a scripting language and an associated toolkit developed by Adobe Systems, intended for use with Creative Suite and Technical Communication Suite products. It is a dialect of the ECMAScript 3 standard and therefore similar to JavaScript and ActionScript. The toolkit comes bundled with Creative Suite and Technical Communication Suite editions and can access tools within applications like Photoshop, FrameMaker, InDesign or After Effects for batch-processing projects.
+
+## Please, do not use this project unethically.
+
+#### yo, pirates, hear me out...
+
+Look, I get that it's tempting– money doesn't grow on trees.
+
+Many script authors are independent developers, and by stealing their work you make what they do unsustainable and their lives harder. Without income, they are not able to create and maintain what many people may depend on.  
+
+Jsxer (in addition to simply being a fun and educational project to develop) was made for source code recovery and security research purposes. It is free and open-source software– and as such, I won't try to control what you can and can't do with it. 
+
+Just remember that script authors are real humans! So if you like their work, show some love and fork over the dough. :)
+
+Appreciate ya!
 
 ## Build (MacOS)
 
