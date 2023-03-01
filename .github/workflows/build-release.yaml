@@ -1,19 +1,14 @@
 name: "Build for Release"
 
-# I am new to github actions; this code may be bad.
-
 on:
   push:
     tags:
-    - 'v*'
+      - 'v*'
 
 jobs:
-  build-for-release:
-    name: Build Release for ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+  build-windows:
+    name: Build Release for Windows
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -23,44 +18,62 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.13.1
         with:
           cmake-version: '3.25.2'
-        
+
       - name: Configure CMake
         run: cmake .
 
       - name: Build Project
         run: cmake --build . --config release
 
-      - name: Download Release Assets
-        uses: actions/download-artifact@v3
-        with:
-          name: release-assets
-          path: release-assets
+      - name: Remove Dumb Windows Garbage
+        run: |
+          move ./bin/release/dll/Release/lib-jsxer.dll ./bin/release/dll/
+          rm -r ./bin/release/dll/Release
+          move ./bin/release/static/Release/libjsxer.lib ./bin/release/static/
+          rm -r ./bin/release/static/Release
+          move ./bin/release/Release/jsxer.exe ./bin/release/
+          rm -r ./bin/release/Release
 
-      - name: Attach Build Artifacts to Release - Linux
+      - name: Zip Artifacts
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          filename: ${{ format('jsxer-{0}-Windows.zip', github.ref_name) }}
+          path: './bin/release/'
+
+      - name: Attach Build Artifacts to Release
         uses: softprops/action-gh-release@v1
-        if: ${{matrix.os == 'ubuntu-latest'}}
         with:
-          files: |
-            bin/release/dll/lib-jsxer.so
-            bin/release/static/libjsxer.a
-            bin/release/dll/jsxer
+          files: jsxer-${{  github.ref_name }}-Windows.zip
 
-      - name: Attach Build Artifacts to Release - Windows
+  build-macos:
+    name: Build Release for macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.13.1
+        with:
+          cmake-version: '3.25.2'
+
+      - name: Configure CMake
+        run: cmake .
+
+      - name: Build Project
+        run: cmake --build . --config release
+
+      - name: Zip Artifacts
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          filename: ${{ format('jsxer-{0}-macOS.zip', github.ref_name) }}
+          path: './bin/release/'
+
+      - name: Attach Build Artifacts to Release
         uses: softprops/action-gh-release@v1
-        if: ${{matrix.os == 'windows-latest'}}
         with:
-          files: |
-            bin/release/dll/lib-jsxer.dll
-            bin/release/dll/libjsxer.lib
-            bin/release/dll/jsxer.exe
-
-      - name: Attach Build Artifacts to Release - macOS
-        uses: softprops/action-gh-release@v1
-        if: ${{matrix.os == 'macos-latest'}}
-        with:
-          files: |
-            bin/release/dll/lib-jsxer.dylib
-            bin/release/dll/libjsxer.a
-            bin/release/dll/jsxer
-
+          files: jsxer-${{  github.ref_name }}-macOS.zip
 
