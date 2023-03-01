@@ -1,0 +1,65 @@
+name: "Build for Release"
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  build-for-release:
+    name: Build Release for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        cmake_version: '3.25.2'
+
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install CMake
+      uses: jwlawson/actions-setup-cmake@v1.13.1
+      with:
+        cmake-version: ${{ matrix.cmake_version }}
+
+    - name: Configure CMake
+      run: cmake .
+
+    - name: Build Project
+      run: cmake --build . --config release
+
+    - name: Download Release Assets
+      uses: actions/download-artifact@v3
+      with:
+        name: release-assets
+        path: release-assets
+
+    - name: Attach Build Artifacts to Release - Linux
+      uses: softprops/action-gh-release@v1
+      if: ${{matrix.os == 'ubuntu-latest'}}
+      with:
+        files: |
+          bin/release/dll/lib-jsxer.so
+          bin/release/static/libjsxer.a
+          bin/release/dll/jsxer
+
+    - name: Attach Build Artifacts to Release - Windows
+      uses: softprops/action-gh-release@v1
+      if: ${{matrix.os == 'windows-latest'}}
+      with:
+        files: |
+          bin/release/dll/lib-jsxer.dll
+          bin/release/dll/libjsxer.lib
+          bin/release/dll/jsxer.exe
+
+    - name: Attach Build Artifacts to Release - macOS
+      uses: softprops/action-gh-release@v1
+      if: ${{matrix.os == 'macos-latest'}}
+      with:
+        files: |
+          bin/release/dll/lib-jsxer.dylib
+          bin/release/dll/libjsxer.a
+          bin/release/dll/jsxer
+
+
