@@ -14,7 +14,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        cmake_version: [3, 25, 2]
 
     steps:
       - name: Checkout code
@@ -23,8 +22,8 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.13.1
         with:
-          cmake-version: ${{ matrix.cmake_version }}
-
+          cmake-version: '3.25.2'
+        
       - name: Configure CMake
         run: cmake .
 
