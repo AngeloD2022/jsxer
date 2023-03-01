@@ -2,6 +2,8 @@
 #include "deobfuscation.h"
 #include "common.h"
 
+#include <algorithm>
+
 using namespace jsxer::deob;
 
 BEGIN_NS(jsxer)
