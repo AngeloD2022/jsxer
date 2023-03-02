@@ -4,10 +4,28 @@
 
 #include <string>
 
-void prepend_header(string& code, bool unblind) {
+void prepend_header(string& code, JsxbinVersion jsxbin_version, bool unblind) {
+
+    string version;
+    switch (jsxbin_version){
+        case JsxbinVersion::v10:
+            version = "1.0";
+            break;
+        case JsxbinVersion::v20:
+            version = "2.0";
+            break;
+        case JsxbinVersion::v21:
+            version = "2.1";
+            break;
+        default:
+            version = "VERSION UNKNOWN";
+    }
+
     string header = "/*\n"
                     "* Decompiled with Jsxer\n"
-                    "* Version: " CONFIG_VERSION "\n";
+                    "* Version: " CONFIG_VERSION
+                    "\n"
+                    "* JSXBIN " + version + "\n";
 
     if (unblind) {
         header += "* Jsxblind Deobfuscation Enabled (EXPERIMENTAL)\n";
@@ -34,7 +52,7 @@ int jsxer::decompile(const string& input, string& output, bool unblind) {
 
     // Generate code from the ast
     output = ast->to_string();
-    prepend_header(output, unblind);
+    prepend_header(output, reader->version(), unblind);
 
     return 0;
 }
