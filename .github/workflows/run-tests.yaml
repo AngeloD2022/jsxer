@@ -25,4 +25,4 @@ jobs:
         run: cmake --build . --config debug
 
       - name: Run Tests
-        run: ctest --test-dir ./cmake-build-debug
+        run: ctest
