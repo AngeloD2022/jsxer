@@ -1,29 +1,48 @@
-import os
+import logging
 import platform
-from ctypes import CDLL, POINTER, \
-    c_int, c_char_p, c_size_t, c_bool, byref, create_string_buffer
+from os import path
+from ctypes import CDLL, POINTER, c_int, c_char_p, c_size_t, c_bool, byref, create_string_buffer
+
+logger = logging.getLogger(__file__)
 
 
-pf = platform.system().lower()
+def _get_binding_path():
+    pf = platform.system().lower()
 
-if pf == 'windows':
-    _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.dll'
-elif pf == 'linux':
-    _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.so'
-elif pf == 'darwin':
-    _backend_binding_lib_path = '../../bin/debug/dll/lib-jsxer.dylib'
-else:
-    raise EnvironmentError(f'Unknown platform: {pf}')
+    for build_type in ('release', 'debug',):
+        _binding_base_path = path.realpath(
+            path.join(
+                path.dirname(__file__),
+                '..',
+                '..',
+                'bin',
+                build_type,
+                'dll',
+            )
+        )
 
-_backend_binding_lib_path = os.path.realpath(_backend_binding_lib_path)
+        if pf == 'windows':
+            _binding_lib_path = path.join(_binding_base_path, 'lib-jsxer.dll')
+        elif pf == 'linux':
+            _binding_lib_path = path.join(_binding_base_path, 'lib-jsxer.so')
+        elif pf == 'darwin':
+            _binding_lib_path = path.join(_binding_base_path, 'lib-jsxer.dylib')
+        else:
+            raise EnvironmentError(f'Unknown platform: {pf}')
 
-if not os.path.isfile(_backend_binding_lib_path):
-    raise FileNotFoundError(f'Backend lib not exists in place: {_backend_binding_lib_path}')
+        logger.debug(f'Searching for Backend lib at: {_binding_lib_path}')
+
+        if path.isfile(_binding_lib_path):
+            logger.debug(f'Backend lib found at: {_binding_lib_path}')
+            return _binding_lib_path
+    else:
+        raise FileNotFoundError(f'Backend lib not found!')
+
 
 """
 int decompile(const char* input, size_t in_len, char* output, size_t* out_len, bool unblind = false)
 """
-_backend = CDLL(_backend_binding_lib_path)
+_backend = CDLL(_get_binding_path())
 _decompile = _backend.decompile
 _decompile.argtypes = [
     c_char_p,
