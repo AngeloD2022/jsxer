@@ -10,6 +10,12 @@ enum LiteralType {
     NUMBER,
 };
 
+enum NumberType : int {
+    kDouble = 8,
+    kInteger = 4,
+    kShort = 2,
+};
+
 string d_number_primitive(jsxer::Reader& reader, int length, bool negative) {
      vector<byte> buffer(length);
 
@@ -21,13 +27,13 @@ string d_number_primitive(jsxer::Reader& reader, int length, bool negative) {
 
     // using the length, return the appropriate interpretation of the value...
     switch (length) {
-        case 8:
+        case kDouble:
             // result is a double...
             return std::to_string(*((double *)buffer.data()) * sign);
-        case 4:
+        case kInteger:
             // result is an integer...
             return std::to_string(*((uint32_t *)buffer.data()) * sign);
-        case 2:
+        case kShort:
             // result is a short...
             return std::to_string(*((uint16_t *)buffer.data()) * sign);
         default:
