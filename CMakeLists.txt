@@ -27,6 +27,12 @@ FetchContent_Declare(cli11
 )
 FetchContent_MakeAvailable(cli11)
 
+# json
+FetchContent_Declare(json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
+)
+FetchContent_MakeAvailable(json)
+
 file(STRINGS "VERSION" JSXER_VERSION)
 
 message("${PROJECT_NAME} v${JSXER_VERSION}")
@@ -99,7 +105,8 @@ add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURC
 
 target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
 
-target_link_libraries(${JSXER_CORE_TARGET} PRIVATE fmt::fmt plog::plog)
+target_link_libraries(${JSXER_CORE_TARGET} PRIVATE
+    fmt::fmt plog::plog nlohmann_json::nlohmann_json)
 
 target_compile_definitions(${JSXER_CORE_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
@@ -129,7 +136,8 @@ file(GLOB_RECURSE JSXER_DLL_SOURCES
 
 add_library(${JSXER_DLL_TARGET} SHARED ${JSXER_DLL_HEADERS} ${JSXER_DLL_SOURCES})
 
-target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog)
+target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET}
+    fmt::fmt plog::plog nlohmann_json::nlohmann_json)
 
 target_compile_definitions(${JSXER_DLL_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
@@ -159,7 +167,8 @@ file(GLOB_RECURSE JSXER_CLI_SOURCES
 
 add_executable(${JSXER_CLI_TARGET} ${JSXER_CLI_HEADERS} ${JSXER_CLI_SOURCES})
 
-target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog CLI11::CLI11)
+target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET}
+    fmt::fmt plog::plog CLI11::CLI11 nlohmann_json::nlohmann_json)
 
 target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
