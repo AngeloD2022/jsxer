@@ -1,0 +1,21 @@
+{
+  "name": "test-runner",
+  "version": "0.1.0",
+  "license" : "BSD-3-Clause",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "jtr": "dist/cli.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "dependencies": {
+    "es-compile": "github:psyirius/es-compile#5fbee4d5"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "typescript": "^5.0.2",
+    "tsup": "^6.7.0"
+  }
+}
