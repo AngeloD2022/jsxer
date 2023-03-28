@@ -6,21 +6,17 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup"
   },
   "bin": {
-    "jtr": "bin/cli.js"
+    "compile": "bin/cli.js"
   },
   "engines": {
     "node": ">=14"
   },
   "dependencies": {
-    "es-compile": "github:psyirius/es-compile#42ede37c"
+    "jsxbin": "^2.2.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.31",
-    "typescript": "^5.0.2",
-    "glob": "^9.3.2",
-    "tsup": "^6.7.0"
+    "@types/node": "^14.14.31"
   }
 }

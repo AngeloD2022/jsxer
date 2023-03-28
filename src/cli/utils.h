@@ -22,13 +22,13 @@ namespace utils {
         };
     }
 
-    size_t WriteFileContents(const fs::path& path, const std::vector<unsigned char>& contents) {
+    size_t WriteFileContents(const fs::path& path, const std::string& contents) {
         //  std::ios::binary    -> makes it read as binary
-        std::basic_fstream<unsigned char> f(path, std::ios::binary);
+        std::ofstream f(path);
 
         // move cursor to start
-        f.write(contents.data(), std::streamsize(contents.size()));
-        f.flush();
+        f << contents;
+        f.close();
 
         return contents.size();
     }
