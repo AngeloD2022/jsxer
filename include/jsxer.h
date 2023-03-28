@@ -19,4 +19,6 @@ enum class JsxbinVersion : uint16_t {
 
 namespace jsxer {
     int decompile(const string& input, string& output, bool unblind = false);
+
+    int decompile_test(const string& input, string& output, bool unblind = false);
 }

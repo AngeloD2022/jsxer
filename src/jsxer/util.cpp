@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include <fmt/format.h>
+
 BEGIN_NS(jsxer) BEGIN_NS(utils)
 
 bool string_equal(const string &str1, const string &str2) {
@@ -294,7 +296,7 @@ string simplify_number_literal(const string &value) {
         }
     }
 
-    skip_e_sfy:
+skip_e_sfy:
     auto ds = string_split(result, ".");
 
     // trim prefix zeroes
@@ -328,69 +330,96 @@ string simplify_number_literal(const string &value) {
     return result;
 }
 
-// FIXME: Floating point mismatch
 string number_to_string(double value) {
-    char _buff[40] = {0};
-    int _fmt_len;
-    string result;
+    // let's try fmt to do all the dirty works
+    // TODO:
+    //  Write a full NumberToString test to confirm
+    //  if it's okay for us to keep fmt for this job
+    {
+        string result;
 
-    // integer        -> 1-7 bytes in memory
-    // double         -> 8 bytes in memory
-    // 63rd bit       -> sign
-    if (is_number_negative(value)) {
-        result += '-';
-    }
-
-    if (is_number_integer(value)) {
-        // Integer
-        _fmt_len = snprintf(
-                _buff, sizeof(_buff),
-                "%llu", number_to_integer(value)
-        );
-    } else {
-        // Double
-        int precision = 15;
-        const char *fmt;
-
-        switch (number_raw_cast<uint64_t>(value)) {
-            case 0x7FEFFFFFFFFFFFFF:
-                return "1.7976931348623157e+308";
-            case 0xFFEFFFFFFFFFFFFF:
-                return "-1.7976931348623157e+308";
-            default: {
-                if ((value >= 1.0e21) || (floor(value) != value)) {
-                    if ((value < 1.0e21) && (value >= 0.000001)) {
-                        int l10 = (int) log10(value);
-                        int fpn = (l10 >= 0) ? l10 : 0;
-
-                        precision = 15 - (value >= 1.0) - fpn;
-                        if (precision > 15) {
-                            precision = 15;
-                        }
-
-                        fmt = "%20.*f";
-                    } else {
-                        fmt = "%20.*e";
-                        precision -= 1;
-                    }
-                } else if (value >= 1000000000.0) {
-                    fmt = "%*.0f";
-                } else {
-                    fmt = "%*.f";
-                }
-            }
+        // integer        -> 1-7 bytes
+        // double         -> 8 bytes
+        // sign           -> 63rd bit
+        if (is_number_negative(value)) { // is the sign(63rd) bit is set
+            result += '-';
         }
 
-        _fmt_len = snprintf(
-                _buff, sizeof(_buff),
-                fmt, precision, number_to_double(value)
-        );
+        if (is_number_integer(value)) { // is byte_length < 8
+            auto i = number_to_integer(value);
+            result += fmt::format("{}", i);
+        } else {
+            auto d = number_to_double(value);
+            result += fmt::format("{}", d);
+        }
+
+        return result;
     }
 
-    _buff[_fmt_len] = '\0';
-    result += trim(_buff, ' ');
+    // our dirty impl
+    {
+        char _buff[40] = {0};
+        int _fmt_len;
+        string result;
 
-    return simplify_number_literal(result);
+        // integer        -> 1-7 bytes in memory
+        // double         -> 8 bytes in memory
+        // 63rd bit       -> sign
+        if (is_number_negative(value)) {
+            result += '-';
+        }
+
+        if (is_number_integer(value)) {
+            // Integer
+            _fmt_len = snprintf(
+                    _buff, sizeof(_buff),
+                    "%llu", number_to_integer(value)
+            );
+        } else {
+            // Double
+            int precision = 15;
+            const char *fmt;
+
+            switch (number_raw_cast<uint64_t>(value)) {
+                case 0x7FEFFFFFFFFFFFFF:
+                    return "1.7976931348623157e+308";
+                case 0xFFEFFFFFFFFFFFFF:
+                    return "-1.7976931348623157e+308";
+                default: {
+                    if ((value >= 1.0e21) || (floor(value) != value)) {
+                        if ((value < 1.0e21) && (value >= 0.000001)) {
+                            int l10 = (int) log10(value);
+                            int fpn = (l10 >= 0) ? l10 : 0;
+
+                            precision = 15 - (value >= 1.0) - fpn;
+                            if (precision > 15) {
+                                precision = 15;
+                            }
+
+                            fmt = "%20.*f";
+                        } else {
+                            fmt = "%20.*e";
+                            precision -= 1;
+                        }
+                    } else if (value >= 1000000000.0) {
+                        fmt = "%*.0f";
+                    } else {
+                        fmt = "%*.f";
+                    }
+                }
+            }
+
+            _fmt_len = snprintf(
+                    _buff, sizeof(_buff),
+                    fmt, precision, number_to_double(value)
+            );
+        }
+
+        _buff[_fmt_len] = '\0';
+        result += trim(_buff, ' ');
+
+        return simplify_number_literal(result);
+    }
 }
 
 bool bytes_eq(const uint8_t *b1, const uint8_t *b2, size_t size) {
