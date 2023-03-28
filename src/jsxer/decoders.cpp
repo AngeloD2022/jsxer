@@ -6,6 +6,8 @@
 #include "decoders.h"
 #include "nodes/nodes.h"
 
+#include <fmt/format.h>
+
 enum LiteralType {
     NUMBER,
 };
@@ -29,13 +31,13 @@ string d_number_primitive(jsxer::Reader& reader, int length, bool negative) {
     switch (length) {
         case kDouble:
             // result is a double...
-            return std::to_string(*((double *)buffer.data()) * sign);
+            return fmt::to_string(*((double *) buffer.data()) * sign);
         case kInteger:
             // result is an integer...
-            return std::to_string(*((uint32_t *)buffer.data()) * sign);
+            return fmt::to_string(*((uint32_t *) buffer.data()) * sign);
         case kShort:
             // result is a short...
-            return std::to_string(*((uint16_t *)buffer.data()) * sign);
+            return fmt::to_string(*((uint16_t *) buffer.data()) * sign);
         default:
             return "";
     }
@@ -67,10 +69,10 @@ string d_literal_primitive(jsxer::Reader& reader, LiteralType literalType) {
         byte num = jsxer::decoders::d_byte(reader);
 
         if (negative) {
-            return std::to_string(-1 * (int) num);
+            return fmt::to_string(-1 * (int) num);
         } else {
             if (literalType == LiteralType::NUMBER) {
-                return std::to_string((unsigned char) num);
+                return fmt::to_string((unsigned char) num);
             } else {
                 return jsxer::utils::string_literal_escape(num);
             }
