@@ -170,9 +170,7 @@ vector<jsxer::nodes::AstOpNode> jsxer::decoders::d_children(Reader& reader) {
     vector<AstOpNode> result;
     for (int i = 0; i < length; ++i) {
         auto child = d_node(reader);
-        if (child != nullptr) {
-            result.push_back(child);
-        }
+        result.push_back(child);
     }
 
     return result;

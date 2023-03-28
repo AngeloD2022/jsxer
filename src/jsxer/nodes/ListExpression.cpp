@@ -18,11 +18,16 @@ namespace jsxer::nodes {
 
         // TODO: fix declarations
         for (int i = 0; i < arguments.size(); ++i) {
-            if (for_loop && i > 0 && arguments[i]->type() == NodeType::LocalAssignmentExpression) {
-                std::dynamic_pointer_cast<LocalAssignmentExpression>(arguments[i])->suppress_declarative_keyword(true);
-            }
+            if (arguments[i]) {
+                if (for_loop && i > 0 && arguments[i]->type() == NodeType::LocalAssignmentExpression) {
+                    std::dynamic_pointer_cast<LocalAssignmentExpression>(arguments[i])->suppress_declarative_keyword(true);
+                }
 
-            result += arguments[i]->to_string() + (i + 1 == arguments.size() ? "" : delimiter);
+                result += arguments[i]->to_string() + (i + 1 == arguments.size() ? "" : delimiter);
+            } else {
+                // holey element
+                result += "/* hole */" + (i + 1 == arguments.size() ? "" : delimiter);
+            }
         }
 
         if (sequence_expr && !for_loop) {
