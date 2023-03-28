@@ -1,8 +1,24 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(Jsxer)
 
 # using c++17 to use some modern features of c++
 set(CMAKE_CXX_STANDARD 17)
+
+include(FetchContent)
+
+# string formatting
+FetchContent_Declare(fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 9.1.0
+)
+FetchContent_MakeAvailable(fmt)
+
+# logger
+FetchContent_Declare(plog
+    GIT_REPOSITORY https://github.com/SergiusTheBest/plog.git
+    GIT_TAG 1.1.9
+)
+FetchContent_MakeAvailable(plog)
 
 file(STRINGS "VERSION" JSXER_VERSION)
 
@@ -76,6 +92,8 @@ add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURC
 
 target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
 
+target_link_libraries(${JSXER_CORE_TARGET} PRIVATE fmt::fmt plog::plog)
+
 target_compile_definitions(${JSXER_CORE_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
 )
@@ -104,7 +122,7 @@ file(GLOB_RECURSE JSXER_DLL_SOURCES
 
 add_library(${JSXER_DLL_TARGET} SHARED ${JSXER_DLL_HEADERS} ${JSXER_DLL_SOURCES})
 
-target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET})
+target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog)
 
 target_compile_definitions(${JSXER_DLL_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
@@ -134,7 +152,7 @@ file(GLOB_RECURSE JSXER_CLI_SOURCES
 
 add_executable(${JSXER_CLI_TARGET} ${JSXER_CLI_HEADERS} ${JSXER_CLI_SOURCES})
 
-target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET})
+target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog)
 
 target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
