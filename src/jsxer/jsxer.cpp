@@ -56,3 +56,24 @@ int jsxer::decompile(const string& input, string& output, bool unblind) {
 
     return 0;
 }
+
+// for testing
+int jsxer::decompile_test(const string& input, string& output, bool unblind) {
+    auto reader = std::make_unique<Reader>(input, unblind);
+
+    if (!reader->verifySignature()) {
+        // TODO: Handle this properly
+        fprintf(stderr, "JSXBIN signature verification failed!");
+        output = "";
+        return -3;
+    }
+
+    // Parse into an Ast
+    auto ast = std::make_unique<jsxer::nodes::Program>(*reader);
+    ast->parse();
+
+    // Generate code from the ast
+    output = ast->to_string();
+
+    return 0;
+}
