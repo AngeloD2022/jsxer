@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void ForInStatement::parse() {
+        print_tree_node(reader, "ForInStatement");
+
         bodyInfo = decoders::d_line_info(reader);
         loopVariable = decoders::d_node(reader);
         objExpression = decoders::d_node(reader);

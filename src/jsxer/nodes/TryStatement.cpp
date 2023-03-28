@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void TryStatement::parse() {
+        print_tree_node(reader, "TryStatement");
+
         tryBlock = decoders::d_line_info(reader);
         length = decoders::d_length(reader);
         finallyBlock = decoders::d_node(reader);

@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void CallExpression::parse() {
+        print_tree_node(reader, "CallExpression");
+
         function = decoders::d_node(reader);
         args = decoders::d_node(reader);
         constructorCall = reader.getBoolean();

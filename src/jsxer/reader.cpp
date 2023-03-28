@@ -39,6 +39,18 @@ size_t Reader::depth() const {
     return _depth;
 }
 
+size_t Reader::indent_level() const {
+    return _indent_level;
+}
+
+void Reader::indent_up() {
+    _indent_level++;
+}
+
+void Reader::indent_down() {
+    _indent_level--;
+}
+
 void Reader::step(int offset) {
     _cursor += offset;
 }
@@ -335,6 +347,10 @@ ByteString Reader::getSymbol(Number id) {
 
 void Reader::addSymbol(Number id, const ByteString& symbol) {
     _symbols[id] = symbol;
+}
+
+int Reader::indent_size() const {
+    return _indent_size;
 }
 
 Variant::Variant() {

@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void Program::parse() {
+        print_tree_node(reader, "Program");
+
         body = decoders::d_node(reader);
     }
 

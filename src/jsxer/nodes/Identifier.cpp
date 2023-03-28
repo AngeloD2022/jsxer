@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void Identifier::parse() {
+        print_tree_node(reader, "Identifier");
+
         id = decoders::d_sid(reader);
 
         if (reader.version() >= JsxbinVersion::v20)

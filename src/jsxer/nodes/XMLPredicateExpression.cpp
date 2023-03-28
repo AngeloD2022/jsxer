@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void XMLPredicateExpression::parse() {
+        print_tree_node(reader, "XMLPredicateExpression");
+
         reference = decoders::d_literal_ref(reader);
         object = decoders::d_node(reader);
         member = decoders::d_node(reader);

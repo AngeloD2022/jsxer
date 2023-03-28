@@ -1,9 +1,9 @@
 #include "ObjectExpression.h"
-#include "../util.h"
-
 
 namespace jsxer::nodes {
     void ObjectExpression::parse() {
+        print_tree_node(reader, "ObjectExpression");
+
         objectId = decoders::d_sid(reader);
 
         size_t child_count = decoders::d_length(reader);

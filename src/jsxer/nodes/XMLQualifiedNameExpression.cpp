@@ -1,8 +1,9 @@
 #include "XMLQualifiedNameExpression.h"
-#include "../util.h"
 
 namespace jsxer::nodes {
     void XMLQualifiedNameExpression::parse() {
+        print_tree_node(reader, "XMLQualifiedNameExpression");
+
         namespaceObject = decoders::d_literal_ref(reader);
         object = decoders::d_node(reader);
         decoders::d_node(reader);

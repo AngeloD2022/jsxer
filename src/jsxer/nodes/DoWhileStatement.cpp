@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void DoWhileStatement::parse() {
+        print_tree_node(reader, "DoWhileStatement");
+
         body = decoders::d_line_info(reader);
         condition = decoders::d_node(reader);
     }

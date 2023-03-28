@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void IndexingExpression::parse() {
+        print_tree_node(reader, "IndexingExpression");
+
         auto ref = decoders::d_literal_ref(reader); // <str, bool>
         auto name = decoders::d_node(reader);
         auto expr = decoders::d_node(reader);

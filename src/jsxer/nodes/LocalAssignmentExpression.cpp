@@ -3,8 +3,10 @@
 
 namespace jsxer::nodes {
     void LocalAssignmentExpression::parse() {
+        print_tree_node(reader, "LocalAssignmentExpression");
+
         var_name = decoders::d_sid(reader);
-        unsigned int type = (unsigned int) decoders::d_length(reader);
+        auto type = (unsigned int) decoders::d_length(reader);
         expression = decoders::d_node(reader);
         literal = decoders::d_variant(reader);
         shorthand = reader.getBoolean();

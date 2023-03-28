@@ -3,6 +3,8 @@
 
 namespace jsxer::nodes {
     void ForStatement::parse() {
+        print_tree_node(reader, "ForStatement");
+
         bodyInfo = decoders::d_line_info(reader);
         initial = decoders::d_node(reader);
 

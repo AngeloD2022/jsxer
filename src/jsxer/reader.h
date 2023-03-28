@@ -74,6 +74,9 @@ public:
     [[nodiscard]] ParseError error() const;
     [[nodiscard]] size_t depth() const;
 
+    [[nodiscard]] size_t indent_level() const;
+    [[nodiscard]] int indent_size() const;
+
     bool verifySignature();
 
     Token get();
@@ -95,8 +98,13 @@ public:
     size_t get_node_depth();
     bool decrement_node_depth();
 
+    void indent_up();
+    void indent_down();
+
 private:
     vector<Token> _data;
+    size_t _indent_level = 0;
+    int _indent_size = 2;
     size_t _start;
     size_t _end;
     size_t _cursor;
@@ -114,7 +122,6 @@ private:
 
     Token _next();
     static bool _ignorable(Token value);
-
 };
 
 END_NS(jsxbin)

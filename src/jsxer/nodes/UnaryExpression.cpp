@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void UnaryExpression::parse() {
+        print_tree_node(reader, "UnaryExpression");
+
         op = decoders::d_operator(reader);
         expression = decoders::d_node(reader);
     }

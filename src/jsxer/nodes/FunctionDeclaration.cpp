@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void FunctionDeclaration::parse() {
+        print_tree_node(reader, "FunctionDeclaration");
+
         bodyInfo = decoders::d_line_info(reader);
         signature = decoders::d_fn_sig(reader);
         _type = (unsigned int) decoders::d_length(reader);

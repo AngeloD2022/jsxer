@@ -28,6 +28,8 @@ namespace jsxer::nodes {
     }
 
     void BinaryExpression::parse() {
+        print_tree_node(reader, "BinaryExpression");
+
         op_name = decoders::d_operator(reader);
         left = decoders::d_node(reader);
         right = decoders::d_node(reader);
