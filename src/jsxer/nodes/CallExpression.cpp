@@ -1,5 +1,7 @@
 #include "CallExpression.h"
 
+#include <fmt/format.h>
+
 namespace jsxer::nodes {
     void CallExpression::parse() {
         function = decoders::d_node(reader);
@@ -8,11 +10,16 @@ namespace jsxer::nodes {
     }
 
     string CallExpression::to_string() {
-        string result = constructorCall ? "new " : "";
-        auto argList = std::dynamic_pointer_cast<ListExpression>(args);
+        auto arguments = std::dynamic_pointer_cast<ListExpression>(args);
+        bool needWrap = function->type() == NodeType::FunctionExpression;
 
-        // {new }{funcName}({args})
-        result += function->to_string() + '(' + (argList == nullptr ? "" : argList->to_string()) + ")";
-        return result;
+        // {new }{funcName|funcBody}({args})
+        return fmt::format("{}{}{}({}){}\n",
+                           constructorCall ? "new " : "",
+                           needWrap ? "(" : "",
+                           function->to_string(),
+                           arguments ? arguments->to_string() : "",
+                           needWrap ? ")" : ""
+        );
     }
 }
