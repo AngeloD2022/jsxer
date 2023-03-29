@@ -1,64 +1,71 @@
-#include <iostream>
 #include <string>
-#include <fstream>
-#include <cstring>
-#include <sstream>
+#include <iostream>
+#include <filesystem>
 
-#include "jsxer.h"
+#include <CLI/App.hpp>
+#include <CLI/Formatter.hpp>    // DON'T remove
+#include <CLI/Config.hpp>       // DON'T remove
 
-inline std::string read_file(const std::string& path) {
-    std::ostringstream buf;
-    std::ifstream input (path.c_str());
-    buf << input.rdbuf();
-    return buf.str();
-}
+#include <jsxer.h>
 
-string get_filename(const char* path) {
-    for(size_t i = strlen(path) - 1; i; --i) {
-        if ((path[i] == '/') || (path[i] == '\\')) {
-            return &path[i + 1];
-        }
-    }
-    return path;
-}
+#include "./utils.h"
 
-void print_usage(const std::string& cli_path) {
-    std::cout << "Usage: " << get_filename(cli_path.c_str()) << " <jsxbin path> <output path> [--unblind]" << std::endl;
-    exit(0);
-}
+namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
-    if (argc < 3 || argc > 4) {
-        print_usage(argv[0]);
-        exit(0);
-    } else {
-        std::string input_path = argv[1];
-        std::string output_path = argv[2];
+    CLI::App cli{"ExtendScript Decompiler"};
 
-        // read in the JSXBIN file contents...
-        std::string content = read_file(input_path);
-        std::cout << "[i] Decompiling..." << std::endl;
+    // cli flag variables
+    bool unblind = false;
+//    bool verbose = false;
+    std::string input;
+    std::string output;
 
-        // begin de-compilation...
-        std::string output;
-        bool unblind = false;
+    // cli building
+    auto output_option = cli.add_option("-o,--output",
+                   output,
+                   "Output path for the decompiled file");
+    cli.add_flag("-b,--unblind",
+                   unblind,
+                   "Try renaming symbols which are obfuscated by 'JsxBlind' (experimental)");
+//    cli.add_flag("-v,--verbose",
+//                   verbose,
+//                   "Display verbose log");
 
-        if (argc == 4) {
-            if (strcmp(argv[3], "--unblind") == 0) {
-                std::cout << "[+] Jsxblind deobfuscation enabled!" << std::endl;
-                unblind = true;
-            } else {
-                print_usage(argv[0]);
-                exit(0);
-            }
-        }
-        jsxer::decompile(content, output, unblind);
-        std::cout << "[i] Finished." << std::endl;
+    cli.add_option("input",
+                   input,
+                   "Name of file to read"
+    )->check(CLI::ExistingFile)->required();
 
-        std::ofstream outfile(output_path);
-        outfile << output;
-        outfile.close();
+    // cli parsing
+    try {
+        cli.parse(argc, argv);
+    } catch(const CLI::ParseError &e) {
+        return cli.exit(e);
     }
+
+    // process
+    auto input_path = fs::path(input);
+
+    fs::path output_path = !bool(*output_option)
+        ? input_path.parent_path() / (input_path.stem().string() + ".jsx")
+        : fs::path(output);
+
+    if (!bool(*output_option) && fs::exists(output_path.parent_path())) {
+        fs::create_directories(output_path.parent_path());
+    }
+
+    // read in the JSXBIN file contents...
+    auto contents = utils::ReadFileContents(input_path);
+    auto contents_str = std::string(contents.begin(), contents.end());
+
+    // begin de-compilation...
+    std::string decompiled;
+    std::cout << "[i] Decompiling..." << std::endl;
+    jsxer::decompile(contents_str, decompiled, unblind);
+    std::cout << "[i] Finished." << std::endl;
+
+    utils::WriteFileContents(output_path, decompiled);
 
     return 0;
 }
