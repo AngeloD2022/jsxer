@@ -26,9 +26,9 @@ string prepend_header(const string& code, JsxbinVersion jsxbin_version, Options 
                     "\n"
                     "* JSXBIN " + version + "\n";
 
-    header += "Options:\n";
+    header += "* Options:\n";
     if (options & kDO_Unblind) {
-        header += "\t* Jsxblind Deobfuscation (EXPERIMENTAL)\n";
+        header += "* \tJsxblind Deobfuscation (EXPERIMENTAL)\n";
     }
 
     header += "*/\n\n";
