@@ -20,6 +20,13 @@ FetchContent_Declare(plog
 )
 FetchContent_MakeAvailable(plog)
 
+# cli parser
+FetchContent_Declare(cli11
+    GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+    GIT_TAG v2.3.2
+)
+FetchContent_MakeAvailable(cli11)
+
 file(STRINGS "VERSION" JSXER_VERSION)
 
 message("${PROJECT_NAME} v${JSXER_VERSION}")
@@ -152,7 +159,7 @@ file(GLOB_RECURSE JSXER_CLI_SOURCES
 
 add_executable(${JSXER_CLI_TARGET} ${JSXER_CLI_HEADERS} ${JSXER_CLI_SOURCES})
 
-target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog)
+target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog CLI11::CLI11)
 
 target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
