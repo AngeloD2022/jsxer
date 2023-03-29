@@ -168,8 +168,7 @@ file(GLOB_RECURSE JSXER_CLI_SOURCES
 
 add_executable(${JSXER_CLI_TARGET} ${JSXER_CLI_HEADERS} ${JSXER_CLI_SOURCES})
 
-target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET}
-    fmt::fmt plog::plog CLI11::CLI11 nlohmann_json::nlohmann_json)
+target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog CLI11::CLI11 nlohmann_json::nlohmann_json)
 
 target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
