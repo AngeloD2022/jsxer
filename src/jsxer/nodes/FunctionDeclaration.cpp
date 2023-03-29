@@ -17,9 +17,9 @@ namespace jsxer::nodes {
     }
 
     string FunctionDeclaration::to_string() {
-        for (auto& v : signature.variables) {
-            fmt::print("{:x}: {}\n", v.first, v.second);
-        }
+//        for (auto& v : signature.variables) {
+//            fmt::print("{:x}: {}\n", v.first, v.second);
+//        }
 
         string body = bodyInfo.create_body();
 
