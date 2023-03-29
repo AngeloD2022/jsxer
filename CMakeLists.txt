@@ -6,10 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 
+# Needed to print downloading progress
+Set(FETCHCONTENT_QUIET FALSE)
+
 # string formatting
 FetchContent_Declare(fmt
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
     GIT_TAG 9.1.0
+    GIT_PROGRESS TRUE
 )
 FetchContent_MakeAvailable(fmt)
 
@@ -17,8 +21,31 @@ FetchContent_MakeAvailable(fmt)
 FetchContent_Declare(plog
     GIT_REPOSITORY https://github.com/SergiusTheBest/plog.git
     GIT_TAG 1.1.9
+    GIT_PROGRESS TRUE
 )
 FetchContent_MakeAvailable(plog)
+
+# cli parser
+FetchContent_Declare(cli11
+    GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
+    GIT_TAG v2.3.2
+    GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(cli11)
+
+# utils
+
+# Add Boost Lib Sources
+set(BOOST_ENABLE_CMAKE ON)
+set(Boost_USE_STATIC_LIBS ON)
+set(BOOST_INCLUDE_LIBRARIES thread filesystem system algorithm)
+
+FetchContent_Declare(Boost
+    URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.tar.xz
+    GIT_PROGRESS TRUE
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+FetchContent_MakeAvailable(Boost)
 
 file(STRINGS "VERSION" JSXER_VERSION)
 
@@ -92,7 +119,10 @@ add_library(${JSXER_CORE_TARGET} STATIC ${JSXER_CORE_HEADERS} ${JSXER_CORE_SOURC
 
 target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
 
-target_link_libraries(${JSXER_CORE_TARGET} PRIVATE fmt::fmt plog::plog)
+target_link_libraries(${JSXER_CORE_TARGET} PRIVATE
+        fmt::fmt
+        plog::plog
+        Boost::algorithm)
 
 target_compile_definitions(${JSXER_CORE_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
@@ -122,7 +152,9 @@ file(GLOB_RECURSE JSXER_DLL_SOURCES
 
 add_library(${JSXER_DLL_TARGET} SHARED ${JSXER_DLL_HEADERS} ${JSXER_DLL_SOURCES})
 
-target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog)
+target_link_libraries(${JSXER_DLL_TARGET} PRIVATE ${JSXER_CORE_TARGET}
+        fmt::fmt
+        plog::plog)
 
 target_compile_definitions(${JSXER_DLL_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
@@ -152,7 +184,11 @@ file(GLOB_RECURSE JSXER_CLI_SOURCES
 
 add_executable(${JSXER_CLI_TARGET} ${JSXER_CLI_HEADERS} ${JSXER_CLI_SOURCES})
 
-target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET} fmt::fmt plog::plog)
+target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET}
+        fmt::fmt
+        plog::plog
+        CLI11::CLI11
+        Boost::filesystem)
 
 target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
@@ -177,29 +213,19 @@ set(JSXER_TESTS_DATA_DIR ${JSXER_TESTS_DIR}/data)
 add_executable(jsxer-test-array-expr ${JSXER_TESTS_SRC_DIR}/array-expr.cpp)
 target_link_libraries(jsxer-test-array-expr PRIVATE ${JSXER_CORE_TARGET})
 
-add_test("CodeGen::ArrayExpression" jsxer-test-array-expr)
+add_test("ArrayExpression" jsxer-test-array-expr)
 
 add_executable(jsxer-test-obj-expr ${JSXER_TESTS_SRC_DIR}/obj-expr.cpp)
 target_link_libraries(jsxer-test-obj-expr PRIVATE ${JSXER_CORE_TARGET})
 
-add_test("CodeGen::ObjectExpression" jsxer-test-obj-expr)
+add_test("ObjectExpression" jsxer-test-obj-expr)
 
 add_executable(jsxer-test-member-expr ${JSXER_TESTS_SRC_DIR}/member-expr.cpp)
 target_link_libraries(jsxer-test-member-expr PRIVATE ${JSXER_CORE_TARGET})
 
-add_test("CodeGen::MemberExpression" jsxer-test-member-expr)
+add_test("MemberExpression" jsxer-test-member-expr)
 
 add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
 target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
 
-add_test("CodeGen::ForStatement" jsxer-test-for-stmt)
-
-add_executable(jsxer-test-exp ${JSXER_TESTS_SRC_DIR}/exp.cpp)
-target_link_libraries(jsxer-test-exp PRIVATE ${JSXER_CORE_TARGET})
-
-add_test("Jsxer::Experiment" jsxer-test-exp)
-
-add_executable(n2s-formatting-test ${JSXER_TESTS_SRC_DIR}/n2s-formatting.cpp)
-target_link_libraries(n2s-formatting-test PRIVATE ${JSXER_CORE_TARGET})
-
-add_test("CodeGen::NumberFormatting" n2s-formatting-test)
+add_test("ForStatement" jsxer-test-for-stmt)

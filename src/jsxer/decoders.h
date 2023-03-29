@@ -46,13 +46,12 @@ namespace jsxer::decoders {
     };
 
     struct FunctionSignature {
-        unsigned int flags;
         string name;
-        size_t num_arguments;
-        size_t num_local_const;
-        FunctionType func_type;
-        map<string, size_t> parameters;
-        map<string, size_t> local_vars;
+        size_t num_args;
+        size_t num_vars;
+        size_t num_consts;
+        map<size_t, string> variables;
+        int flags = 0x10000;
     };
 
     AstOpNode d_node(Reader& reader);
