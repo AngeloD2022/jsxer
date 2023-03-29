@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void MemberExpression::parse() {
-        print_tree_node(reader, "MemberExpression");
+        AstNode::parse();
 
         memberInfo = decoders::d_literal_ref(reader);
         objInfo = decoders::d_node(reader);

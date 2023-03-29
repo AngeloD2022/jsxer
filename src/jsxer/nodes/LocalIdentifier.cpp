@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void LocalIdentifier::parse() {
-        print_tree_node(reader, "LocalIdentifier");
+        AstNode::parse();
 
         reference = decoders::d_id_ref(reader);
         _type = decoders::d_length(reader);

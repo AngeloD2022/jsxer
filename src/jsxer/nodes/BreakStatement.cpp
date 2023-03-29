@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void BreakStatement::parse() {
-        print_tree_node(reader, "BreakStatement");
+        AstNode::parse();
 
         labelInfo = decoders::d_line_info(reader);
         jmpLocation = decoders::d_sid(reader);

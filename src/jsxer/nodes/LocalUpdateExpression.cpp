@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void LocalUpdateExpression::parse() {
-        print_tree_node(reader, "LocalUpdateExpression");
+        AstNode::parse();
 
         id = decoders::d_sid(reader);
         length = decoders::d_length(reader);

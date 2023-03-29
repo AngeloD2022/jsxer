@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class WithStatement : public AstNode {
     public:
-        explicit WithStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(WithStatement);
 
-        NodeType type() override {
-            return NodeType::WithStatement;
-        }
+        explicit WithStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

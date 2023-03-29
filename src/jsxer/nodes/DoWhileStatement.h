@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class DoWhileStatement : public AstNode {
     public:
-        explicit DoWhileStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(DoWhileStatement);
 
-        NodeType type() override {
-            return NodeType::DoWhileStatement;
-        }
+        explicit DoWhileStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class TernaryExpression : public AstNode {
     public:
-        explicit TernaryExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(TernaryExpression);
 
-        NodeType type() override {
-            return NodeType::TernaryExpression;
-        }
+        explicit TernaryExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

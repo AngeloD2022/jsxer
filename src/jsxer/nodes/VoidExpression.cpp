@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void VoidExpression::parse() {
-        print_tree_node(reader, "VoidExpression");
+        AstNode::parse();
 
         defaultNamespaceFxnCall = decoders::d_node(reader);
     }

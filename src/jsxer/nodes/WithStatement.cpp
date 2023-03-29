@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void WithStatement::parse() {
-        print_tree_node(reader, "WithStatement");
+        AstNode::parse();
 
         bodyInfo = decoders::d_line_info(reader);
         object = decoders::d_node(reader);

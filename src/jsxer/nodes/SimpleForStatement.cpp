@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void SimpleForStatement::parse() {
-        print_tree_node(reader, "SimpleForStatement");
+        AstNode::parse();
 
         bodyInfo = decoders::d_line_info(reader);
         loopVar = decoders::d_node(reader);

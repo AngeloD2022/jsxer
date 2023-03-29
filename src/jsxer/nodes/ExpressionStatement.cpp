@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void ExpressionStatement::parse() {
-        print_tree_node(reader, "ExpressionStatement");
+        AstNode::parse();
 
         lineInfo = decoders::d_line_info(reader);
         expression = decoders::d_node(reader);

@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class UnaryExpression : public AstNode {
     public:
-        explicit UnaryExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(UnaryExpression);
 
-        NodeType type() override {
-            return NodeType::UnaryExpression;
-        }
+        explicit UnaryExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

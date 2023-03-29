@@ -6,7 +6,7 @@ namespace jsxer::nodes {
     }
 
     void LogicalExpression::parse() {
-        print_tree_node(reader, "LogicalExpression");
+        AstNode::parse();
 
         // opName is either "&&" or "||"
         opName = decoders::d_operator(reader);

@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class XMLConstantExpression : public AstNode {
     public:
-        explicit XMLConstantExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(XMLConstantExpression);
 
-        NodeType type() override {
-            return NodeType::XMLConstantExpression;
-        }
+        explicit XMLConstantExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

@@ -42,28 +42,28 @@ size_t Reader::depth() const {
     return _depth;
 }
 
-size_t Reader::tree_indent_level() const {
-    return _tree_indent_level;
+size_t Reader::parse_indent_level() const {
+    return _parse_indent_level;
 }
 
-void Reader::tree_indent_up() {
-    _tree_indent_level++;
+void Reader::parse_indent_up() {
+    _parse_indent_level++;
 }
 
-void Reader::tree_indent_down() {
-    _tree_indent_level--;
+void Reader::parse_indent_down() {
+    _parse_indent_level--;
 }
 
-size_t Reader::indent_level() const {
-    return _indent_level;
+size_t Reader::dump_indent_level() const {
+    return _dump_indent_level;
 }
 
-void Reader::indent_up() {
-    _indent_level++;
+void Reader::dump_indent_up() {
+    _dump_indent_level++;
 }
 
-void Reader::indent_down() {
-    _indent_level--;
+void Reader::dump_indent_down() {
+    _dump_indent_level--;
 }
 
 void Reader::step(int offset) {
@@ -364,8 +364,12 @@ void Reader::addSymbol(Number id, const ByteString& symbol) {
     _symbols[id] = symbol;
 }
 
-int Reader::tree_indent_size() const {
-    return _tree_indent_size;
+int Reader::parse_indent_size() const {
+    return _parse_indent_size;
+}
+
+int Reader::dump_indent_size() const {
+    return _dump_indent_size;
 }
 
 bool Reader::should_print_tree() const {

@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class IndexingExpression : public AstNode {
     public:
-        explicit IndexingExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(IndexingExpression);
 
-        NodeType type() override {
-            return NodeType::IndexingExpression;
-        }
+        explicit IndexingExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

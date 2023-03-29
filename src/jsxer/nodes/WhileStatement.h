@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class WhileStatement : public AstNode {
     public:
-        explicit WhileStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(WhileStatement);
 
-        NodeType type() override {
-            return NodeType::WhileStatement;
-        }
+        explicit WhileStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

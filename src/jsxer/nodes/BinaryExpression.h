@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class BinaryExpression : public AstNode {
     public:
-        explicit BinaryExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(BinaryExpression);
 
-        NodeType type() override {
-            return NodeType::BinaryExpression;
-        }
+        explicit BinaryExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

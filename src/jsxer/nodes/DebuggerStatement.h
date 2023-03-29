@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class DebuggerStatement : public AstNode {
     public:
-        explicit DebuggerStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(DebuggerStatement);
 
-        NodeType type() override {
-            return NodeType::DebuggerStatement;
-        }
+        explicit DebuggerStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

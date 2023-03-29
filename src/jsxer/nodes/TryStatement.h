@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class TryStatement : public AstNode {
     public:
-        explicit TryStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(TryStatement);
 
-        NodeType type() override {
-            return NodeType::TryStatement;
-        }
+        explicit TryStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

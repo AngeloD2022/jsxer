@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void LocalAssignmentExpression::parse() {
-        print_tree_node(reader, "LocalAssignmentExpression");
+        AstNode::parse();
 
         var_name = decoders::d_sid(reader);
         auto type = (unsigned int) decoders::d_length(reader);

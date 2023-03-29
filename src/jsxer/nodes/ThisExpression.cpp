@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void ThisExpression::parse() {
-        print_tree_node(reader, "ThisExpression");
+        AstNode::parse();
 
         reference = decoders::d_literal_ref(reader);
     }

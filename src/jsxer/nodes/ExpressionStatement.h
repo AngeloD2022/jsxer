@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class ExpressionStatement : public AstNode {
     public:
-        explicit ExpressionStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(ExpressionStatement);
 
-        NodeType type() override {
-            return NodeType::ExpressionStatement;
-        }
+        explicit ExpressionStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

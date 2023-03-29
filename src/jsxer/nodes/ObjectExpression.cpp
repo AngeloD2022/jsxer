@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void ObjectExpression::parse() {
-        print_tree_node(reader, "ObjectExpression");
+        AstNode::parse();
 
         objectId = decoders::d_sid(reader);
 

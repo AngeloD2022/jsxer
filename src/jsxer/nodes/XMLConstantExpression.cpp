@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void XMLConstantExpression::parse() {
-        print_tree_node(reader, "XMLConstantExpression");
+        AstNode::parse();
 
         size_t length = decoders::d_length(reader);
 

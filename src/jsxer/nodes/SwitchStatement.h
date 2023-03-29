@@ -7,11 +7,9 @@
 namespace jsxer::nodes {
     class SwitchStatement : public AstNode {
     public:
-        explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(SwitchStatement);
 
-        NodeType type() override {
-            return NodeType::SwitchStatement;
-        }
+        explicit SwitchStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

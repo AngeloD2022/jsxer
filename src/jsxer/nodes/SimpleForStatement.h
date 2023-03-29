@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class SimpleForStatement : public AstNode {
     public:
-        explicit SimpleForStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(SimpleForStatement);
 
-        NodeType type() override {
-            return NodeType::SimpleForStatement;
-        }
+        explicit SimpleForStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

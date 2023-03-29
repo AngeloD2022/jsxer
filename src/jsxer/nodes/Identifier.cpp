@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void Identifier::parse() {
-        print_tree_node(reader, "Identifier");
+        AstNode::parse();
 
         id = decoders::d_sid(reader);
 

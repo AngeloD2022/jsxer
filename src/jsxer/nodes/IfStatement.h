@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class IfStatement : public AstNode {
     public:
-        explicit IfStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(IfStatement);
 
-        NodeType type() override {
-            return NodeType::IfStatement;
-        }
+        explicit IfStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

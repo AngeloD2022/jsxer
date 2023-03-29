@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void AssignmentExpression::parse() {
-        print_tree_node(reader, "AssignmentExpression");
+        AstNode::parse();
 
         variable = decoders::d_node(reader);
         expression = decoders::d_node(reader);

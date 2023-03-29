@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class ConstAssignment : public AstNode {
     public:
-        explicit ConstAssignment(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(ConstAssignment);
 
-        NodeType type() override {
-            return NodeType::ConstAssignment;
-        }
+        explicit ConstAssignment(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

@@ -8,11 +8,9 @@
 namespace jsxer::nodes {
     class ArrayExpression : public AstNode {
     public:
-        explicit ArrayExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(ArrayExpression);
 
-        NodeType type() override {
-            return NodeType::ArrayExpression;
-        }
+        explicit ArrayExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

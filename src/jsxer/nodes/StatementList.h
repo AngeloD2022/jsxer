@@ -7,11 +7,9 @@
 namespace jsxer::nodes {
     class StatementList : public AstNode {
     public:
-        explicit StatementList(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(StatementList);
 
-        NodeType type() override {
-            return NodeType::StatementList;
-        }
+        explicit StatementList(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

@@ -7,7 +7,7 @@ namespace jsxer::nodes {
     }
 
     void TernaryExpression::parse() {
-        print_tree_node(reader, "TernaryExpression");
+        AstNode::parse();
 
         condition = decoders::d_node(reader);
         node_true = decoders::d_node(reader);

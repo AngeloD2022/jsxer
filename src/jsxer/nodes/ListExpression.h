@@ -7,11 +7,9 @@
 namespace jsxer::nodes {
     class ListExpression : public AstNode {
     public:
-        explicit ListExpression(Reader &reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(ListExpression);
 
-        NodeType type() override {
-            return NodeType::ListExpression;
-        }
+        explicit ListExpression(Reader &reader) : AstNode(reader) {}
 
         void parse() override;
 

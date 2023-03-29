@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void SwitchStatement::parse() {
-        print_tree_node(reader, "SwitchStatement");
+        AstNode::parse();
 
         lineInfo = decoders::d_line_info(reader);
         switchValue = decoders::d_node(reader);

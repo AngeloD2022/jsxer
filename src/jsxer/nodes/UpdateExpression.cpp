@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void UpdateExpression::parse() {
-        print_tree_node(reader, "UpdateExpression");
+        AstNode::parse();
 
         variable = decoders::d_node(reader);
         operation = decoders::d_literal_num(reader);

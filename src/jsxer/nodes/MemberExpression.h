@@ -8,11 +8,9 @@
 namespace jsxer::nodes {
     class MemberExpression : public AstNode {
     public:
-        explicit MemberExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(MemberExpression);
 
-        NodeType type() override {
-            return NodeType::MemberExpression;
-        }
+        explicit MemberExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

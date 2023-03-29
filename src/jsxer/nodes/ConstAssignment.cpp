@@ -2,7 +2,7 @@
 
 namespace jsxer::nodes {
     void ConstAssignment::parse() {
-        print_tree_node(reader, "ConstAssignment");
+        AstNode::parse();
 
         name = decoders::d_sid(reader);
         length = decoders::d_length(reader);

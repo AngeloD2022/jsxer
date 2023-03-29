@@ -3,7 +3,7 @@
 
 namespace jsxer::nodes {
     void StatementList::parse() {
-        print_tree_node(reader, "StatementList");
+        AstNode::parse();
 
         body = decoders::d_line_info(reader);
 
