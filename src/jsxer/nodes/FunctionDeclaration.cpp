@@ -23,17 +23,6 @@ namespace jsxer::nodes {
 
         string body = bodyInfo.create_body();
 
-        // If a "script closure"
-        if (signature.flags & 0x10000) {
-            if (!signature.name.empty()) {
-                string q = decoders::valid_id(signature.name) ? "" : "\"";
-
-                body = fmt::format("#script {}{}{} \n\n{}", q, signature.name, q, body);
-            }
-
-            return body;
-        }
-
         vector<string> args;
         vector<string> vars;
         vector<string> consts;
@@ -58,10 +47,32 @@ namespace jsxer::nodes {
             consts.push_back(v);
         }
 
+        // If a "script closure"
+        if (signature.flags & 0x10000) {
+            body = fmt::format("{}\n{}",
+                               "/* args: " + boost::algorithm::join(args, ", ") + " */\n"
+                               "/* vars: " + boost::algorithm::join(vars, ", ") + " */\n"
+                               "/* consts: " + boost::algorithm::join(consts, ", ") + " */\n",
+                               body);
+
+            if (!signature.name.empty()) {
+                string q = decoders::valid_id(signature.name) ? "" : "\"";
+
+                body = fmt::format("#script {}{}{}\n{}",
+                                   q, signature.name, q,
+                                   body);
+            }
+
+            return body;
+        }
+
         string result = fmt::format(
-            "function {}({}) {{\n{}\n}}",
+            "function {}({}) {{\n{}\n{}\n}}",
             signature.name,
             boost::algorithm::join(args, ", "),
+            "/* args: " + boost::algorithm::join(args, ", ") + " */\n"
+            "/* vars: " + boost::algorithm::join(vars, ", ") + " */\n"
+            "/* consts: " + boost::algorithm::join(consts, ", ") + " */\n",
             body
         );
 
