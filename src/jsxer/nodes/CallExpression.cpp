@@ -14,12 +14,12 @@ namespace jsxer::nodes {
         bool needWrap = function->type() == NodeType::FunctionExpression;
 
         // {new }{funcName|funcBody}({args})
-        return fmt::format("{}{}{}({}){}\n",
+        return fmt::format("{}{}{}{}({})\n",
                            constructorCall ? "new " : "",
                            needWrap ? "(" : "",
                            function->to_string(),
-                           arguments ? arguments->to_string() : "",
-                           needWrap ? ")" : ""
+                           needWrap ? ")" : "",
+                           arguments ? arguments->to_string() : ""
         );
     }
 }
