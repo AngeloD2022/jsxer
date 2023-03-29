@@ -6,7 +6,7 @@
 
 using namespace jsxer;
 
-Reader::Reader(const string& jsxbin, bool unblind) {
+Reader::Reader(const string& jsxbin, Options options) {
     string _input = jsxbin;
 
     utils::string_strip_char(_input, ' ');
@@ -26,7 +26,8 @@ Reader::Reader(const string& jsxbin, bool unblind) {
 
     _error = ParseError::None;
     _version = JsxbinVersion::Invalid;
-    _unblind = unblind;
+    _unblind = options & Options::kDO_Unblind;
+    _print_tree = options & Options::kDO_PrintTree;
 }
 
 JsxbinVersion Reader::version() const {
@@ -353,6 +354,10 @@ void Reader::addSymbol(Number id, const ByteString& symbol) {
 
 int Reader::indent_size() const {
     return _indent_size;
+}
+
+bool Reader::should_print_tree() const {
+    return _print_tree;
 }
 
 Variant::Variant() {

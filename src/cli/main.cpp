@@ -17,7 +17,8 @@ int main(int argc, char* argv[]) {
 
     // cli flag variables
     bool unblind = false;
-//    bool verbose = false;
+    bool verbose = false;
+    bool ast = false;
     std::string input;
     std::string output;
 
@@ -28,9 +29,12 @@ int main(int argc, char* argv[]) {
     cli.add_flag("-b,--unblind",
                    unblind,
                    "Try renaming symbols which are obfuscated by 'JsxBlind' (experimental)");
-//    cli.add_flag("-v,--verbose",
-//                   verbose,
-//                   "Display verbose log");
+    cli.add_flag("-a,--ast",
+                 ast,
+                 "Print AST");
+    cli.add_flag("-v,--verbose",
+                   verbose,
+                   "Display verbose log");
 
     cli.add_option("input",
                    input,
@@ -42,6 +46,16 @@ int main(int argc, char* argv[]) {
         cli.parse(argc, argv);
     } catch(const CLI::ParseError &e) {
         return cli.exit(e);
+    }
+
+    int options = Options::kDO_None;
+
+    if (unblind) {
+        options |= Options::kDO_Unblind;
+    }
+
+    if (verbose || ast) {
+        options |= Options::kDO_PrintTree;
     }
 
     // process
@@ -62,7 +76,7 @@ int main(int argc, char* argv[]) {
     // begin de-compilation...
     std::string decompiled;
     std::cout << "[i] Decompiling..." << std::endl;
-    jsxer::decompile(contents_str, decompiled, unblind);
+    jsxer::decompile(contents_str, decompiled, static_cast<Options>(options));
     std::cout << "[i] Finished." << std::endl;
 
     utils::WriteFileContents(output_path, decompiled);

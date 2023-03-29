@@ -68,7 +68,7 @@ using OpVariant = std::shared_ptr<Variant>;
 
 class Reader {
 public:
-    explicit Reader(const string& jsxbin, bool unblind);
+    explicit Reader(const string& jsxbin, Options options);
 
     [[nodiscard]] JsxbinVersion version() const;
     [[nodiscard]] ParseError error() const;
@@ -76,6 +76,7 @@ public:
 
     [[nodiscard]] size_t indent_level() const;
     [[nodiscard]] int indent_size() const;
+    [[nodiscard]] bool should_print_tree() const;
 
     bool verifySignature();
 
@@ -113,6 +114,7 @@ private:
     JsxbinVersion _version;
 
     bool _unblind;
+    bool _print_tree;
     deob::DeobfuscationContext deobfuscationContext;
 
     map<Number, ByteString> _symbols;

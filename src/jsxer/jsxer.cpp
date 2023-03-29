@@ -4,9 +4,9 @@
 
 #include <string>
 
-void prepend_header(string& code, JsxbinVersion jsxbin_version, bool unblind) {
+string prepend_header(const string& code, JsxbinVersion jsxbin_version, Options options) {
     string version;
-    switch (jsxbin_version){
+    switch (jsxbin_version) {
         case JsxbinVersion::v10:
             version = "1.0";
             break;
@@ -26,17 +26,18 @@ void prepend_header(string& code, JsxbinVersion jsxbin_version, bool unblind) {
                     "\n"
                     "* JSXBIN " + version + "\n";
 
-    if (unblind) {
-        header += "* Jsxblind Deobfuscation Enabled (EXPERIMENTAL)\n";
+    header += "Options:\n";
+    if (options & kDO_Unblind) {
+        header += "\t* Jsxblind Deobfuscation (EXPERIMENTAL)\n";
     }
 
     header += "*/\n\n";
 
-    code = header + code;
+    return header + code;
 }
 
-int jsxer::decompile(const string& input, string& output, bool unblind) {
-    auto reader = std::make_unique<Reader>(input, unblind);
+int jsxer::decompile(const string& input, string& output, Options options) {
+    auto reader = std::make_unique<Reader>(input, options);
 
     if (!reader->verifySignature()) {
         // TODO: Handle this properly
@@ -51,14 +52,14 @@ int jsxer::decompile(const string& input, string& output, bool unblind) {
 
     // Generate code from the ast
     output = ast->to_string();
-    prepend_header(output, reader->version(), unblind);
+    output = prepend_header(output, reader->version(), options);
 
     return 0;
 }
 
 // for testing
-int jsxer::decompile_test(const string& input, string& output, bool unblind) {
-    auto reader = std::make_unique<Reader>(input, unblind);
+int jsxer::decompile_test(const string& input, string& output, Options options) {
+    auto reader = std::make_unique<Reader>(input, options);
 
     if (!reader->verifySignature()) {
         // TODO: Handle this properly

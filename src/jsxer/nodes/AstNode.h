@@ -19,8 +19,10 @@ namespace jsxer::nodes {
         virtual void parse() = 0;
     public:
         static void print_tree_node(const Reader& r, const string& node_name) {
-            fmt::print("{:{}}", "", r.indent_level() * r.indent_size());
-            fmt::print("{} ({})\n", node_name, r.indent_level());
+            if (r.should_print_tree()) {
+                fmt::print("{:{}}", "", r.indent_level() * r.indent_size());
+                fmt::print("{} ({})\n", node_name, r.indent_level());
+            }
         }
 
     protected:
