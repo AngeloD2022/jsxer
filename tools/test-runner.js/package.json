@@ -1,0 +1,22 @@
+{
+  "name": "@jsxer/test-runner.js",
+  "version": "0.1.0",
+  "description": "ExtendScript decompiler test runner",
+  "license" : "BSD-3-Clause",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+  },
+  "bin": {
+    "compile": "bin/cli.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "dependencies": {
+    "jsxbin": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31"
+  }
+}
