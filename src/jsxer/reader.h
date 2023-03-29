@@ -74,8 +74,9 @@ public:
     [[nodiscard]] ParseError error() const;
     [[nodiscard]] size_t depth() const;
 
+    [[nodiscard]] size_t tree_indent_level() const;
     [[nodiscard]] size_t indent_level() const;
-    [[nodiscard]] int indent_size() const;
+    [[nodiscard]] int tree_indent_size() const;
     [[nodiscard]] bool should_print_tree() const;
 
     bool verifySignature();
@@ -99,13 +100,17 @@ public:
     size_t get_node_depth();
     bool decrement_node_depth();
 
+    void tree_indent_up();
+    void tree_indent_down();
+
     void indent_up();
     void indent_down();
 
 private:
     vector<Token> _data;
+    size_t _tree_indent_level = 0;
     size_t _indent_level = 0;
-    int _indent_size = 2;
+    int _tree_indent_size = 2;
     size_t _start;
     size_t _end;
     size_t _cursor;
