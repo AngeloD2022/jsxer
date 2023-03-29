@@ -21,6 +21,10 @@ namespace jsxer::nodes {
         // but I removed it. We'll see what happens when I test it...
 
         for (int i = 0; i < statements.size(); ++i) {
+            if (!statements[i]) {
+                continue;
+            }
+
             string expression = statements[i]->to_string();
 
 //        if (statements[i]->type() == NodeType::ExpressionStatement)
