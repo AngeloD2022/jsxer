@@ -47,13 +47,18 @@ namespace jsxer::nodes {
             consts.push_back(v);
         }
 
+        auto scope_info = fmt::format(
+            "/* args({}): [{}]; */\n"
+            "/* vars({}): [{}]; */\n"
+            "/* consts({}): [{}]; */\n",
+            args.size(), boost::algorithm::join(args, ", "),
+            vars.size(), boost::algorithm::join(vars, ", "),
+            consts.size(), boost::algorithm::join(consts, ", ")
+        );
+
         // If a "script closure"
         if (signature.flags & 0x10000) {
-            body = fmt::format("{}\n{}",
-                               "/* args: " + boost::algorithm::join(args, ", ") + " */\n"
-                               "/* vars: " + boost::algorithm::join(vars, ", ") + " */\n"
-                               "/* consts: " + boost::algorithm::join(consts, ", ") + " */\n",
-                               body);
+            body = fmt::format("{}\n{}", scope_info, body);
 
             if (!signature.name.empty()) {
                 string q = decoders::valid_id(signature.name) ? "" : "\"";
@@ -70,9 +75,7 @@ namespace jsxer::nodes {
             "function {}({}) {{\n{}\n{}\n}}",
             signature.name,
             boost::algorithm::join(args, ", "),
-            "/* args: " + boost::algorithm::join(args, ", ") + " */\n"
-            "/* vars: " + boost::algorithm::join(vars, ", ") + " */\n"
-            "/* consts: " + boost::algorithm::join(consts, ", ") + " */\n",
+            scope_info,
             body
         );
 
