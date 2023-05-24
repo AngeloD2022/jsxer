@@ -19,8 +19,25 @@ namespace jsxer::nodes {
 
             // FIXME: i have a bad feeling about this one...
             string value_assigned = literal.empty() ? b->get_op() : literal;
+            string op = b->get_op_name();
 
-            result += var_name + ' ' + b->get_op_name() + "= " + value_assigned;
+            result += var_name;
+
+            bool is_negative = value_assigned[0] == '-';
+
+            // attempt to simplify the shorthand update expression with + and -...
+            if (op == "+" || op == "-") {
+                if (is_negative) {
+                    value_assigned = value_assigned.substr(1);
+                    op = op == "+" ? "-" : "+";
+                }
+                if (value_assigned == "1") {
+                    return result + op + op;
+                }
+            }
+            return result + ' ' + op + "= " + value_assigned;
+
+//            result += var_name + ' ' + b->get_op_name() + "= " + value_assigned;
         } else {
             string value_assigned = literal.empty() ? expression->to_string() : literal;
             result += var_name + " = " + value_assigned;
