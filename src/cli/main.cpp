@@ -13,7 +13,10 @@
 namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
-    CLI::App cli{"ExtendScript Decompiler"};
+    CLI::App cli{
+        "JSXER - A fast and accurate JSXBIN decompiler.\n"
+        "Written by Angelo DeLuca and contributors.\n",
+    };
 
     // cli flag variables
     bool unblind = false;
