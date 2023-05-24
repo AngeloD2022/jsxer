@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class Program : AstNode {
     public:
-        explicit Program(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(Program);
 
-        NodeType type() override {
-            return NodeType::Program;
-        }
+        explicit Program(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

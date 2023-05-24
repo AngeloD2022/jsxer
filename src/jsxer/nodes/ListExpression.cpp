@@ -3,6 +3,8 @@
 
 namespace jsxer::nodes {
     void ListExpression::parse() {
+        AstNode::parse();
+
         arguments = decoders::d_children(reader);
         sequence_expr = reader.getBoolean();
     }

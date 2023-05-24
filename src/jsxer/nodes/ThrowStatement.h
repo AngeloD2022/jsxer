@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class ThrowStatement : public AstNode {
     public:
-        explicit ThrowStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(ThrowStatement);
 
-        NodeType type() override {
-            return NodeType::ThrowStatement;
-        }
+        explicit ThrowStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

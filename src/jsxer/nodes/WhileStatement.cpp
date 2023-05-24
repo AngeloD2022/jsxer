@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void WhileStatement::parse() {
+        AstNode::parse();
+
         bodyInfo = decoders::d_line_info(reader);
         condition = decoders::d_node(reader);
     }

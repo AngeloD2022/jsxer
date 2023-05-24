@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void VoidExpression::parse() {
+        AstNode::parse();
+
         defaultNamespaceFxnCall = decoders::d_node(reader);
     }
 

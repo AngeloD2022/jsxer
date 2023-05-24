@@ -3,6 +3,8 @@
 
 namespace jsxer::nodes {
     void StatementList::parse() {
+        AstNode::parse();
+
         body = decoders::d_line_info(reader);
 
         length = decoders::d_length(reader);

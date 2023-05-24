@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class ConstantLiteral : public AstNode {
     public:
-        explicit ConstantLiteral(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(ConstantLiteral);
 
-        NodeType type() override {
-            return NodeType::ConstantLiteral;
-        }
+        explicit ConstantLiteral(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

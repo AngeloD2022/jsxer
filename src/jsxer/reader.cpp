@@ -6,7 +6,7 @@
 
 using namespace jsxer;
 
-Reader::Reader(const string& jsxbin, bool unblind) {
+Reader::Reader(const string& jsxbin, Options options) {
     string _input = jsxbin;
 
     utils::string_strip_char(_input, ' ');
@@ -26,7 +26,8 @@ Reader::Reader(const string& jsxbin, bool unblind) {
 
     _error = ParseError::None;
     _version = JsxbinVersion::Invalid;
-    _unblind = unblind;
+    _unblind = options & Options::kDO_Unblind;
+    _print_tree = options & Options::kDO_PrintTree;
 }
 
 JsxbinVersion Reader::version() const {
@@ -39,6 +40,30 @@ ParseError Reader::error() const {
 
 size_t Reader::depth() const {
     return _depth;
+}
+
+size_t Reader::parse_indent_level() const {
+    return _parse_indent_level;
+}
+
+void Reader::parse_indent_up() {
+    _parse_indent_level++;
+}
+
+void Reader::parse_indent_down() {
+    _parse_indent_level--;
+}
+
+size_t Reader::dump_indent_level() const {
+    return _dump_indent_level;
+}
+
+void Reader::dump_indent_up() {
+    _dump_indent_level++;
+}
+
+void Reader::dump_indent_down() {
+    _dump_indent_level--;
 }
 
 void Reader::step(int offset) {
@@ -337,6 +362,18 @@ ByteString Reader::getSymbol(Number id) {
 
 void Reader::addSymbol(Number id, const ByteString& symbol) {
     _symbols[id] = symbol;
+}
+
+int Reader::parse_indent_size() const {
+    return _parse_indent_size;
+}
+
+int Reader::dump_indent_size() const {
+    return _dump_indent_size;
+}
+
+bool Reader::should_print_tree() const {
+    return _print_tree;
 }
 
 Variant::Variant() {

@@ -1,8 +1,9 @@
 #include "XMLDescendantsExpression.h"
-#include "../util.h"
 
 namespace jsxer::nodes {
     void XMLDescendantsExpression::parse() {
+        AstNode::parse();
+
         descendants = decoders::d_literal_ref(reader);
         object = decoders::d_node(reader);
 

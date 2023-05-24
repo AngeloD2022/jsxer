@@ -1,8 +1,9 @@
 #include "MemberExpression.h"
-#include "../util.h"
 
 namespace jsxer::nodes {
     void MemberExpression::parse() {
+        AstNode::parse();
+
         memberInfo = decoders::d_literal_ref(reader);
         objInfo = decoders::d_node(reader);
     }

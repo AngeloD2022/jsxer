@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void XMLUnaryRefExpression::parse() {
+        AstNode::parse();
+
         id = decoders::d_sid(reader);
         node = decoders::d_node(reader);
     }

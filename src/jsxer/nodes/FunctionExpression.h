@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class FunctionExpression : public AstNode {
     public:
-        explicit FunctionExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(FunctionExpression);
 
-        NodeType type() override {
-            return NodeType::FunctionExpression;
-        }
+        explicit FunctionExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

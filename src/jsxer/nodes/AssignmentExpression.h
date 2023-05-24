@@ -7,11 +7,9 @@
 namespace jsxer::nodes {
     class AssignmentExpression : public AstNode {
     public:
-        explicit AssignmentExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(AssignmentExpression);
 
-        NodeType type() override {
-            return NodeType::AssignmentExpression;
-        }
+        explicit AssignmentExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

@@ -7,11 +7,9 @@
 namespace jsxer::nodes {
     class LocalAssignmentExpression : public AstNode {
     public:
-        explicit LocalAssignmentExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(LocalAssignmentExpression);
 
-        NodeType type() override {
-            return NodeType::LocalAssignmentExpression;
-        }
+        explicit LocalAssignmentExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

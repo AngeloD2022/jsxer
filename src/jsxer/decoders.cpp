@@ -91,7 +91,9 @@ jsxer::nodes::AstOpNode jsxer::decoders::d_node(Reader& reader) {
     auto node = nodes::get((jsxer::nodes::NodeType) marker, reader);
 
     if (node != nullptr) {
+        reader.parse_indent_up();
         node->parse();
+        reader.parse_indent_down();
 
         return node;
     }

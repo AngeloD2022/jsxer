@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class LogicalExpression : public AstNode {
     public:
-        explicit LogicalExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(LogicalExpression);
 
-        NodeType type() override {
-            return NodeType::LogicalExpression;
-        }
+        explicit LogicalExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

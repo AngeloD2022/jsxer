@@ -3,6 +3,8 @@
 
 namespace jsxer::nodes {
     void ForStatement::parse() {
+        AstNode::parse();
+
         bodyInfo = decoders::d_line_info(reader);
         initial = decoders::d_node(reader);
 

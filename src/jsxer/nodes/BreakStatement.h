@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class BreakStatement : public AstNode {
     public:
-        explicit BreakStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(BreakStatement);
 
-        NodeType type() override {
-            return NodeType::BreakStatement;
-        }
+        explicit BreakStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

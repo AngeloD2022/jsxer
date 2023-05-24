@@ -6,6 +6,8 @@ namespace jsxer::nodes {
     }
 
     void LogicalExpression::parse() {
+        AstNode::parse();
+
         // opName is either "&&" or "||"
         opName = decoders::d_operator(reader);
         leftExpr = decoders::d_node(reader);

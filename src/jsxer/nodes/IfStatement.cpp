@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void IfStatement::parse() {
+        AstNode::parse();
+
         bodyInfo = decoders::d_line_info(reader);
         test = decoders::d_node(reader);
         otherwise = decoders::d_node(reader);

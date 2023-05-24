@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class VoidExpression : public AstNode {
     public:
-        explicit VoidExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(VoidExpression);
 
-        NodeType type() override {
-            return NodeType::VoidExpression;
-        }
+        explicit VoidExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

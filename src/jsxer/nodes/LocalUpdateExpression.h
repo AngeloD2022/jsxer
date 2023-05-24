@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class LocalUpdateExpression : public AstNode {
     public:
-        explicit LocalUpdateExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(LocalUpdateExpression);
 
-        NodeType type() override {
-            return NodeType::LocalUpdateExpression;
-        }
+        explicit LocalUpdateExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

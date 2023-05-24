@@ -7,11 +7,9 @@
 namespace jsxer::nodes {
     class CallExpression : public AstNode {
     public:
-        explicit CallExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(CallExpression);
 
-        NodeType type() override {
-            return NodeType::CallExpression;
-        }
+        explicit CallExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

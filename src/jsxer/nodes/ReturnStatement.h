@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class ReturnStatement : public AstNode {
     public:
-        explicit ReturnStatement(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(ReturnStatement);
 
-        NodeType type() override {
-            return NodeType::ReturnStatement;
-        }
+        explicit ReturnStatement(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

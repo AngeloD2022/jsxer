@@ -1,8 +1,9 @@
 #include "LocalIdentifier.h"
-#include "../util.h"
 
 namespace jsxer::nodes {
     void LocalIdentifier::parse() {
+        AstNode::parse();
+
         reference = decoders::d_id_ref(reader);
         _type = decoders::d_length(reader);
     }

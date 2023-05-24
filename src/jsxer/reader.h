@@ -68,11 +68,17 @@ using OpVariant = std::shared_ptr<Variant>;
 
 class Reader {
 public:
-    explicit Reader(const string& jsxbin, bool unblind);
+    explicit Reader(const string& jsxbin, Options options);
 
     [[nodiscard]] JsxbinVersion version() const;
     [[nodiscard]] ParseError error() const;
     [[nodiscard]] size_t depth() const;
+
+    [[nodiscard]] size_t parse_indent_level() const;
+    [[nodiscard]] size_t dump_indent_level() const;
+    [[nodiscard]] int parse_indent_size() const;
+    [[nodiscard]] int dump_indent_size() const;
+    [[nodiscard]] bool should_print_tree() const;
 
     bool verifySignature();
 
@@ -95,8 +101,18 @@ public:
     size_t get_node_depth();
     bool decrement_node_depth();
 
+    void parse_indent_up();
+    void parse_indent_down();
+
+    void dump_indent_up();
+    void dump_indent_down();
+
 private:
     vector<Token> _data;
+    size_t _parse_indent_level = 0;
+    size_t _dump_indent_level = 0;
+    int _parse_indent_size = 2;
+    int _dump_indent_size = 2;
     size_t _start;
     size_t _end;
     size_t _cursor;
@@ -105,16 +121,16 @@ private:
     JsxbinVersion _version;
 
     bool _unblind;
+    bool _print_tree;
     deob::DeobfuscationContext deobfuscationContext;
 
-    map<Number, ByteString> _symbols;
+    map<Number, ByteString> _symbols; // symbol pool
 
     void update_node_depth();
     int parse_node_depth();
 
     Token _next();
     static bool _ignorable(Token value);
-
 };
 
 END_NS(jsxbin)

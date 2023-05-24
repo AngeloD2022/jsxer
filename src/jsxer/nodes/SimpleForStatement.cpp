@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void SimpleForStatement::parse() {
+        AstNode::parse();
+
         bodyInfo = decoders::d_line_info(reader);
         loopVar = decoders::d_node(reader);
         iteratorInitial = decoders::d_number(reader);

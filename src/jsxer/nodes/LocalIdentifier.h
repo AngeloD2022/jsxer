@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class LocalIdentifier : public AstNode {
     public:
-        explicit LocalIdentifier(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(LocalIdentifier);
 
-        NodeType type() override {
-            return NodeType::LocalIdentifier;
-        }
+        explicit LocalIdentifier(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

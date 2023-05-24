@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void UpdateExpression::parse() {
+        AstNode::parse();
+
         variable = decoders::d_node(reader);
         operation = decoders::d_literal_num(reader);
         postfix = reader.getBoolean();

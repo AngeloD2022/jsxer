@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class XMLDescendantsExpression : public AstNode {
     public:
-        explicit XMLDescendantsExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(XMLDescendantsExpression);
 
-        NodeType type() override {
-            return NodeType::XMLDescendantsExpression;
-        }
+        explicit XMLDescendantsExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

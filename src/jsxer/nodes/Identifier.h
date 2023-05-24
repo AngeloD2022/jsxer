@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class Identifier : public AstNode {
     public:
-        explicit Identifier(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(Identifier);
 
-        NodeType type() override {
-            return NodeType::Identifier;
-        }
+        explicit Identifier(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

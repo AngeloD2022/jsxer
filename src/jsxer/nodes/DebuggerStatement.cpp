@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void DebuggerStatement::parse() {
+        AstNode::parse();
+
         lineInfo = decoders::d_line_info(reader);
     }
 

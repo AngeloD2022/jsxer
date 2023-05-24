@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class XMLQualifiedNameExpression : public AstNode {
     public:
-        explicit XMLQualifiedNameExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(XMLQualifiedNameExpression);
 
-        NodeType type() override {
-            return NodeType::XMLQualifiedNameExpression;
-        }
+        explicit XMLQualifiedNameExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

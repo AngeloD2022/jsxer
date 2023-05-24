@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void BreakStatement::parse() {
+        AstNode::parse();
+
         labelInfo = decoders::d_line_info(reader);
         jmpLocation = decoders::d_sid(reader);
         breakStatement = reader.getBoolean();

@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void SwitchStatement::parse() {
+        AstNode::parse();
+
         lineInfo = decoders::d_line_info(reader);
         switchValue = decoders::d_node(reader);
 

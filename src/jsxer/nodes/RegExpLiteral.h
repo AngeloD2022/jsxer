@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class RegExpLiteral : public AstNode {
     public:
-        explicit RegExpLiteral(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(RegExpLiteral);
 
-        NodeType type() override {
-            return NodeType::RegExpLiteral;
-        }
+        explicit RegExpLiteral(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

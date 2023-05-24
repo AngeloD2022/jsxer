@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void Program::parse() {
+        AstNode::parse();
+
         body = decoders::d_node(reader);
     }
 

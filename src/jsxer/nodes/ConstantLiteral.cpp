@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void ConstantLiteral::parse() {
+        AstNode::parse();
+
         value = decoders::d_variant(reader);
     }
 

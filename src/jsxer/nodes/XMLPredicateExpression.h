@@ -6,11 +6,9 @@
 namespace jsxer::nodes {
     class XMLPredicateExpression : public AstNode {
     public:
-        explicit XMLPredicateExpression(Reader& reader) : AstNode(reader) {}
+        DEFINE_NODE_TYPE(XMLPredicateExpression);
 
-        NodeType type() override {
-            return NodeType::XMLPredicateExpression;
-        }
+        explicit XMLPredicateExpression(Reader& reader) : AstNode(reader) {}
 
         void parse() override;
 

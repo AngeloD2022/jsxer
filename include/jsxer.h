@@ -17,8 +17,15 @@ enum class JsxbinVersion : uint16_t {
     v21 = 0x0201,
 };
 
-namespace jsxer {
-    int decompile(const string& input, string& output, bool unblind = false);
+enum Options {
+    kDO_None = 0,
 
-    int decompile_test(const string& input, string& output, bool unblind = false);
+    kDO_Unblind = 1 << 0,
+    kDO_PrintTree = 1 << 1,
+};
+
+namespace jsxer {
+    int decompile(const string& input, string& output, Options options = kDO_None);
+
+    int decompile_test(const string& input, string& output, Options options = kDO_None);
 }

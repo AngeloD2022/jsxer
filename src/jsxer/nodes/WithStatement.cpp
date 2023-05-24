@@ -2,6 +2,8 @@
 
 namespace jsxer::nodes {
     void WithStatement::parse() {
+        AstNode::parse();
+
         bodyInfo = decoders::d_line_info(reader);
         object = decoders::d_node(reader);
     }

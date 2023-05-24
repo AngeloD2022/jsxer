@@ -1,8 +1,9 @@
 #include "ThisExpression.h"
-#include "../util.h"
 
 namespace jsxer::nodes {
     void ThisExpression::parse() {
+        AstNode::parse();
+
         reference = decoders::d_literal_ref(reader);
     }
 
