@@ -1,7 +1,6 @@
 #include "FunctionDeclaration.h"
 
 #include <fmt/printf.h>
-#include <boost/algorithm/string/join.hpp>
 
 namespace jsxer::nodes {
     enum VariableTypeRange : int {
@@ -17,9 +16,6 @@ namespace jsxer::nodes {
     }
 
     string FunctionDeclaration::to_string() {
-//        for (auto& v : signature.variables) {
-//            fmt::print("{:x}: {}\n", v.first, v.second);
-//        }
 
         string body = bodyInfo.create_body();
 
@@ -34,54 +30,37 @@ namespace jsxer::nodes {
         }
 
         // not used for de-compilation
-        for (int i = 0; i < signature.num_vars; ++i) {
-            uint32_t k = kVars + i;
-            auto v = signature.variables[k];
-            vars.push_back(v);
-        }
+//        for (int i = 0; i < signature.num_vars; ++i) {
+//            uint32_t k = kVars + i;
+//            auto v = signature.variables[k];
+//            vars.push_back(v);
+//        }
 
         // not used for de-compilation
-        for (int i = 0; i < signature.num_consts; ++i) {
-            uint32_t k = kConsts + i;
-            auto v = signature.variables[k];
-            consts.push_back(v);
-        }
-
-        auto scope_info = fmt::format(
-            "/* args({}): [{}]; */\n"
-            "/* vars({}): [{}]; */\n"
-            "/* consts({}): [{}]; */\n",
-            args.size(), boost::algorithm::join(args, ", "),
-            vars.size(), boost::algorithm::join(vars, ", "),
-            consts.size(), boost::algorithm::join(consts, ", ")
-        );
+//        for (int i = 0; i < signature.num_consts; ++i) {
+//            uint32_t k = kConsts + i;
+//            auto v = signature.variables[k];
+//            consts.push_back(v);
+//        }
 
         // If a "script closure"
         if (signature.flags & 0x10000) {
-            body = fmt::format("{}\n{}", scope_info, body);
 
             if (!signature.name.empty()) {
                 string q = decoders::valid_id(signature.name) ? "" : "\"";
 
-                body = fmt::format("#script {}{}{}\n{}",
-                                   q, signature.name, q,
-                                   body);
+                body = "#script " + q + signature.name + q + '\n' + body;
             }
 
             return body;
         }
 
-        string result = fmt::format(
-            "function {}({}) {{\n{}\n{}\n}}",
-            signature.name,
-            boost::algorithm::join(args, ", "),
-            scope_info,
-            body
-        );
+        string args_string = utils::string_join(args, ", ");
+        string result = "function " + signature.name + '(' + args_string + ") {\n" + body + "\n}";
 
-        if (signature.name.empty()) {
-            result = '(' + result + ')';
-        }
+//        if (signature.name.empty()) {
+//            result = '(' + result + ')';
+//        }
 
         return result;
     }

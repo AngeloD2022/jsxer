@@ -35,18 +35,6 @@ FetchContent_MakeAvailable(cli11)
 
 # utils
 
-# Add Boost Lib Sources
-set(BOOST_ENABLE_CMAKE ON)
-set(Boost_USE_STATIC_LIBS ON)
-set(BOOST_INCLUDE_LIBRARIES thread filesystem system algorithm)
-
-FetchContent_Declare(Boost
-    URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.tar.xz
-    GIT_PROGRESS TRUE
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-FetchContent_MakeAvailable(Boost)
-
 file(STRINGS "VERSION" JSXER_VERSION)
 
 message("${PROJECT_NAME} v${JSXER_VERSION}")
@@ -122,7 +110,7 @@ target_include_directories(${JSXER_CORE_TARGET} PUBLIC ${JSXER_INCLUDE_DIR})
 target_link_libraries(${JSXER_CORE_TARGET} PRIVATE
         fmt::fmt
         plog::plog
-        Boost::algorithm)
+        )
 
 target_compile_definitions(${JSXER_CORE_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"
@@ -188,7 +176,7 @@ target_link_libraries(${JSXER_CLI_TARGET} PRIVATE ${JSXER_CORE_TARGET}
         fmt::fmt
         plog::plog
         CLI11::CLI11
-        Boost::filesystem)
+        )
 
 target_compile_definitions(${JSXER_CLI_TARGET} PUBLIC
     CONFIG_VERSION="${JSXER_VERSION}"

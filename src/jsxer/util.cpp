@@ -79,6 +79,20 @@ string escape_hex_or_unicode(uint16_t value, bool capital = false) {
     return unicode_escape(value, capital);
 }
 
+string string_join(vector<string> strings, const string& delimiter) {
+    string result;
+
+    for (int i = 0; i < strings.size(); ++i) {
+        result += strings[i];
+
+        if (i + 1 != strings.size()) {
+            result += delimiter;
+        }
+    }
+
+    return result;
+}
+
 string string_literal_escape(uint16_t value, bool capital) {
     switch (value) {
         case '\b':
