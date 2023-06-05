@@ -17,6 +17,8 @@ void string_strip_char(string& str, char search);
 
 void replace_str_inplace(string& subject, const string& search, const string& replace);
 
+string string_join(vector<string> strings, const string& delimiter);
+
 string string_literal_escape(uint16_t value, bool capital = false);
 
 string string_literal_escape(const ByteString& value, bool capital = false);

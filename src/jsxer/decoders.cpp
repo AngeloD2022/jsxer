@@ -186,6 +186,7 @@ vector<jsxer::nodes::AstOpNode> jsxer::decoders::d_children(Reader& reader) {
     return result;
 }
 
+// jsOpStatement
 jsxer::decoders::LineInfo jsxer::decoders::d_line_info(Reader& reader) {
     LineInfo result;
 
@@ -205,39 +206,36 @@ jsxer::decoders::FunctionSignature jsxer::decoders::d_fn_sig(Reader& reader) {
     FunctionSignature result;
 
     // identifiers/variables in func scope
-    size_t num_idents = d_length(reader);
-    for (int i = 0; i < num_idents; ++i) {
-        string id = d_sid(reader);
-        size_t id_seq = d_length(reader);
+    size_t n_vars = d_length(reader); // readInt
+    for (int i = 0; i < n_vars; ++i) {
+        string sid = d_sid(reader);
+        size_t id_seq = d_length(reader); // readInt
 
-        // separate local variables from Arguments
-        if (id_seq > 0x1ffffc70 && id_seq < 0x202fbf00)
-            // 0x20000000 ... | sort it to get the sequence
-            result.parameters[id] = id_seq;
-        else
-            // 0x40000000 ...
-            result.local_vars[id] = id_seq;
+        // 0x20000000 ... | args
+        // 0x40000000 ... | vars
+        // 0x60000000 ... | consts
+        result.variables[id_seq] = sid;
     }
 
     // num of normal func args
-    result.num_arguments = d_length(reader);
+    result.num_args = d_length(reader); // readInt
 
-    // 0 -> normal func or Script Closure with no func local vars
-    // 2 -> normal func with func local vars
-    // 3 -> Script Closure with func local vars
-    result.flags = (unsigned int) d_length(reader);
+    // num of vars
+    result.num_vars = d_length(reader); // readInt
 
     // num of func local const variables
-    result.num_local_const = d_length(reader);
+    result.num_consts = d_length(reader); // readInt
 
     // name of the function or closure
     // if type == 3,
     //      Script name => #script name
-    result.name = d_sid(reader);
+    result.name = d_sid(reader); // readSID
 
+    // v1 = (short | 4) << 16
     // 0 - normal func
     // 1 - Script Closure
-    result.func_type = (FunctionType) d_literal_num(reader);
+    auto sf = decoders::d_literal_num(reader); // readShort
+    result.flags = (sf | 4) << 16;
 
     return result;
 }

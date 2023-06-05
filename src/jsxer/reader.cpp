@@ -339,6 +339,16 @@ void Reader::addSymbol(Number id, const ByteString& symbol) {
     _symbols[id] = symbol;
 }
 
+int Reader::getInt() {
+    Number val = getNumber();
+    return int(val);
+}
+
+short Reader::getShort() {
+    Number val = getNumber();
+    return short(val);
+}
+
 Variant::Variant() {
     _type = VariantType::None;
     doErase();
