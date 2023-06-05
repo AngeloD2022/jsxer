@@ -81,6 +81,8 @@ public:
     void step(int offset = 1);
 
     Byte getByte();
+    int getInt();
+    short getShort();
     Number getNumber();
     ByteString getString();
     bool getBoolean();

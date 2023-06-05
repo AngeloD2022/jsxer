@@ -5,8 +5,8 @@
 #include <string>
 
 void prepend_header(string& code, JsxbinVersion jsxbin_version, bool unblind) {
-
     string version;
+
     switch (jsxbin_version){
         case JsxbinVersion::v10:
             version = "1.0";
