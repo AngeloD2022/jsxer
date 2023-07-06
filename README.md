@@ -53,7 +53,7 @@ cd ./bin/release/
 > Make sure that the input file only contains the JSXBIN literal itself.<sup><a href="https://youtu.be/939Bo5iTxo0?lc=UgyPDxgsuRmbfd8MI-F4AaABAg.9gIEl4rxFVa9gIFW1EPzqO">\[1\]</a></sup>&ensp;(Usually starting with `@JSXBIN@`)
 
 ```bash
-jsxer <jsxbin path> <output path> [--unblind]
+jsxer <jsxbin path>
 ```
 
 The `--unblind` flag enables the experimental deobfuscation.
