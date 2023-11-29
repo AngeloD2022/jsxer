@@ -65,3 +65,10 @@ The `--unblind` flag enables the experimental deobfuscation.
 
 ## Contributions
 Contributions are welcome. Open an issue if you have a problem. Check contribution guidelines [here](CONTRIBUTING.md).
+
+---
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=AngeloD2022/jsxer&type=Date)](https://star-history.com/#AngeloD2022/jsxer&Date)
+
