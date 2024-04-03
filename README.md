@@ -59,7 +59,7 @@ jsxer <jsxbin path>
 The `--unblind` flag enables the experimental deobfuscation.
 
 ## Credits
-  - Thanks to Andrin Meier ([@andrinmeier](https://github.com/andrinmeier), formerly `@autoboosh`) for his research on the format, and his project [jsxbin-to-jsx-converter](https://github.com/autoboosh/jsxbin-to-jsx-converter).
+  - Thanks to Andrin Meier ([@andrinpricemeier](https://github.com/andrinpricemeier), formerly `@autoboosh`) for his research on the format, and his project [jsxbin-to-jsx-converter](https://github.com/autoboosh/jsxbin-to-jsx-converter).
   - Thanks to [@codecopy](https://github.com/codecopy) for keeping a [fork](https://github.com/codecopy/jsxbin-to-jsx-converter) of `@autoboosh`'s project, where the original vanished as a consequence of a DMCA takedown from Adobe.
 
 
