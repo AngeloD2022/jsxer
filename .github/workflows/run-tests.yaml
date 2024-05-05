@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         # macos arm64, macos x86_64, and windows
-        os: [macos-latest, macos-14-large, windows-latest]
+        os: [macos-latest, macos-13, windows-latest]
 
     steps:
       - name: Checkout code
