@@ -47,6 +47,15 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
 
 message("Build: " "${CMAKE_BUILD_TYPE}")
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(BUILD_ARCH "64-bit")
+else()
+    set(BUILD_ARCH "32-bit")
+endif()
+
+message("System Architecture: " "${CMAKE_SYSTEM_PROCESSOR}")
+message("System Bitness: " "${BUILD_ARCH}")
+
 if(MSVC OR MSYS OR MINGW)
     # for detecting Windows compilers
     set(BUILD_PLATFORM "Windows")
@@ -63,7 +72,6 @@ elseif(UNIX AND NOT APPLE)
     set(BIN_LIB_EXT ".a")
 elseif(APPLE)
     # for MacOS X or iOS, watchOS, tvOS (since 3.10.3)
-    message("OSX Architecture: ${CMAKE_OSX_ARCHITECTURES}")
     set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "Build architecture for macOS" FORCE)
 
     set(BUILD_PLATFORM "Darwin")
