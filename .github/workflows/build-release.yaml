@@ -79,7 +79,9 @@ jobs:
 
   build-macos-x86:
     name: Build Release for macOS (x86)
-    runs-on: macos-latest
+
+    # at the time of writing this, you need to have macos-13 in order to build for x86.
+    runs-on: macos-13
 
     steps:
       - name: Checkout code
