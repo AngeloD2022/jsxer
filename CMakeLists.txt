@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.26)
+
 project(Jsxer)
 
 # using c++17 to use some modern features of c++
@@ -62,6 +63,9 @@ elseif(UNIX AND NOT APPLE)
     set(BIN_LIB_EXT ".a")
 elseif(APPLE)
     # for MacOS X or iOS, watchOS, tvOS (since 3.10.3)
+
+    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "Build architecture for macOS" FORCE)
+
     set(BUILD_PLATFORM "Darwin")
 
     set(BIN_CLI_EXT "")
