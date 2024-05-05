@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.26)
+
 project(Jsxer)
 
 # using c++17 to use some modern features of c++
@@ -45,6 +46,15 @@ set(JSXER_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include)
 string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
 
 message("Build: " "${CMAKE_BUILD_TYPE}")
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(BUILD_ARCH "64-bit")
+else()
+    set(BUILD_ARCH "32-bit")
+endif()
+
+message("System Architecture: " "${CMAKE_SYSTEM_PROCESSOR}")
+message("System Bitness: " "${BUILD_ARCH}")
 
 if(MSVC OR MSYS OR MINGW)
     # for detecting Windows compilers

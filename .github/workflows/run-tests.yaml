@@ -9,7 +9,9 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        # macos arm64, macos x86_64, and windows
+        # at the time of writing this, you need to have macos-13 in order to build for x86.
+        os: [macos-latest, macos-13, windows-latest]
 
     steps:
       - name: Checkout code
@@ -18,7 +20,7 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.13.1
         with:
-          cmake-version: '3.25.2'
+          cmake-version: '3.26'
 
       - name: Configure CMake
         run: cmake .

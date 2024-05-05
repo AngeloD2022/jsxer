@@ -17,7 +17,7 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.13.1
         with:
-          cmake-version: '3.25.2'
+          cmake-version: '3.26'
 
       - name: Configure CMake
         run: cmake .
@@ -46,8 +46,8 @@ jobs:
         with:
           files: jsxer-${{  github.ref_name }}-Windows.zip
 
-  build-macos:
-    name: Build Release for macOS
+  build-macos-arm64:
+    name: Build Release for macOS (arm64)
     runs-on: macos-latest
 
     steps:
@@ -57,7 +57,7 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.13.1
         with:
-          cmake-version: '3.25.2'
+          cmake-version: '3.26'
 
       - name: Configure CMake
         run: cmake .
@@ -69,11 +69,43 @@ jobs:
         uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: ${{ format('jsxer-{0}-macOS.zip', github.ref_name) }}
+          filename: ${{ format('jsxer-{0}-macOS-arm64.zip', github.ref_name) }}
           path: './bin/release/'
 
       - name: Attach Build Artifacts to Release
         uses: softprops/action-gh-release@v1
         with:
-          files: jsxer-${{  github.ref_name }}-macOS.zip
+          files: jsxer-${{  github.ref_name }}-macOS-arm64.zip
 
+  build-macos-x86:
+    name: Build Release for macOS (x86)
+
+    # at the time of writing this, you need to have macos-13 in order to build for x86.
+    runs-on: macos-13
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.13.1
+        with:
+          cmake-version: '3.26'
+
+      - name: Configure CMake
+        run: cmake .
+
+      - name: Build Project
+        run: cmake --build . --config release
+
+      - name: Zip Artifacts
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          filename: ${{ format('jsxer-{0}-macOS-x86.zip', github.ref_name) }}
+          path: './bin/release/'
+
+      - name: Attach Build Artifacts to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: jsxer-${{  github.ref_name }}-macOS-x86.zip
