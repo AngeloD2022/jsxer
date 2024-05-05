@@ -4,7 +4,9 @@
 
 #include <fmt/format.h>
 
+
 using namespace jsxer;
+#define perror(msg) printf("[!] " msg ", POS: %lu\n", this->_cursor)
 
 Reader::Reader(const string& jsxbin, bool unblind) {
     string _input = jsxbin;
@@ -99,7 +101,7 @@ bool Reader::verifySignature() {
         _version = JsxbinVersion::v21;
     } else {
         _error = ParseError::InvalidVersion;
-        printf("[!]: %s\n", "Parse Error at verifySignature()");
+        printf("[!]: %s\n", "The input file has an invalid signature.");
 
         return false;
     }
@@ -161,7 +163,7 @@ Byte Reader::getByte() {
 
 error8:
     _error = ParseError::DecodeError;
-    printf("[!]: %s\n", "Parse Error at getByte()");
+    perror("Parse Error at getByte()");
     return 0;
 }
 
@@ -216,7 +218,7 @@ bool Reader::getBoolean() {
         return false;
     } else {
         _error = ParseError::DecodeError;
-        printf("[!]: %s\n", "Parse Error at getBoolean()");
+        perror("Parse Error at getBoolean()");
     }
 
     return false;
@@ -302,7 +304,7 @@ OpVariant Reader::getVariant() {
 
         default:
             _error = ParseError::DecodeError;
-            printf("[!]: %s\n", "Parse Error at getVariant()");
+            perror("Parse Error at getVariant()");
             break;
     }
 
