@@ -57,7 +57,7 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.13.1
         with:
-          cmake-version: '3.25.2'
+          cmake-version: '3.26'
 
       - name: Configure CMake
         run: cmake .
