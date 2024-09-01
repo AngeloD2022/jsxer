@@ -27,6 +27,7 @@ enum class ParseError : int {
     InvalidVersion,
     ReachedEnd,
     DecodeError,
+    NoData,
 };
 
 enum class VariantType : int {

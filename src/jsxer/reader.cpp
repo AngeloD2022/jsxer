@@ -97,6 +97,16 @@ bool Reader::decrement_node_depth() {
 }
 
 bool Reader::verifySignature() {
+    if (_data.empty()) {
+        _error = ParseError::NoData;
+        return false;
+    }
+
+    if (_data.size() < JSXBIN_SIGNATURE_LEN) {
+        _error = ParseError::InvalidVersion;
+        return false;
+    }
+
     if ( utils::bytes_eq((uint8_t*) _data.data(), (uint8_t*) JSXBIN_SIGNATURE_V10, JSXBIN_SIGNATURE_LEN) ) {
         _version = JsxbinVersion::v10;
     } else if ( utils::bytes_eq((uint8_t*) _data.data(), (uint8_t*) JSXBIN_SIGNATURE_V20, JSXBIN_SIGNATURE_LEN) ) {
