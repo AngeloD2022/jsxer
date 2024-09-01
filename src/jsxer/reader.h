@@ -73,7 +73,7 @@ public:
     [[nodiscard]] JsxbinVersion version() const;
     [[nodiscard]] ParseError error() const;
     [[nodiscard]] size_t depth() const;
-
+    [[nodiscard]] bool should_unblind() const;
     bool verifySignature();
 
     Token get();
