@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
         "JSXER - A fast and accurate JSXBIN decompiler.\n"
         "Written by Angelo DeLuca and contributors.\n",
     };
+    cli.set_version_flag("-v,--version", CONFIG_VERSION);
 
     // cli flag variables
     bool unblind = false;
