@@ -43,6 +43,10 @@ size_t Reader::depth() const {
     return _depth;
 }
 
+bool Reader::should_unblind() const {
+    return _unblind;
+}
+
 void Reader::step(int offset) {
     _cursor += offset;
 }
@@ -101,8 +105,6 @@ bool Reader::verifySignature() {
         _version = JsxbinVersion::v21;
     } else {
         _error = ParseError::InvalidVersion;
-        printf("[!]: %s\n", "The input file has an invalid signature.");
-
         return false;
     }
 

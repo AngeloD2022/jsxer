@@ -41,6 +41,7 @@ int jsxer::decompile(const string& input, string& output, bool unblind) {
 
     if (!reader->verifySignature()) {
         // TODO: Handle this properly
+        printf("[!]: %s\n", "The input file has an invalid signature.");
         fprintf(stderr, "JSXBIN signature verification failed!");
         output = "";
         return -3;
