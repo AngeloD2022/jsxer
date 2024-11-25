@@ -1,6 +1,9 @@
 # Jsxer
 A faster decompiler for Adobe's (Legacy) ExtendScript binary format (*.jsxbin).
 
+> [!WARNING]
+> This project is currently being rewritten in Rust. Development is occurring on the `rust-rewrite` branch.
+
 ## Features
 * [x] Lifts JSXBIN back to JavaScript code.
 * [x] Jsxblind deobfuscation (experimental).
