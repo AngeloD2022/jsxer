@@ -1,4 +1,5 @@
 [workspace]
 members = [
-    "crates/cli"
+    "crates/jsxer_cli",
+    "crates/jsxer_core"
 ]
