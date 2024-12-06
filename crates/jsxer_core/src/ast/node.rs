@@ -1,11 +1,13 @@
 
+use nodes;
+
 
 #[derive(Debug)]
-enum AstNode {
-    ArrayExpression,
-    AssignmentExpression,
-    BinaryExpression,
-    BreakStatement,
+enum AnyNode {
+    ArrayExpression(nodes::ArrayExpression),
+    AssignmentExpression(nodes::AssignmentExpression),
+    BinaryExpression(nodes::BinaryExpression),
+    BreakStatement(nodes::BreakStatement),
     CallExpression,
     ConstantLiteral,
     ConstAssignment,
@@ -26,7 +28,7 @@ enum AstNode {
     LogicalExpression,
     MemberExpression,
     ObjectExpression,
-    Root,
+    RootProgram,
     RegExpLiteral,
     ReturnStatement,
     SimpleForStatement,
