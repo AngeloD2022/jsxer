@@ -9,6 +9,7 @@
 /cmake-build-debug/
 /cmake-build-release/
 /cmake-build-*/
+target/
 
 node_modules/
 
