@@ -19,22 +19,8 @@ namespace jsxer::nodes {
         result += varname + " = " + iteratorInitial + "; ";
         result += varname + ' ' + comparisonOperator + ' ' + upperBound->to_string() + "; ";
 
-        result += varname;
-
-        // attempt to simplify the update expression...
-        string op = "+";
-        bool is_negative = stepSize[0] == '-';
-        string value_assigned = is_negative ? stepSize.substr(1) : stepSize;
-
-        // we want to alter the operator to be functionally equivalent, such that the step value can be unsigned...
-        if (is_negative)
-            op = "-";
-        if (value_assigned == "1")
-            result += op + op;
-        else
-            result += " " + op + "= " + value_assigned;
-
-        result += ") {\n" + bodyInfo.create_body() + "\n}";
+        result += varname + " += " + stepSize;
+        result += ") { \n" + bodyInfo.create_body() + '}';
 
         return result;
     }
