@@ -5,7 +5,9 @@
 #include "util.h"
 #include "decoders.h"
 #include "nodes/nodes.h"
+#include "error.h"
 
+#include <sstream>
 #include <fmt/format.h>
 
 enum LiteralType {
@@ -96,8 +98,9 @@ jsxer::nodes::AstOpNode jsxer::decoders::d_node(Reader& reader) {
         return node;
     }
 
-    // TODO: handle this
-    return nullptr;
+    std::ostringstream emsg;
+    emsg << "invalid node marker at position " << (reader.getCursor() - 1);
+    throw JsxerParseError(emsg.str(), ParseErrorKind::InvalidNode);
 }
 
 string jsxer::decoders::d_number(Reader& reader) {

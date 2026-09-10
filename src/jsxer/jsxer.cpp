@@ -1,4 +1,7 @@
 #include "jsxer.h"
+
+#include <iostream>
+
 #include "util.h"
 #include "nodes/Program.h"
 
@@ -49,7 +52,12 @@ int jsxer::decompile(const string& input, string& output, bool unblind) {
 
     // Parse into an Ast
     auto ast = std::make_unique<jsxer::nodes::Program>(*reader);
-    ast->parse();
+    try {
+        ast->parse();
+    } catch (const JsxerParseError& error) {
+        std::cerr << "Parse error: " << error.what() << std::endl;
+        return -1;
+    }
 
     // Generate code from the ast
     output = ast->to_string();

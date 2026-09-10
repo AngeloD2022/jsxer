@@ -3,6 +3,7 @@
 #include "jsxer.h"
 #include "common.h"
 #include "deobfuscation.h"
+#include "error.h"
 
 #include <map>
 #include <string>
@@ -20,15 +21,6 @@ BEGIN_NS(jsxer)
 #define JSXBIN_SIGNATURE_V21 "@JSXBIN@ES@2.1@"
 
 #define JSXBIN_SIGNATURE_LEN 15
-
-enum class ParseError : int {
-    None = 0,
-
-    InvalidVersion,
-    ReachedEnd,
-    DecodeError,
-    NoData,
-};
 
 enum class VariantType : int {
     None = -1,
@@ -72,7 +64,7 @@ public:
     explicit Reader(const string& jsxbin, bool unblind);
 
     [[nodiscard]] JsxbinVersion version() const;
-    [[nodiscard]] ParseError error() const;
+    [[nodiscard]] ParseErrorKind error() const;
     [[nodiscard]] size_t depth() const;
     [[nodiscard]] bool should_unblind() const;
     bool verifySignature();
@@ -95,6 +87,8 @@ public:
     void addSymbol(Number id, const ByteString& symbol);
     ByteString getSymbol(Number id);
 
+    size_t getCursor();
+
     size_t get_node_depth();
     bool decrement_node_depth();
 
@@ -104,7 +98,7 @@ private:
     size_t _end;
     size_t _cursor;
     size_t _depth;
-    ParseError _error;
+    ParseErrorKind _error;
     JsxbinVersion _version;
 
     bool _unblind;
