@@ -1,12 +1,16 @@
 #include <memory>
 #include "reader.h"
+
+#include <sstream>
+
 #include "util.h"
 
 #include <fmt/format.h>
 
+#include "error.h"
+
 
 using namespace jsxer;
-#define perror(msg) printf("[!] " msg ", POS: %lu\n", this->_cursor)
 
 Reader::Reader(const string& jsxbin, bool unblind) {
     string _input = jsxbin;
@@ -26,7 +30,7 @@ Reader::Reader(const string& jsxbin, bool unblind) {
     _end = input_len - 1;
     _depth = 0;
 
-    _error = ParseError::None;
+    _error = ParseErrorKind::None;
     _version = JsxbinVersion::Invalid;
     _unblind = unblind;
 }
@@ -35,7 +39,7 @@ JsxbinVersion Reader::version() const {
     return _version;
 }
 
-ParseError Reader::error() const {
+ParseErrorKind Reader::error() const {
     return _error;
 }
 
@@ -98,12 +102,12 @@ bool Reader::decrement_node_depth() {
 
 bool Reader::verifySignature() {
     if (_data.empty()) {
-        _error = ParseError::NoData;
+        _error = ParseErrorKind::NoData;
         return false;
     }
 
     if (_data.size() < JSXBIN_SIGNATURE_LEN) {
-        _error = ParseError::InvalidVersion;
+        _error = ParseErrorKind::InvalidVersion;
         return false;
     }
 
@@ -114,7 +118,7 @@ bool Reader::verifySignature() {
     } else if ( utils::bytes_eq((uint8_t*) _data.data(), (uint8_t*) JSXBIN_SIGNATURE_V21, JSXBIN_SIGNATURE_LEN) ) {
         _version = JsxbinVersion::v21;
     } else {
-        _error = ParseError::InvalidVersion;
+        _error = ParseErrorKind::InvalidVersion;
         return false;
     }
 
@@ -174,8 +178,12 @@ Byte Reader::getByte() {
     return m - 0x41;
 
 error8:
-    _error = ParseError::DecodeError;
-    perror("Parse Error at getByte()");
+    _error = ParseErrorKind::DecodeError;
+
+    std::ostringstream emsg;
+    emsg << "parse error at getByte(), position: " << (_cursor - 1);
+    throw JsxerParseError(emsg.str(), _error);
+
     return 0;
 }
 
@@ -229,8 +237,11 @@ bool Reader::getBoolean() {
     } else if (t == 'f') {
         return false;
     } else {
-        _error = ParseError::DecodeError;
-        perror("Parse Error at getBoolean()");
+        _error = ParseErrorKind::DecodeError;
+
+        std::ostringstream emsg;
+        emsg << "parse error at getBoolean(), position: " << (_cursor - 1);
+        throw JsxerParseError(emsg.str(), _error);
     }
 
     return false;
@@ -315,8 +326,11 @@ OpVariant Reader::getVariant() {
             break;
 
         default:
-            _error = ParseError::DecodeError;
-            perror("Parse Error at getVariant()");
+            _error = ParseErrorKind::DecodeError;
+
+            std::ostringstream emsg;
+            emsg << "parse error at getVariant(), position: " << (_cursor - 1);
+            throw JsxerParseError(emsg.str(), _error);
             break;
     }
 
@@ -328,7 +342,7 @@ Token Reader::_next() {
         return _data[_cursor++];
     }
 
-    _error = ParseError::ReachedEnd;
+    _error = ParseErrorKind::ReachedEnd;
 
     return _data[_end];
 }
@@ -347,6 +361,10 @@ bool Reader::_ignorable(Token value) {
 
 ByteString Reader::getSymbol(Number id) {
     return _symbols[id];
+}
+
+size_t Reader::getCursor() {
+    return _cursor;
 }
 
 void Reader::addSymbol(Number id, const ByteString& symbol) {

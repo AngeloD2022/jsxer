@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
     // process
     auto input_path = fs::path(input);
 
-    fs::path output_path = !bool(*output_option)
+    fs::path output_path = !static_cast<bool>(*output_option)
         ? input_path.parent_path() / (input_path.stem().string() + ".jsx")
         : fs::path(output);
 
@@ -66,9 +66,11 @@ int main(int argc, char* argv[]) {
     // begin de-compilation...
     std::string decompiled;
     std::cout << "[i] Decompiling..." << std::endl;
-    jsxer::decompile(contents_str, decompiled, unblind);
-    std::cout << "[i] Finished." << std::endl;
+    if (jsxer::decompile(contents_str, decompiled, unblind) != 0) {
+        return 1;
+    }
 
+    std::cout << "[i] Finished." << std::endl;
     utils::WriteFileContents(output_path, decompiled);
 
     return 0;
