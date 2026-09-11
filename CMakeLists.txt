@@ -227,3 +227,9 @@ add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
 target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
 
 add_test("ForStatement" jsxer-test-for-stmt)
+
+add_test(NAME "CliInvalidInput"
+    COMMAND $<TARGET_FILE:jsxer-cli>
+        -o ${CMAKE_CURRENT_BINARY_DIR}/invalid-signature-output.jsx
+        ${JSXER_TESTS_DATA_DIR}/jsxbin/invalid-signature.jsxbin)
+set_tests_properties("CliInvalidInput" PROPERTIES WILL_FAIL TRUE)
