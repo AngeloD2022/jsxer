@@ -8,12 +8,18 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <stdexcept>
 
 using std::string;
 using std::vector;
 using std::map;
 
 BEGIN_NS(jsxer)
+
+class ReaderError : public std::runtime_error {
+public:
+    explicit ReaderError(const string& message) : std::runtime_error(message) {}
+};
 
 #define JSXBIN_SIGNATURE_V10 "@JSXBIN@ES@1.0@"
 #define JSXBIN_SIGNATURE_V20 "@JSXBIN@ES@2.0@"

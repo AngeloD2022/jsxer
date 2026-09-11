@@ -23,7 +23,9 @@ Reader::Reader(const string& jsxbin, bool unblind) {
     memcpy(_data.data(), _input.data(), input_len);
 
     _start = _cursor = 0;
-    _end = input_len - 1;
+    // _end is exclusive.  The old input_len - 1 convention made the last
+    // byte unreadable and underflowed for empty input.
+    _end = input_len;
     _depth = 0;
 
     _error = ParseError::None;
@@ -48,11 +50,21 @@ bool Reader::should_unblind() const {
 }
 
 void Reader::step(int offset) {
-    _cursor += offset;
+    const auto next = static_cast<ptrdiff_t>(_cursor) + offset;
+    if (next < 0 || static_cast<size_t>(next) > _end) {
+        _error = ParseError::ReachedEnd;
+        throw ReaderError("JSXBIN cursor moved outside the input");
+    }
+    _cursor = static_cast<size_t>(next);
 }
 
 Token Reader::peek(int offset) {
-    return _data[_cursor + offset];
+    const auto position = static_cast<ptrdiff_t>(_cursor) + offset;
+    if (position < 0 || static_cast<size_t>(position) >= _end) {
+        _error = ParseError::ReachedEnd;
+        throw ReaderError("unexpected end of JSXBIN input");
+    }
+    return _data[static_cast<size_t>(position)];
 }
 
 size_t Reader::get_node_depth() {
@@ -329,8 +341,7 @@ Token Reader::_next() {
     }
 
     _error = ParseError::ReachedEnd;
-
-    return _data[_end];
+    throw ReaderError("unexpected end of JSXBIN input");
 }
 
 bool Reader::_ignorable(Token value) {
