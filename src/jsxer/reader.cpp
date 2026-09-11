@@ -3,6 +3,7 @@
 #include "util.h"
 
 #include <fmt/format.h>
+#include <stdexcept>
 
 
 using namespace jsxer;
@@ -144,21 +145,22 @@ Byte Reader::getByte() {
     if (m == '0') {
         Token n = get();
 
-        if (n > 0x5A) {
+        if (n < 'A' || n > 'Z') {
             goto error8;
         } else {
             _depth = n - 0x40;
             return 0;
         }
-    } else if (m > 0x5A) {
-        if (m > 0x6E) {
+    } else if (m < 'A' || m > 'Z') {
+        // Adobe accepts g..n as the high five-bit selector.
+        if (m < 'g' || m > 'n') {
             goto error8;
         } else {
             Token z = get();
             uint8_t l, r = 32 * (m + 1);
 
-            if (z > 0x5A) {
-                if (z > 0x66) {
+            if (z < 'A' || z > 'Z') {
+                if (z < 'a' || z > 'f') {
                     goto error8;
                 } else {
                     l = z - 0x47;
@@ -176,7 +178,7 @@ Byte Reader::getByte() {
 error8:
     _error = ParseError::DecodeError;
     perror("Parse Error at getByte()");
-    return 0;
+    throw std::runtime_error("invalid JSXBIN byte encoding");
 }
 
 Number Reader::getNumber() {
