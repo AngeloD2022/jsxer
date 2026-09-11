@@ -227,3 +227,8 @@ add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
 target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
 
 add_test("ForStatement" jsxer-test-for-stmt)
+
+add_executable(jsxer-test-reader-errors ${JSXER_TESTS_SRC_DIR}/reader-errors.cpp)
+target_link_libraries(jsxer-test-reader-errors PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("ReaderErrors" jsxer-test-reader-errors)

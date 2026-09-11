@@ -3,6 +3,7 @@
 #include "nodes/Program.h"
 
 #include <string>
+#include <exception>
 
 void prepend_header(string& code, JsxbinVersion jsxbin_version, bool unblind) {
     string version;
@@ -47,13 +48,16 @@ int jsxer::decompile(const string& input, string& output, bool unblind) {
         return -3;
     }
 
-    // Parse into an Ast
-    auto ast = std::make_unique<jsxer::nodes::Program>(*reader);
-    ast->parse();
-
-    // Generate code from the ast
-    output = ast->to_string();
-    prepend_header(output, reader->version(), unblind);
+    try {
+        auto ast = std::make_unique<jsxer::nodes::Program>(*reader);
+        ast->parse();
+        output = ast->to_string();
+        prepend_header(output, reader->version(), unblind);
+    } catch (const std::exception& error) {
+        fprintf(stderr, "JSXBIN decoding failed: %s\n", error.what());
+        output.clear();
+        return -4;
+    }
 
     return 0;
 }
@@ -69,12 +73,15 @@ int jsxer::decompile_test(const string& input, string& output, bool unblind) {
         return -3;
     }
 
-    // Parse into an Ast
-    auto ast = std::make_unique<jsxer::nodes::Program>(*reader);
-    ast->parse();
-
-    // Generate code from the ast
-    output = ast->to_string();
+    try {
+        auto ast = std::make_unique<jsxer::nodes::Program>(*reader);
+        ast->parse();
+        output = ast->to_string();
+    } catch (const std::exception& error) {
+        fprintf(stderr, "JSXBIN decoding failed: %s\n", error.what());
+        output.clear();
+        return -4;
+    }
 
     return 0;
 }
