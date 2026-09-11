@@ -6,6 +6,6 @@ namespace jsxer::nodes {
     }
 
     string Program::to_string() {
-        return body->to_string();
+        return body == nullptr ? "" : body->to_string();
     }
 }

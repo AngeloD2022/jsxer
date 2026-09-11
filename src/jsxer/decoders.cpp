@@ -96,7 +96,13 @@ jsxer::nodes::AstOpNode jsxer::decoders::d_node(Reader& reader) {
         return node;
     }
 
-    // TODO: handle this
+    // Adobe defines 'n' as its payload-free jsOpEmpty node. Jsxer represents
+    // that sentinel with a null AstOpNode.
+    if (marker == static_cast<Token>(nodes::NodeType::EmptyExpression)) {
+        return nullptr;
+    }
+
+    // TODO: report unsupported opcodes to the caller.
     return nullptr;
 }
 
