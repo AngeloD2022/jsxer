@@ -66,7 +66,11 @@ int main(int argc, char* argv[]) {
     // begin de-compilation...
     std::string decompiled;
     std::cout << "[i] Decompiling..." << std::endl;
-    jsxer::decompile(contents_str, decompiled, unblind);
+    int result = jsxer::decompile(contents_str, decompiled, unblind);
+    if (result != 0) {
+        std::cerr << "[!] Decompilation failed (error " << result << ")." << std::endl;
+        return 1;
+    }
     std::cout << "[i] Finished." << std::endl;
 
     utils::WriteFileContents(output_path, decompiled);
