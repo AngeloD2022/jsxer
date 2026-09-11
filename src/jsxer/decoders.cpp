@@ -7,6 +7,7 @@
 #include "nodes/nodes.h"
 
 #include <fmt/format.h>
+#include <stdexcept>
 
 enum LiteralType {
     NUMBER,
@@ -96,8 +97,11 @@ jsxer::nodes::AstOpNode jsxer::decoders::d_node(Reader& reader) {
         return node;
     }
 
-    // TODO: handle this
-    return nullptr;
+    if (marker == static_cast<Token>(nodes::NodeType::EmptyExpression)) {
+        return nullptr;
+    }
+
+    throw std::runtime_error(fmt::format("unsupported JSXBIN opcode 0x{:02x}", marker));
 }
 
 string jsxer::decoders::d_number(Reader& reader) {

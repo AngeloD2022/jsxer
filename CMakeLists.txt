@@ -227,3 +227,8 @@ add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
 target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
 
 add_test("ForStatement" jsxer-test-for-stmt)
+
+add_executable(jsxer-test-invalid-opcode ${JSXER_TESTS_SRC_DIR}/invalid-opcode.cpp)
+target_link_libraries(jsxer-test-invalid-opcode PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("InvalidOpcode" jsxer-test-invalid-opcode)
