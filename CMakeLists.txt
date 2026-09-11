@@ -227,3 +227,8 @@ add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
 target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
 
 add_test("ForStatement" jsxer-test-for-stmt)
+
+add_executable(jsxer-test-empty-opcode ${JSXER_TESTS_SRC_DIR}/empty-opcode.cpp)
+target_link_libraries(jsxer-test-empty-opcode PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("EmptyOpcode" jsxer-test-empty-opcode)
