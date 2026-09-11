@@ -227,3 +227,8 @@ add_executable(jsxer-test-for-stmt ${JSXER_TESTS_SRC_DIR}/for-stmt.cpp)
 target_link_libraries(jsxer-test-for-stmt PRIVATE ${JSXER_CORE_TARGET})
 
 add_test("ForStatement" jsxer-test-for-stmt)
+
+add_executable(jsxer-test-byte-alphabet ${JSXER_TESTS_SRC_DIR}/byte-alphabet.cpp)
+target_link_libraries(jsxer-test-byte-alphabet PRIVATE ${JSXER_CORE_TARGET})
+
+add_test("ByteAlphabet" jsxer-test-byte-alphabet)
